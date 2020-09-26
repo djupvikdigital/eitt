@@ -1,14 +1,12 @@
 function renderCards(cards) {
     let cardsElement = document.getElementById('cards');
-    let cardElements = cards.map(card => {
-        let element = document.createElement('button');
-        element.nodeValue = JSON.stringify(card)
-    })
     let fragment = document.createDocumentFragment();
-    for (element in cardElements) {
+    for (card of cards) {
+        let element = document.createElement('button');
+        element.textContent = JSON.stringify(card);
         fragment.appendChild(element);
     }
-    document.appendChild(fragment);
+    cardsElement.appendChild(fragment);
 }
 
 let cards = [{ color: 'red', value: 'S' }, { color: 'green', value: '+2' }];
