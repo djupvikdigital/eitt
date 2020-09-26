@@ -1,8 +1,17 @@
 //express setup
-let express = require('express');
-const { disconnect } = require('process');
+import express from 'express';
+import * as http from 'http';
+import { dirname } from 'path';
+import socketio from 'socket.io';
+import { fileURLToPath } from 'url';
+
+import * as game from './game.mjs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 let app = express();
-let serv = require('http').Server(app);
+let serv = http.Server(app);
 
 app.get('/',function(req, res){
     res.sendFile(__dirname + '/client/index.html');
@@ -14,18 +23,16 @@ console.log('Server started.');
 
 let SOCKET_LIST = {};
 
-let game = require('./game.mjs')
-
 let lastPlayedCard = game.generateCard();
 
-let io = require('socket.io')(serv,{});
+let io = socketio(serv,{});
 io.sockets.on('connection', function(socket){
     socket.id = Math.random();
     SOCKET_LIST[socket.id] = socket;
     console.log('socket connection');
     for(var i in SOCKET_LIST){
         var currentSocket = SOCKET_LIST[i];
-        currentSocket.emit('lastPlayed',data);
+        currentSocket.emit('lastPlayed',lastPlayedCard);
     }
 
     socket.on('playCard',function(data){
