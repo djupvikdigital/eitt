@@ -12,4 +12,16 @@ app.use('/client',express.static(__dirname + '/client'));
 serv.listen(process.env.PORT || 2000);
 console.log('Server started.');
 
-let socket = require('./server/socket.js')
+let SOCKET_LIST = {};
+
+let io = require('socket.io')(serv,{});
+io.sockets.on('connection', function(socket){
+    socket.id = Math.random();
+    SOCKET_LIST[socket.id] = socket;
+    console.log('socket connection');
+
+    socket.on('disconnect',function(){
+        delete SOCKET_LIST[socket.id];
+        console.log('socket disconnected');
+    });
+});
