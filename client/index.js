@@ -49,3 +49,7 @@ var socket = io();
 socket.on('lastPlayed', renderLastPlayedCard);
 
 socket.on('unlegitPlay', addCard);
+
+document.getElementById('draw-card').addEventListener('click', function () {
+    addCard(generateCard());
+});
