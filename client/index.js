@@ -28,3 +28,7 @@ console.log(cards);
 renderCards(cards);
 
 var socket = io();
+
+socket.on('lastPlayed',function(data){
+    console.log("last played card is " + data.color + " " + data.value)
+});
