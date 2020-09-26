@@ -12,7 +12,8 @@ function renderCards(cards) {
     for (let card of cards) {
         let element = document.createElement('button');
         element.addEventListener('click', createClickHandler(card));
-        element.textContent = JSON.stringify(card);
+        element.style.backgroundColor = card.color;
+        element.textContent = card.value;
         fragment.appendChild(element);
     }
     cardsElement.appendChild(fragment);
@@ -20,7 +21,8 @@ function renderCards(cards) {
 
 function renderLastPlayedCard(card) {
     let lastPlayedCardElement = document.getElementById('last-played-card');
-    lastPlayedCardElement.textContent = JSON.stringify(card);
+    lastPlayedCardElement.style.backgroundColor = card.color;
+    lastPlayedCardElement.textContent = card.value;
 }
 
 let cards = [];
