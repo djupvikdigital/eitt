@@ -42,3 +42,5 @@ renderCards(cards);
 var socket = io();
 
 socket.on('lastPlayed', renderLastPlayedCard);
+
+socket.on('unlegitPlay', renderLastPlayedCard);
