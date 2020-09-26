@@ -1,5 +1,10 @@
 import { generateCard } from '/client/game.js';
 
+function addCard(card) {
+    cards.push(card)
+    renderCards(cards);
+}
+
 function createClickHandler(i, card, cards) {
     return function clickHandler() {
         cards.splice(i, 1);
@@ -43,4 +48,4 @@ var socket = io();
 
 socket.on('lastPlayed', renderLastPlayedCard);
 
-socket.on('unlegitPlay', renderLastPlayedCard);
+socket.on('unlegitPlay', addCard);
