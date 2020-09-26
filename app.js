@@ -20,6 +20,10 @@ io.sockets.on('connection', function(socket){
     SOCKET_LIST[socket.id] = socket;
     console.log('socket connection');
 
+    socket.on('playCard',function(data){
+        console.log("Yay! Someone played a " + data.color + data.value)
+    });
+
     socket.on('disconnect',function(){
         delete SOCKET_LIST[socket.id];
         console.log('socket disconnected');
