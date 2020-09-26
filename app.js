@@ -5,7 +5,7 @@ import { dirname } from 'path';
 import socketio from 'socket.io';
 import { fileURLToPath } from 'url';
 
-import * as game from './game.mjs';
+import * as game from './client/game.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
