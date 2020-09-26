@@ -24,5 +24,9 @@
   "bugs": {
     "url": "https://github.com/thirdhand/eitt/issues"
   },
-  "homepage": "https://github.com/thirdhand/eitt#readme"
+  "homepage": "https://github.com/thirdhand/eitt#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  }
 }
