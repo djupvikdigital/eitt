@@ -12,6 +12,7 @@ function renderCards(cards) {
     for (let card of cards) {
         let element = document.createElement('button');
         element.addEventListener('click', createClickHandler(card));
+        element.className = 'card';
         element.style.backgroundColor = card.color;
         element.textContent = card.value;
         fragment.appendChild(element);

@@ -1,0 +1,9 @@
+.card {
+    box-sizing: content-box;
+    display: inline-block;
+    font-family: sans-serif;
+    font-size: 2rem;
+    padding: 2em 1em;
+    text-align: center;
+    width: 2em;
+}
