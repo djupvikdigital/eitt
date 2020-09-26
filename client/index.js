@@ -14,3 +14,5 @@ function renderCards(cards) {
 let cards = [{ color: 'red', value: 'S' }, { color: 'green', value: '+2' }];
 
 renderCards(cards);
+
+var socket = io();
