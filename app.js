@@ -36,12 +36,24 @@ io.sockets.on('connection', function(socket){
     }
 
     socket.on('playCard',function(data){
-        console.log("Yay! Someone played a " + data.color + " " + data.value);
-        for(var i in SOCKET_LIST){
-            var currentSocket = SOCKET_LIST[i];
-            currentSocket.emit('lastPlayed',data);
+        
+        function legitPlay(){
+            console.log("Yay! Someone played a " + data.color + " " + data.value);
+            for(var i in SOCKET_LIST){
+                var currentSocket = SOCKET_LIST[i];
+                currentSocket.emit('lastPlayed',data);
+                }
+            lastPlayedCard = data;
         }
-        lastPlayedCard = data;
+
+        function unlegitPlay(){
+            console.log("Oh now! We've got a cheater over here! He tried to play a " + data.color + " " + data.value + " on top of a " + lastPlayedCard.color + " " + lastPlayedCard.value);
+            socket.emit('unlegitPlay',data);
+        }
+
+        if (lastPlayedCard.color == data.color) legitPlay();
+        else if (lastPlayedCard.value == data.value) legitPlay();
+        else unlegitPlay();
     });
 
     socket.on('disconnect',function(){
