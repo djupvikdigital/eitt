@@ -1,17 +1,21 @@
 import { generateCard } from '/client/game.js';
 
-function createClickHandler(card) {
+function createClickHandler(i, card, cards) {
     return function clickHandler() {
+        cards.splice(i, 1);
+        renderCards(cards);
         socket.emit('playCard', card);
     }
 }
 
 function renderCards(cards) {
     let cardsElement = document.getElementById('cards');
+    cardsElement.textContent = '';
     let fragment = document.createDocumentFragment();
-    for (let card of cards) {
+    for (let i = 0; i < cards.length; i++) {
+        let card = cards[i];
         let element = document.createElement('button');
-        element.addEventListener('click', createClickHandler(card));
+        element.addEventListener('click', createClickHandler(i, card, cards));
         element.className = 'card';
         element.style.backgroundColor = card.color;
         element.textContent = card.value;
@@ -27,7 +31,7 @@ function renderLastPlayedCard(card) {
 }
 
 let cards = [];
-for (let i = 0; i <= 7; i++) {
+for (let i = 0; i < 7; i++) {
     cards.push(generateCard());
 }
 
