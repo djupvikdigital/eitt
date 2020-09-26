@@ -18,6 +18,11 @@ function renderCards(cards) {
     cardsElement.appendChild(fragment);
 }
 
+function renderLastPlayedCard(card) {
+    let lastPlayedCardElement = document.getElementById('last-played-card');
+    lastPlayedCardElement.textContent = JSON.stringify(card);
+}
+
 let cards = [];
 for (let i = 0; i <= 7; i++) {
     cards.push(generateCard());
@@ -29,6 +34,4 @@ renderCards(cards);
 
 var socket = io();
 
-socket.on('lastPlayed',function(data){
-    console.log("last played card is " + data.color + " " + data.value)
-});
+socket.on('lastPlayed', renderLastPlayedCard);
