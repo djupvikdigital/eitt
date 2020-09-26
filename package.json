@@ -1,0 +1,28 @@
+{
+  "name": "eitt",
+  "version": "1.0.0",
+  "description": "An unofficial implementation of a certain card game named after Spanish for \"one\"",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thirdhand/eitt.git"
+  },
+  "keywords": [
+    "card",
+    "game",
+    "uno",
+    "eitt",
+    "multiplayer",
+    "socket.io",
+    "html"
+  ],
+  "author": "Reidar D and Kenny B",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thirdhand/eitt/issues"
+  },
+  "homepage": "https://github.com/thirdhand/eitt#readme"
+}
