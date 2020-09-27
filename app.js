@@ -23,11 +23,13 @@ console.log('Server started.');
 
 let SOCKET_LIST = {};
 
+
 let lastPlayedCard = game.generateCard();
 
 let io = socketio(serv,{});
 io.sockets.on('connection', function(socket){
     socket.id = Math.random();
+    socket.name = "Unnamed";
     SOCKET_LIST[socket.id] = socket;
     console.log('socket connection');
     for(var i in SOCKET_LIST){
@@ -54,6 +56,11 @@ io.sockets.on('connection', function(socket){
         if (lastPlayedCard.color == data.color) legitPlay();
         else if (lastPlayedCard.value == data.value) legitPlay();
         else unlegitPlay();
+    });
+
+    socket.on('nameChanged',function(data){
+        console.log('Socket id: ' + socket.id + " changed name to " + data);
+        socket.name = data;
     });
 
     socket.on('disconnect',function(){
