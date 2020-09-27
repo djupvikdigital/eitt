@@ -33,6 +33,9 @@ function sendPlayerList(){
             name:currentSocket.name,
             hasTurn:currentSocket.hasTurn  
         });
+    }
+    for(var i in SOCKET_LIST){
+        var currentSocket = SOCKET_LIST[i];
         currentSocket.emit('playerList',pack);
     }
 }
@@ -41,8 +44,8 @@ let io = socketio(serv,{});
 io.sockets.on('connection', function(socket){
     socket.id = Math.random();
     socket.name = "Unnamed";
-    if (Object.keys(SOCKET_LIST).length == 0) socket.hasTurn = true;
     SOCKET_LIST[socket.id] = socket;
+    if (Object.keys(SOCKET_LIST).length == 1) socket.hasTurn = true;
     console.log('socket connection');
     for(var i in SOCKET_LIST){
         var currentSocket = SOCKET_LIST[i];
