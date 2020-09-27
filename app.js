@@ -45,11 +45,17 @@ io.sockets.on('connection', function(socket){
     socket.id = Math.random();
     socket.name = "Unnamed";
     SOCKET_LIST[socket.id] = socket;
-    if (Object.keys(SOCKET_LIST).length == 1) socket.hasTurn = true;
     console.log('socket connection');
+    let hasTurn = false;
     for(var i in SOCKET_LIST){
         var currentSocket = SOCKET_LIST[i];
+        if (currentSocket.hasTurn) hasTurn = true;
         currentSocket.emit('lastPlayed',lastPlayedCard);
+    }
+    if (!hasTurn) {
+        let ids = Object.keys(SOCKET_LIST);
+        let randomId = ids[Math.floor(Math.random() * ids.length)];
+        SOCKET_LIST[randomId].hasTurn = true;
     }
     sendPlayerList();
     socket.on('playCard',function(data){
