@@ -35,6 +35,21 @@ function renderLastPlayedCard(card) {
     lastPlayedCardElement.textContent = card.value;
 }
 
+function renderPlayerList(playerList) {
+    let playerListELement = document.getElementById('player-list');
+    playerListELement.textContent = '';
+    let fragment = document.createDocumentFragment();
+    for (let player of playerList) {
+        let element = document.createElement('li');
+        element.textContent = player.name;
+        if (player.hasTurn) {
+            element.style.fontWeight = 'bold';
+        }
+        fragment.appendChild(element);
+    }
+    playerListELement.appendChild(fragment);
+} 
+
 let cards = [];
 for (let i = 0; i < 7; i++) {
     cards.push(generateCard());
@@ -47,6 +62,8 @@ renderCards(cards);
 var socket = io();
 
 socket.on('lastPlayed', renderLastPlayedCard);
+
+socket.on('playerList', renderPlayerList);
 
 socket.on('unlegitPlay', addCard);
 
