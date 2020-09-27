@@ -50,6 +50,11 @@ socket.on('lastPlayed', renderLastPlayedCard);
 
 socket.on('unlegitPlay', addCard);
 
+document.getElementById('change-name-button').addEventListener('click', function () {
+    let name = document.getElementById('change-name-input').value;
+    socket.emit('nameChanged', name);
+})
+
 document.getElementById('draw-card').addEventListener('click', function () {
     addCard(generateCard());
 });
