@@ -23,20 +23,32 @@ console.log('Server started.');
 
 let SOCKET_LIST = {};
 
-
 let lastPlayedCard = game.generateCard();
+
+function sendPlayerList(){
+    var pack = [];
+    for(var i in SOCKET_LIST){
+        var currentSocket = SOCKET_LIST[i];
+        pack.push({
+            name:currentSocket.name,
+            hasTurn:currentSocket.hasTurn  
+        });
+        currentSocket.emit('playerList',pack);
+    }
+}
 
 let io = socketio(serv,{});
 io.sockets.on('connection', function(socket){
     socket.id = Math.random();
     socket.name = "Unnamed";
+    if (Object.keys(SOCKET_LIST).length == 0) socket.hasTurn = true;
     SOCKET_LIST[socket.id] = socket;
     console.log('socket connection');
     for(var i in SOCKET_LIST){
         var currentSocket = SOCKET_LIST[i];
         currentSocket.emit('lastPlayed',lastPlayedCard);
     }
-
+    sendPlayerList();
     socket.on('playCard',function(data){
         
         function legitPlay(){
@@ -61,10 +73,12 @@ io.sockets.on('connection', function(socket){
     socket.on('nameChanged',function(data){
         console.log('Socket id: ' + socket.id + " changed name to " + data);
         socket.name = data;
+        sendPlayerList();
     });
 
     socket.on('disconnect',function(){
         delete SOCKET_LIST[socket.id];
         console.log('socket disconnected');
+        sendPlayerList();
     });
 });
