@@ -78,8 +78,8 @@ io.sockets.on('connection', function(socket){
             socket.emit('unlegitPlay',data);
         }
 
-        if (lastPlayedCard.color == data.color) legitPlay();
-        else if (lastPlayedCard.value == data.value) legitPlay();
+        if (lastPlayedCard.color == data.color && socket.hasTurn) legitPlay();
+        else if (lastPlayedCard.value == data.value && socket.hasTurn) legitPlay();
         else unlegitPlay();
     });
 
