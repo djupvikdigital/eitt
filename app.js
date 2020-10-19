@@ -25,7 +25,7 @@ let SOCKET_LIST = {};
 
 let lastPlayedCard = game.generateCard();
 
-function assignTurn(){
+function turnAssign(){
     let hasTurn = false;
     for(var i in SOCKET_LIST){
         var currentSocket = SOCKET_LIST[i];
@@ -37,6 +37,30 @@ function assignTurn(){
         let randomId = ids[Math.floor(Math.random() * ids.length)];
         SOCKET_LIST[randomId].hasTurn = true;
     }
+}
+
+function turnSwitch(){
+    let nextPlayer = 0;
+    let nextPlayerTurn = 99;
+    for(var i in SOCKET_LIST){
+        var currentSocket = SOCKET_LIST[i];
+        nextPlayer++;
+        if (nextPlayer > (Object.keys(SOCKET_LIST).length - 1)) nextPlayer = 0;
+        if (currentSocket.hasTurn){
+            nextPlayerTurn = nextPlayer;
+            currentSocket.hasTurn = false;
+        }
+    }
+    nextPlayer = 0;
+    for(var i in SOCKET_LIST){
+        var currentSocket = SOCKET_LIST[i];
+        if (nextPlayer == nextPlayerTurn) {
+            currentSocket.hasTurn = true;
+        }
+        nextPlayer++;
+    }
+
+
 }
 
 function sendPlayerList(){
@@ -54,13 +78,15 @@ function sendPlayerList(){
     }
 }
 
+
 let io = socketio(serv,{});
 io.sockets.on('connection', function(socket){
     socket.id = Math.random();
     socket.name = "Unnamed";
     SOCKET_LIST[socket.id] = socket;
+    console.log(Object.keys(SOCKET_LIST).length);
     console.log('socket connection');
-    assignTurn();
+    turnAssign();
     sendPlayerList();
     socket.on('playCard',function(data){
         
@@ -71,6 +97,8 @@ io.sockets.on('connection', function(socket){
                 currentSocket.emit('lastPlayed',data);
                 }
             lastPlayedCard = data;
+            turnSwitch();
+            sendPlayerList();
         }
 
         function unlegitPlay(){
@@ -90,6 +118,7 @@ io.sockets.on('connection', function(socket){
     });
 
     socket.on('disconnect',function(){
+        turnSwitch();
         delete SOCKET_LIST[socket.id];
         console.log('socket disconnected');
         sendPlayerList();
