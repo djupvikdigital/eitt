@@ -47,14 +47,15 @@ function turnSwitch(){
     let nextPlayerTurn = 99;
     for(var i in SOCKET_LIST){
         var currentSocket = SOCKET_LIST[i];
-        if (nextPlayer > (Object.keys(SOCKET_LIST).length - 1)) nextPlayer = (nextPlayer - (Object.keys(SOCKET_LIST).length - 1) - 1);
         if (currentSocket.hasTurn){
             nextPlayerTurn = nextPlayer + (1 * turnRotation * turnSkip);
             currentSocket.hasTurn = false;
+            turnSkip = 1;
         }
         nextPlayer++;
     }
     if (nextPlayerTurn > (Object.keys(SOCKET_LIST).length - 1)) nextPlayerTurn = (nextPlayerTurn - (Object.keys(SOCKET_LIST).length - 1) - 1);
+    if (nextPlayerTurn < 0) nextPlayerTurn = ((Object.keys(SOCKET_LIST).length) + nextPlayerTurn);
     nextPlayer = 0;
     for(var i in SOCKET_LIST){
         var currentSocket = SOCKET_LIST[i];
@@ -100,6 +101,8 @@ io.sockets.on('connection', function(socket){
                 currentSocket.emit('lastPlayed',data);
                 }
             lastPlayedCard = data;
+            if (data.value == 'R') turnRotation = (turnRotation * -1);
+            if (data.value == 'S') turnSkip = 2;
             turnSwitch();
             sendPlayerList();
         }
