@@ -25,6 +25,9 @@ let SOCKET_LIST = {};
 
 let lastPlayedCard = game.generateCard();
 
+let turnRotation = 1;
+let turnSkip = 1;
+
 function turnAssign(){
     let hasTurn = false;
     for(var i in SOCKET_LIST){
@@ -44,13 +47,14 @@ function turnSwitch(){
     let nextPlayerTurn = 99;
     for(var i in SOCKET_LIST){
         var currentSocket = SOCKET_LIST[i];
-        nextPlayer++;
-        if (nextPlayer > (Object.keys(SOCKET_LIST).length - 1)) nextPlayer = 0;
+        if (nextPlayer > (Object.keys(SOCKET_LIST).length - 1)) nextPlayer = (nextPlayer - (Object.keys(SOCKET_LIST).length - 1) - 1);
         if (currentSocket.hasTurn){
-            nextPlayerTurn = nextPlayer;
+            nextPlayerTurn = nextPlayer + (1 * turnRotation * turnSkip);
             currentSocket.hasTurn = false;
         }
+        nextPlayer++;
     }
+    if (nextPlayerTurn > (Object.keys(SOCKET_LIST).length - 1)) nextPlayerTurn = (nextPlayerTurn - (Object.keys(SOCKET_LIST).length - 1) - 1);
     nextPlayer = 0;
     for(var i in SOCKET_LIST){
         var currentSocket = SOCKET_LIST[i];
@@ -84,7 +88,6 @@ io.sockets.on('connection', function(socket){
     socket.id = Math.random();
     socket.name = "Unnamed";
     SOCKET_LIST[socket.id] = socket;
-    console.log(Object.keys(SOCKET_LIST).length);
     console.log('socket connection');
     turnAssign();
     sendPlayerList();
