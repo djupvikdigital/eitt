@@ -17,3 +17,20 @@
     vertical-align: middle;
     width: 2em;
 }
+
+.card-blue {
+    background-color: blue;
+}
+
+.card-green {
+    background-color: green;
+}
+
+.card-red {
+    background-color: red;
+}
+
+.card-yellow {
+    background-color: yellow;
+    color: black;
+}

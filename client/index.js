@@ -21,8 +21,7 @@ function renderCards(cards) {
         let card = cards[i];
         let element = document.createElement('button');
         element.addEventListener('click', createClickHandler(i, card, cards));
-        element.className = 'card';
-        element.style.backgroundColor = card.color;
+        element.className = 'card card-' + card.color;
         element.textContent = card.value;
         fragment.appendChild(element);
     }
