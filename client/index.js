@@ -21,7 +21,7 @@ function renderCards(cards) {
 
 function renderLastPlayedCard(card) {
     let lastPlayedCardElement = document.getElementById('last-played-card');
-    lastPlayedCardElement.style.backgroundColor = card.color;
+    lastPlayedCardElement.className = 'card card-' + card.color;
     lastPlayedCardElement.textContent = card.value;
 }
 
