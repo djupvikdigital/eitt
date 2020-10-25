@@ -5,6 +5,7 @@
 .card {
     background-color: black;
     border: 0;
+    border-radius: 5px;
     box-sizing: content-box;
     box-shadow: inset 0 0 0 1px black, inset 0 0 0 5px white;
     color: white;
