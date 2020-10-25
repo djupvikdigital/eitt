@@ -1,15 +1,6 @@
-import { generateCard } from '/client/game.js';
-
-function addCard(card) {
-    cards.push(card)
-    renderCards(cards);
-}
-
-function createClickHandler(i, card, cards) {
+function createClickHandler(i) {
     return function clickHandler() {
-        cards.splice(i, 1);
-        renderCards(cards);
-        socket.emit('playCard', card);
+        socket.emit('playCard', i);
     }
 }
 
@@ -20,7 +11,7 @@ function renderCards(cards) {
     for (let i = 0; i < cards.length; i++) {
         let card = cards[i];
         let element = document.createElement('button');
-        element.addEventListener('click', createClickHandler(i, card, cards));
+        element.addEventListener('click', createClickHandler(i));
         element.className = 'card card-' + card.color;
         element.textContent = card.value;
         fragment.appendChild(element);
@@ -49,22 +40,26 @@ function renderPlayerList(playerList) {
     playerListELement.appendChild(fragment);
 } 
 
-let cards = [];
-for (let i = 0; i < 7; i++) {
-    cards.push(generateCard());
+function setCards(cards) {
+    gameStatus.cards = cards;
+    renderCards(cards);
 }
 
-console.log(cards);
+function setGameStatus(status) {
+    gameStatus = status;
+    renderCards(status.cards);
+    renderPlayerList(status.playerList);
+}
 
-renderCards(cards);
+let gameStatus = {};
 
 var socket = io();
 
+socket.on('gameStatus', setGameStatus);
+
 socket.on('lastPlayed', renderLastPlayedCard);
 
-socket.on('playerList', renderPlayerList);
-
-socket.on('unlegitPlay', addCard);
+socket.on('receiveCards', setCards);
 
 document.getElementById('change-name-button').addEventListener('click', function () {
     let name = document.getElementById('change-name-input').value;
@@ -72,5 +67,5 @@ document.getElementById('change-name-button').addEventListener('click', function
 })
 
 document.getElementById('draw-card').addEventListener('click', function () {
-    addCard(generateCard());
+    socket.emit('drawCards', 1);
 });
