@@ -146,6 +146,9 @@ io.sockets.on('connection', function(socket){
     });
 
     socket.on('nameChanged',function(data){
+        if (data.length > 20) {
+            data = data.slice(0, 20);
+        }
         console.log('Socket id: ' + socket.id + " changed name to " + data);
         socket.name = data;
         sendGameStatus();
