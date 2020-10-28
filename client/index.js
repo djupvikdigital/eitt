@@ -31,7 +31,7 @@ function renderPlayerList(playerList) {
     let fragment = document.createDocumentFragment();
     for (let player of playerList) {
         let element = document.createElement('li');
-        element.textContent = player.name;
+        element.textContent = player.name + ', ' + player.numberOfCards;
         if (player.hasTurn) {
             element.style.fontWeight = 'bold';
         }
@@ -39,11 +39,6 @@ function renderPlayerList(playerList) {
     }
     playerListELement.appendChild(fragment);
 } 
-
-function setCards(cards) {
-    gameStatus.cards = cards;
-    renderCards(cards);
-}
 
 function setGameStatus(status) {
     gameStatus = status;
@@ -58,8 +53,6 @@ var socket = io();
 socket.on('gameStatus', setGameStatus);
 
 socket.on('lastPlayed', renderLastPlayedCard);
-
-socket.on('receiveCards', setCards);
 
 document.getElementById('change-name-button').addEventListener('click', function () {
     let name = document.getElementById('change-name-input').value;

@@ -74,6 +74,7 @@ function sendGameStatus(){
         var currentSocket = SOCKET_LIST[i];
         pack.push({
             name:currentSocket.name,
+            numberOfCards:currentSocket.cards.length,
             hasTurn:currentSocket.hasTurn  
         });
     }
@@ -109,7 +110,7 @@ io.sockets.on('connection', function(socket){
             for (let i = 0; i < number; i++) {
                 cards.push(game.generateCard());
             }
-            socket.emit('receiveCards', cards);
+            sendGameStatus();
         }
     });
 
