@@ -25,8 +25,23 @@ let SOCKET_LIST = {};
 
 let lastPlayedCard = game.generateCard();
 
+// number of +2 cards currently in play
+let plusTwoInPlay = 0;
+
 let turnRotation = 1;
 let turnSkip = 1;
+
+function drawCards(){
+    let cards = [];
+    let number = 1;
+    if (plusTwoInPlay) {
+        number = plusTwoInPlay * 2;
+    }
+    for (let i = 0; i < number; i++) {
+        cards.push(game.generateCard());
+    }
+    return cards;
+}
 
 function turnAssign(){
     let hasTurn = false;
@@ -104,17 +119,22 @@ io.sockets.on('connection', function(socket){
     turnAssign();
     sendGameStatus();
 
-    socket.on('drawCards',function(number){
+    socket.on('drawCards',function(){
         if (socket.hasTurn) {
-            let cards = socket.cards;
-            for (let i = 0; i < number; i++) {
-                cards.push(game.generateCard());
+            socket.cards = socket.cards.concat(drawCards());
+            if (plusTwoInPlay > 0) {
+                plusTwoInPlay = 0;
+                turnSwitch();
             }
             sendGameStatus();
         }
     });
 
     socket.on('pass',function(){
+        if (plusTwoInPlay > 0) {
+            socket.cards = socket.cards.concat(drawCards());
+            plusTwoInPlay = 0;
+        }
         turnSwitch();
         sendGameStatus();
     });
@@ -130,6 +150,7 @@ io.sockets.on('connection', function(socket){
                 currentSocket.emit('lastPlayed',data);
                 }
             lastPlayedCard = data;
+            if (data.value == '+2') plusTwoInPlay = plusTwoInPlay + 1;
             if (data.value == 'R') turnRotation = (turnRotation * -1);
             if (data.value == 'S') turnSkip = 2;
             turnSwitch();
@@ -146,7 +167,8 @@ io.sockets.on('connection', function(socket){
             return;
         }
         let data = socket.cards[cardIndex];
-        if (lastPlayedCard.color == data.color && socket.hasTurn) legitPlay();
+        if (plusTwoInPlay > 0 && data.value != '+2') unlegitPlay();
+        else if (lastPlayedCard.color == data.color && socket.hasTurn) legitPlay();
         else if (lastPlayedCard.value == data.value && socket.hasTurn) legitPlay();
         else unlegitPlay();
     });
