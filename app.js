@@ -114,6 +114,11 @@ io.sockets.on('connection', function(socket){
         }
     });
 
+    socket.on('pass',function(){
+        turnSwitch();
+        sendGameStatus();
+    });
+
     socket.on('playCard',function(cardIndex){
         
         function legitPlay(){

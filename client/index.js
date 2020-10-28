@@ -62,3 +62,7 @@ document.getElementById('change-name-button').addEventListener('click', function
 document.getElementById('draw-card').addEventListener('click', function () {
     socket.emit('drawCards', 1);
 });
+
+document.getElementById('pass').addEventListener('click', function () {
+    socket.emit('pass');
+});
