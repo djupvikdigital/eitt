@@ -134,10 +134,37 @@ io.sockets.on('connection', function(socket){
 
     ROOM_LIST.mainlobby.push(socket.id);
     console.log(ROOM_LIST);
+    socket.room = 'mainlobby'
     socket.emit('joinRoom', 'mainlobby')
 
     turnAssign();
     sendGameStatus();
+
+    socket.on('createNewRoom', function(data){
+        for (let i in ROOM_LIST) {
+            let room = ROOM_LIST[i];
+            for (let o in room) {
+                if (room[o] == socket.id) room.splice(o, 1);
+            }
+        }
+        let roomExist = false;
+        for (let i in ROOM_LIST) {
+            let room = ROOM_LIST[i];
+            if (room[0] == data) {
+                roomExist = true;
+                socket.emit('roomExists','')
+            }
+        }
+
+        if (roomExist == false) {
+            let newRoom = [];
+            newRoom.push(data);
+            newRoom.push(socket.id);
+            ROOM_LIST.push(newRoom);
+            socket.emit('joinRoom', data)
+            console.log(ROOM_LIST);
+        }
+    })
 
     socket.on('drawCards',function(){
         if (socket.hasTurn) {

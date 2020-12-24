@@ -7,8 +7,19 @@
     <link rel="stylesheet" href="/client/index.css">
 </head>
 <body>
+    <div id='mainlobby'>
+        <h1>This is the main lobby!</h1>
+        <h2>Choose a open room</h2>
+        <div id='openRooms'></div>
+        <br>
+        <h2>Or create your own</h2>
+        <p>Room name</p>
+        <input type="text" id="newRoomNameInput" maxlength="20">
+        <button id="createNewRoomButton">Create room!</button>
+    </div>
+
     <div id='room'>
-        <h1>Det her er mega fedt!!!!</h1>
+        <h1 id="roomNameHeadline">Det her er mega fedt!!!!</h1>
         <ul id="player-list"></ul>
         <div>
             <input id="change-name-input" maxlength="20" type="text">
@@ -24,6 +35,7 @@
 
     <script>
         document.getElementById("room").style.display = "none";
+        document.getElementById("mainlobby").style.display = "none";
     </script>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script src="/client/mainlobby.js"></script>
