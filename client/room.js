@@ -1,10 +1,11 @@
 function createClickHandler(i, card) {
     return function clickHandler() {
+        currentIndex = i;
         if (card.color === 'black') {
             showColorPicker();
         }
         else {
-            socket.emit('playCard', i);
+            socket.emit('playCard', { index: i });
         }
     }
 }
@@ -56,9 +57,10 @@ function setGameStatus(status) {
 }
 
 function showColorPicker() {
-    document.getElementById('color-picker').style.display = 'block';
+    document.getElementById('color-picker').style.display = 'inline';
 }
 
+let currentIndex = 0;
 let gameStatus = {};
 
 var socket = io();
@@ -83,4 +85,20 @@ document.getElementById('draw-card').addEventListener('click', function () {
 
 document.getElementById('pass').addEventListener('click', function () {
     socket.emit('pass');
+});
+
+document.getElementById('pick-blue').addEventListener('click', function () {
+    socket.emit('playCard', { color: 'blue', index: currentIndex });
+});
+
+document.getElementById('pick-green').addEventListener('click', function () {
+    socket.emit('playCard', { color: 'green', index: currentIndex });
+});
+
+document.getElementById('pick-red').addEventListener('click', function () {
+    socket.emit('playCard', { color: 'red', index: currentIndex });
+});
+
+document.getElementById('pick-blue').addEventListener('click', function () {
+    socket.emit('playCard', { color: 'yellow', index: currentIndex });
 });
