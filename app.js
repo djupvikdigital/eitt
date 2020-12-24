@@ -131,12 +131,14 @@ io.sockets.on('connection', function(socket){
     });
 
     socket.on('pass',function(){
-        if (plusTwoInPlay > 0) {
-            socket.cards = socket.cards.concat(drawCards());
-            plusTwoInPlay = 0;
+        if (socket.hasTurn) {
+            if (plusTwoInPlay > 0) {
+                socket.cards = socket.cards.concat(drawCards());
+                plusTwoInPlay = 0;
+            }
+            turnSwitch();
+            sendGameStatus();
         }
-        turnSwitch();
-        sendGameStatus();
     });
 
     socket.on('playCard',function(cardIndex){
