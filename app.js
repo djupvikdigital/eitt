@@ -189,6 +189,7 @@ io.sockets.on('connection', function(socket){
         }
         let data = socket.cards[cardIndex];
         if (plusTwoInPlay > 0 && data.value != '+2') unlegitPlay();
+        else if (data.color == 'black' && socket.hasTurn) legitPlay();
         else if (lastPlayedCard.color == data.color && socket.hasTurn) legitPlay();
         else if (lastPlayedCard.value == data.value && socket.hasTurn) legitPlay();
         else unlegitPlay();

@@ -1,7 +1,16 @@
-function createClickHandler(i) {
+function createClickHandler(i, card) {
     return function clickHandler() {
-        socket.emit('playCard', i);
+        if (card.color === 'black') {
+            showColorPicker();
+        }
+        else {
+            socket.emit('playCard', i);
+        }
     }
+}
+
+function hideColorPicker() {
+    document.getElementById('color-picker').style.display = 'none';
 }
 
 function renderCards(cards) {
@@ -11,7 +20,7 @@ function renderCards(cards) {
     for (let i = 0; i < cards.length; i++) {
         let card = cards[i];
         let element = document.createElement('button');
-        element.addEventListener('click', createClickHandler(i));
+        element.addEventListener('click', createClickHandler(i, card));
         element.className = 'card card-' + card.color;
         element.textContent = card.value;
         fragment.appendChild(element);
@@ -44,6 +53,10 @@ function setGameStatus(status) {
     gameStatus = status;
     renderCards(status.cards);
     renderPlayerList(status.playerList);
+}
+
+function showColorPicker() {
+    document.getElementById('color-picker').style.display = 'block';
 }
 
 let gameStatus = {};
