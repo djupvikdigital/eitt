@@ -72,6 +72,23 @@ socket.on('lastPlayed', renderLastPlayedCard);
 let inRoom = ''
 socket.on('joinRoom', function(data){
     inRoom = data
+    if (inRoom == 'mainlobby') {
+        document.getElementById("mainlobby").style.display = "block";
+        document.getElementById("room").style.display = "none";
+    }
+    if (inRoom != 'mainlobby' && inRoom != '' ) {
+        document.getElementById("mainlobby").style.display = "none";
+        document.getElementById("room").style.display = "block";
+        document.getElementById("roomNameHeadline").textContent = 'Room: ' + data
+    }
+})
+socket.on('roomExists', function(){
+    alert('Sorry, this room already exists, please be more creative and find another name!')
+})
+
+document.getElementById('createNewRoomButton').addEventListener('click', function () {
+    let newRoom = document.getElementById('newRoomNameInput').value;
+    socket.emit('createNewRoom', newRoom);
 })
 
 document.getElementById('change-name-button').addEventListener('click', function () {
