@@ -19,6 +19,10 @@
     width: 2em;
 }
 
+.card-black {
+    background-color: black;
+}
+
 .card-blue {
     background-color: blue;
 }
