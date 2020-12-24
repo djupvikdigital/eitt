@@ -185,7 +185,7 @@ io.sockets.on('connection', function(socket){
     });
 
     socket.on('disconnect',function(){
-        turnSwitch();
+        if (socket.hasTurn) turnSwitch();
         delete SOCKET_LIST[socket.id];
         console.log('socket disconnected');
         sendGameStatus();
