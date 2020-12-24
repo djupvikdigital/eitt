@@ -4,7 +4,7 @@ export function generateCard() {
     let color = 'black';
     let value = values[Math.floor(Math.random() * values.length)];
     if (value !== '+4' && value !== 'W') {
-        colors[Math.floor(Math.random() * colors.length)]
+        color = colors[Math.floor(Math.random() * colors.length)];
     }
     return { color, value };
 }
