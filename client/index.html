@@ -7,19 +7,26 @@
     <link rel="stylesheet" href="/client/index.css">
 </head>
 <body>
-    <h1>Det her er mega fedt!!!!</h1>
-    <ul id="player-list"></ul>
-    <div>
-        <input id="change-name-input" maxlength="20" type="text">
-        <button id="change-name-button">Change name</button>
+    <div id='room'>
+        <h1>Det her er mega fedt!!!!</h1>
+        <ul id="player-list"></ul>
+        <div>
+            <input id="change-name-input" maxlength="20" type="text">
+            <button id="change-name-button">Change name</button>
+        </div>
+        <div class="cards">
+            <button class="card" id="draw-card">Draw card</button>
+            <span class="card" id="last-played-card"></span>
+            <button id="pass">Pass</button>
+        </div>
+        <div class="cards" id="cards"></div>
     </div>
-    <div class="cards">
-        <button class="card" id="draw-card">Draw card</button>
-        <span class="card" id="last-played-card"></span>
-        <button id="pass">Pass</button>
-    </div>
-    <div class="cards" id="cards"></div>
+
+    <script>
+        document.getElementById("room").style.display = "none";
+    </script>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script src="/client/mainlobby.js"></script>
     <script src="/client/room.js"></script>
 </body>
 </html>

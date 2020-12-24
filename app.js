@@ -134,7 +134,8 @@ io.sockets.on('connection', function(socket){
 
     ROOM_LIST.mainlobby.push(socket.id);
     console.log(ROOM_LIST);
-    
+    socket.emit('joinRoom', 'mainlobby')
+
     turnAssign();
     sendGameStatus();
 
@@ -207,7 +208,14 @@ io.sockets.on('connection', function(socket){
     socket.on('disconnect',function(){
         if (socket.hasTurn) turnSwitch();
         delete SOCKET_LIST[socket.id];
+        for (let i in ROOM_LIST) {
+            let room = ROOM_LIST[i];
+            for (let o in room) {
+                if (room[o] == socket.id) room.splice(o, 1);
+            }
+        }
         console.log('socket disconnected');
+        console.log(ROOM_LIST);
         sendGameStatus();
     });
 });
