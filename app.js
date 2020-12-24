@@ -188,38 +188,39 @@ io.sockets.on('connection', function(socket){
         }
     });
 
-    socket.on('playCard',function(cardIndex){
+    socket.on('playCard',function(data){
         
         function legitPlay(){
-            console.log("Yay! Someone played a " + data.color + " " + data.value);
+            console.log("Yay! Someone played a " + card.color + " " + card.value);
             // remove played card from player cards
-            socket.cards.splice(cardIndex, 1);
+            socket.cards.splice(data.index, 1);
             for(var i in SOCKET_LIST){
                 var currentSocket = SOCKET_LIST[i];
-                currentSocket.emit('lastPlayed',data);
+                currentSocket.emit('lastPlayed',card);
                 }
-            lastPlayedCard = data;
-            if (data.value == '+2') plusTwoInPlay = plusTwoInPlay + 1;
-            if (data.value == 'R') turnRotation = (turnRotation * -1);
-            if (data.value == 'S') turnSkip = 2;
+            lastPlayedCard = card;
+            if (card.color == 'black') card.color = data.color;
+            if (card.value == '+2') plusTwoInPlay = plusTwoInPlay + 1;
+            if (card.value == 'R') turnRotation = (turnRotation * -1);
+            if (card.value == 'S') turnSkip = 2;
             turnSwitch();
             sendGameStatus();
         }
 
         function unlegitPlay(){
-            console.log("Oh now! We've got a cheater over here! He tried to play a " + data.color + " " + data.value + " on top of a " + lastPlayedCard.color + " " + lastPlayedCard.value);
+            console.log("Oh now! We've got a cheater over here! He tried to play a " + card.color + " " + card.value + " on top of a " + lastPlayedCard.color + " " + lastPlayedCard.value);
         }
 
-        if (!(cardIndex < socket.cards.length)) {
+        if (!(data.index < socket.cards.length)) {
             // we got invalid input
-            console.log(cardIndex + ' is not in range');
+            console.log(data.index + ' is not in range');
             return;
         }
-        let data = socket.cards[cardIndex];
-        if (plusTwoInPlay > 0 && data.value != '+2') unlegitPlay();
-        else if (data.color == 'black' && socket.hasTurn) legitPlay();
-        else if (lastPlayedCard.color == data.color && socket.hasTurn) legitPlay();
-        else if (lastPlayedCard.value == data.value && socket.hasTurn) legitPlay();
+        let card = socket.cards[data.index];
+        if (plusTwoInPlay > 0 && card.value != '+2') unlegitPlay();
+        else if (card.color == 'black' && socket.hasTurn) legitPlay();
+        else if (lastPlayedCard.color == card.color && socket.hasTurn) legitPlay();
+        else if (lastPlayedCard.value == card.value && socket.hasTurn) legitPlay();
         else unlegitPlay();
     });
 

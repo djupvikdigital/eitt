@@ -1,5 +1,6 @@
 function createClickHandler(i, card) {
     return function clickHandler() {
+        console.log('clickHandler');
         currentIndex = i;
         if (card.color === 'black') {
             showColorPicker();
@@ -57,6 +58,7 @@ function setGameStatus(status) {
 }
 
 function showColorPicker() {
+    console.log('showColorPicker');
     document.getElementById('color-picker').style.display = 'inline';
 }
 
@@ -105,17 +107,25 @@ document.getElementById('pass').addEventListener('click', function () {
 });
 
 document.getElementById('pick-blue').addEventListener('click', function () {
+    console.log('pick');
+    hideColorPicker();
     socket.emit('playCard', { color: 'blue', index: currentIndex });
 });
 
 document.getElementById('pick-green').addEventListener('click', function () {
+    console.log('pick');
+    hideColorPicker();
     socket.emit('playCard', { color: 'green', index: currentIndex });
 });
 
 document.getElementById('pick-red').addEventListener('click', function () {
+    console.log('pick');
+    hideColorPicker();
     socket.emit('playCard', { color: 'red', index: currentIndex });
 });
 
 document.getElementById('pick-blue').addEventListener('click', function () {
+    console.log('pick');
+    hideColorPicker();
     socket.emit('playCard', { color: 'yellow', index: currentIndex });
 });
