@@ -23,6 +23,10 @@ console.log('Server started.');
 
 let SOCKET_LIST = {};
 
+let ROOM_LIST = [];
+ROOM_LIST.mainlobby = [];
+ROOM_LIST.mainlobby.push('mainlobby');
+
 let lastPlayedCard = game.generateCard();
 
 // number of +2 cards currently in play
@@ -127,6 +131,10 @@ io.sockets.on('connection', function(socket){
 
     SOCKET_LIST[socket.id] = socket;
     console.log('socket connection');
+
+    ROOM_LIST.mainlobby.push(socket.id);
+    console.log(ROOM_LIST);
+    
     turnAssign();
     sendGameStatus();
 
