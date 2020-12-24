@@ -54,6 +54,11 @@ socket.on('gameStatus', setGameStatus);
 
 socket.on('lastPlayed', renderLastPlayedCard);
 
+let inRoom = ''
+socket.on('joinRoom', function(data){
+    inRoom = data
+})
+
 document.getElementById('change-name-button').addEventListener('click', function () {
     let name = document.getElementById('change-name-input').value;
     socket.emit('nameChanged', name);
