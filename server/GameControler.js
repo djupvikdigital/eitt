@@ -4,13 +4,17 @@ export function GameControler(room, playerList, roomList) {
         connected: [],
         lastPlayedCard: generateCard(),
         plusTwoInPlay: 0,
+        plusFourInPlay: false,
         turnRotation: 1,
         turnSkip: 1
     }
     self.drawCards = function () {
         let cards = [];
         let number = 1;
-        if (this.plusTwoInPlay) {
+        if (this.lastPlayedCard.value == '+4') {
+            number = 4
+        }
+        else if (this.plusTwoInPlay) {
             number = this.plusTwoInPlay * 2;
         }
         for (let i = 0; i < number; i++) {
