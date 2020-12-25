@@ -3,10 +3,9 @@ import express from 'express';
 import * as http from 'http';
 import { dirname } from 'path';
 import socketio from 'socket.io';
-import { rootCertificates } from 'tls';
 import { fileURLToPath } from 'url';
 
-import {GameControler, generateCard} from './server/GameControler.js'
+import { GameControler } from './server/GameControler.js'
 import {Player} from './server/Player.js'
 
 const __filename = fileURLToPath(import.meta.url);
