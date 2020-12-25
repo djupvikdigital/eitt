@@ -144,7 +144,11 @@ io.sockets.on('connection', function(socket){
     socket.on('pass',function(){
         let room = ROOM_LIST[player.room]
         if (player.hasTurn) {
-            if (room.plusTwoInPlay > 0) {
+            if (room.plusFourInPlay) {
+                player.cards = player.cards.concat(room.drawCards())
+                room.plusFourInPlay = false
+            }
+            else if (room.plusTwoInPlay > 0) {
                 player.cards = player.cards.concat(room.drawCards());
                 room.plusTwoInPlay = 0;
             }
