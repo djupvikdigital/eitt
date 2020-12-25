@@ -87,6 +87,29 @@ socket.on('joinRoom', function(data){
 socket.on('roomExists', function(){
     alert('Sorry, this room already exists, please be more creative and find another name!')
 })
+socket.on('roomStatus', function(data){
+    let divElement = document.getElementById('openRooms')
+    divElement.textContent = ''
+    for (let i = 0; i < data.length; i++) {
+        let room = data[i]
+        if (room.room != 'mainlobby') {
+            let element = document.createElement('button');
+            element.addEventListener('click', createClickHandlerJoinRoom(room.room));
+            element.textContent = room.room
+            divElement.appendChild(element)
+        }
+    }
+    if (data.length == 1) {
+        let p = document.createElement('p')
+        p.textContent = 'Sorry, no rooms seem to be open, but you can create one yourself?!'
+        divElement.appendChild(p)
+    }
+})
+function createClickHandlerJoinRoom(room) {
+    return function clickHandler() {
+        socket.emit('joinRoom', room)
+    }
+}
 
 document.getElementById('createNewRoomButton').addEventListener('click', function () {
     let newRoom = document.getElementById('newRoomNameInput').value;

@@ -1,4 +1,4 @@
-export function GameControler(room, playerList) {
+export function GameControler(room, playerList, roomList) {
     let self = {
         room: room,
         connected: [],
@@ -72,6 +72,19 @@ export function GameControler(room, playerList) {
                 playerList: pack,
             };
             currentPlayer.emit('gameStatus', gameStatus);
+        }
+    }
+    self.sendRoomStatus = function () {
+        let pack = [];
+        for(let i in roomList){
+            let currentRoom = roomList[i]
+            pack.push({
+                room:currentRoom.room
+            });
+        }
+        for(let i = 0; i < this.connected.length; i++){
+            let currentPlayer = playerList[this.connected[i]]
+            currentPlayer.emit('roomStatus', pack);
         }
     }
     return self
