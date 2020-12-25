@@ -127,12 +127,12 @@ io.sockets.on('connection', function(socket){
             console.log("Yay! " + player.name + " played a " + card.color + " " + card.value + " in " + player.room);
             // remove played card from player cards
             player.cards.splice(data.index, 1);
+            if (card.color == 'black') card.color = data.color;
             for(let i in PLAYER_LIST){
                 let currentPlayer = PLAYER_LIST[i];
                 currentPlayer.emit('lastPlayed',card);
                 }
             room.lastPlayedCard = card;
-            if (card.color == 'black') card.color = data.color;
             if (card.value == '+4') room.plusFourInPlay = true
             if (card.value == '+2') room.plusTwoInPlay = room.plusTwoInPlay + 1;
             if (card.value == 'R') room.turnRotation = (room.turnRotation * -1);
