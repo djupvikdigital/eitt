@@ -81,11 +81,7 @@ io.sockets.on('connection', function(socket){
             newGC.connected.push(socket.id)
             ROOM_LIST[data] = newGC
             player.room = data
-            let cards = [];
-            for (let i = 0; i < 7; i++) {
-                cards.push(generateCard());
-            }
-            player.cards = cards
+            player.cards = newGC.dealCards()
             socket.emit('joinRoom', data)
             newGC.turnAssign()
             newGC.sendGameStatus()
@@ -112,11 +108,7 @@ io.sockets.on('connection', function(socket){
             let room = ROOM_LIST[data]
             room.connected.push(socket.id)
             player.room = data
-            let cards = [];
-            for (let i = 0; i < 7; i++) {
-                cards.push(generateCard());
-            }
-            player.cards = cards
+            player.cards = room.dealCards()
             room.turnAssign()
             room.sendGameStatus()
             socket.emit('joinRoom', data)

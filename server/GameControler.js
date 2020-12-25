@@ -8,6 +8,13 @@ export function GameControler(room, playerList, roomList) {
         turnRotation: 1,
         turnSkip: 1
     }
+    self.dealCards = function () {
+        let cards = [];
+        for (let i = 0; i < 7; i++) {
+            cards.push(generateCard());
+        }
+        return cards
+    }
     self.drawCards = function () {
         let cards = [];
         let number = 1;
