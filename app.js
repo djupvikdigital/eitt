@@ -3,6 +3,7 @@ import express from 'express';
 import * as http from 'http';
 import { dirname } from 'path';
 import socketio from 'socket.io';
+import { rootCertificates } from 'tls';
 import { fileURLToPath } from 'url';
 
 import {GameControler, generateCard} from './server/GameControler.js'
@@ -96,6 +97,10 @@ io.sockets.on('connection', function(socket){
         let room = ROOM_LIST[player.room]
         if (player.hasTurn) {
             player.cards = player.cards.concat(room.drawCards());
+            if (room.plusFourInPlay) {
+                room.plusFourInPlay = false
+                room.turnSwitch()
+            }
             if (room.plusTwoInPlay > 0) {
                 room.plusTwoInPlay = 0;
                 room.turnSwitch();
@@ -128,6 +133,7 @@ io.sockets.on('connection', function(socket){
                 }
             room.lastPlayedCard = card;
             if (card.color == 'black') card.color = data.color;
+            if (card.value == '+4') room.plusFourInPlay = true
             if (card.value == '+2') room.plusTwoInPlay = room.plusTwoInPlay + 1;
             if (card.value == 'R') room.turnRotation = (room.turnRotation * -1);
             if (card.value == 'S') room.turnSkip = 2;
@@ -145,7 +151,8 @@ io.sockets.on('connection', function(socket){
             return;
         }
         let card = player.cards[data.index];
-        if (room.plusTwoInPlay > 0 && card.value != '+2') unlegitPlay();
+        if (room.plusFourInPlay) unlegitPlay();
+        else if (room.plusTwoInPlay > 0 && card.value != '+2') unlegitPlay();
         else if (card.color == 'black' && player.hasTurn) legitPlay();
         else if (room.lastPlayedCard.color == card.color && player.hasTurn) legitPlay();
         else if (room.lastPlayedCard.value == card.value && player.hasTurn) legitPlay();
