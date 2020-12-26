@@ -37,6 +37,16 @@ function pickRand(array) {
     return rand
 }
 
+function setTOinRoom(inRoom) {
+    setTimeout(function () {
+        let currentRoom = ROOM_LIST[inRoom]
+        for (let i = 0; i < currentRoom.connected.length; i++) {
+            let currentSocket = SOCKET_LIST[currentRoom.connected[i]]
+            currentSocket.emit('newRound')
+        }
+    }, 5000);
+}
+
 let io = socketio(serv,{});
 io.sockets.on('connection', function(socket){
     
@@ -158,6 +168,11 @@ io.sockets.on('connection', function(socket){
             player.cards.splice(data.index, 1);
             if (player.cards.length === 0) {
                 room.dealNewRound()
+                for (let i = 0; i < room.connected.length; i++) {
+                    let currentSocket = SOCKET_LIST[room.connected[i]]
+                    currentSocket.emit('roundWinner', player.name)
+                }
+                setTOinRoom(player.room)
                 return
             }
             if (card.color == 'black') card.color = data.color;
@@ -213,3 +228,4 @@ io.sockets.on('connection', function(socket){
         console.log(ROOM_LIST);
     });
 });
+
