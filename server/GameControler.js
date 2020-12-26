@@ -8,12 +8,63 @@ export function GameControler(room, playerList, roomList) {
         turnRotation: 1,
         turnSkip: 1
     }
+    self.calculateScores = function () {
+        let scores = {}
+        for (let i = 0; i < this.connected.length; i++) {
+            let score = 0
+            let id = this.connected[i]
+            let currentPlayer = playerList[id]
+            for (let j = 0; j < currentPlayer.cards.length; j++) {
+                let card = currentPlayer.cards[j]
+                if (isNaN(Number(card.value))) {
+                    if (card.color === 'black') {
+                        score += 50
+                    }
+                    else {
+                        score += 20
+                    }
+                }
+                else {
+                    score += Number(card.value)
+                }
+            }
+            scores[id] = score
+        }
+        return scores
+    }
     self.dealCards = function () {
         let cards = [];
         for (let i = 0; i < 7; i++) {
             cards.push(generateCard());
         }
         return cards
+    }
+    self.dealNewRound = function () {
+        let scores = this.calculateScores()
+        let idWithHighestScore = 0
+        let highestScore = 0
+        for (let id in scores) {
+            let score = scores[id]
+            if (score > highestScore) {
+                highestScore = score
+                idWithHighestScore = id
+            }
+        }
+        for (let i = 0; i < this.connected.length; i++) {
+            let id = this.connected[i]
+            let currentPlayer = playerList[id]
+            currentPlayer.scores.push(scores[id])
+            currentPlayer.cards = this.dealCards()
+            currentPlayer.hasTurn = false
+        }
+        this.lastPlayedCard = generateCard()
+        this.plusFourInPlay = false
+        this.plusTwoInPlay = 0
+        this.turnRotation = 1
+        this.turnSkip = 1
+        playerList[idWithHighestScore].hasTurn = true
+        this.turnSwitch()
+        this.sendGameStatus()
     }
     self.drawCards = function () {
         let cards = [];

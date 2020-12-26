@@ -154,6 +154,10 @@ io.sockets.on('connection', function(socket){
             console.log("Yay! " + player.name + " played a " + card.color + " " + card.value + " in " + player.room);
             // remove played card from player cards
             player.cards.splice(data.index, 1);
+            if (player.cards.length === 0) {
+                room.dealNewRound()
+                return
+            }
             if (card.color == 'black') card.color = data.color;
             for(let i in PLAYER_LIST){
                 let currentPlayer = PLAYER_LIST[i];

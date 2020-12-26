@@ -4,6 +4,7 @@ export function Player(id, socketList) {
         cards: [],
         name: '',
         room: '',
+        scores: [],
         hasTurn: false,
 
     }
