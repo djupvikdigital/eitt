@@ -45,7 +45,7 @@ export function GameControler(room, playerList, roomList) {
         let highestScore = 0
         for (let id in scores) {
             let score = scores[id]
-            if (score > highestScore) {
+            if (score >= highestScore) {
                 highestScore = score
                 idWithHighestScore = id
             }
