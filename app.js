@@ -183,6 +183,7 @@ io.sockets.on('connection', function(socket){
         if (room.plusFourInPlay) unlegitPlay();
         else if (room.plusTwoInPlay > 0 && card.value != '+2') unlegitPlay();
         else if (card.color == 'black' && player.hasTurn) legitPlay();
+        else if (room.lastPlayedCard.color == 'black' && player.hasTurn) legitPlay();
         else if (room.lastPlayedCard.color == card.color && player.hasTurn) legitPlay();
         else if (room.lastPlayedCard.value == card.value && player.hasTurn) legitPlay();
         else unlegitPlay();

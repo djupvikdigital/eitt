@@ -2,7 +2,7 @@ export function GameControler(room, playerList, roomList) {
     let self = {
         room: room,
         connected: [],
-        lastPlayedCard: generateCard(),
+        lastPlayedCard: generateCard(false),
         plusTwoInPlay: 0,
         plusFourInPlay: false,
         turnRotation: 1,
@@ -35,7 +35,7 @@ export function GameControler(room, playerList, roomList) {
     self.dealCards = function () {
         let cards = [];
         for (let i = 0; i < 7; i++) {
-            cards.push(generateCard());
+            cards.push(generateCard(true));
         }
         return cards
     }
@@ -45,7 +45,7 @@ export function GameControler(room, playerList, roomList) {
         let highestScore = 0
         for (let id in scores) {
             let score = scores[id]
-            if (score > highestScore) {
+            if (score >= highestScore) {
                 highestScore = score
                 idWithHighestScore = id
             }
@@ -57,7 +57,7 @@ export function GameControler(room, playerList, roomList) {
             currentPlayer.cards = this.dealCards()
             currentPlayer.hasTurn = false
         }
-        this.lastPlayedCard = generateCard()
+        this.lastPlayedCard = generateCard(false)
         this.plusFourInPlay = false
         this.plusTwoInPlay = 0
         this.turnRotation = 1
@@ -76,7 +76,7 @@ export function GameControler(room, playerList, roomList) {
             number = this.plusTwoInPlay * 2;
         }
         for (let i = 0; i < number; i++) {
-            cards.push(generateCard());
+            cards.push(generateCard(true));
         }
         return cards;
     }
@@ -152,9 +152,12 @@ export function GameControler(room, playerList, roomList) {
     return self
 }
 
-function generateCard() {
+function generateCard(allowPlusFour) {
     let colors = ['blue', 'red', 'green', 'yellow'];
-    let values = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+2', 'R', 'S', '+4', 'W'];
+    let values = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+2', 'R', 'S', 'W'];
+    if (allowPlusFour) {
+        values.push('+4')
+    }
     let color = 'black';
     let value = values[Math.floor(Math.random() * values.length)];
     if (value !== '+4' && value !== 'W') {
