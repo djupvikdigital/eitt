@@ -50,10 +50,41 @@ function renderPlayerList(playerList) {
     playerListELement.appendChild(fragment);
 } 
 
+function renderPlayerScores(playerList) {
+    console.log(playerList)
+    let playerScoresElement = document.getElementById('player-scores')
+    playerScoresElement.textContent = ''
+    let fragment = document.createDocumentFragment()
+    let scores = []
+    for (let i = 0; i < playerList.length; i++) {
+        let player = playerList[i]
+        let column = [player.name].concat(player.scores)
+        for (let j = 0; j < column.length; j++) {
+            if (scores[j]) {
+                scores[j].push(column[j])
+            }
+            else {
+                scores[j] = [column[j]]
+            }
+        }
+    }
+    for (let i = 0; i < scores.length; i++) {
+        let rowElement = document.createElement('tr')
+        for (let cell of scores[i]) {
+            let cellElement = document.createElement(i === 0 ? 'th' : 'td')
+            cellElement.textContent = cell
+            rowElement.appendChild(cellElement)
+        }
+        fragment.appendChild(rowElement)
+    }
+    playerScoresElement.appendChild(fragment)
+}
+
 function setGameStatus(status) {
     gameStatus = status;
     renderCards(status.cards);
     renderPlayerList(status.playerList);
+    renderPlayerScores(status.playerList)
 }
 
 function showColorPicker() {

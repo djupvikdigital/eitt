@@ -123,7 +123,8 @@ export function GameControler(room, playerList, roomList) {
             pack.push({
                 name:currentPlayer.name,
                 numberOfCards:currentPlayer.cards.length,
-                hasTurn:currentPlayer.hasTurn  
+                hasTurn:currentPlayer.hasTurn,
+                scores:currentPlayer.scores
             });
         }
         for(let i = 0; i < this.connected.length; i++){
