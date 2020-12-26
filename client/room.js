@@ -85,6 +85,7 @@ function setGameStatus(status) {
     renderCards(status.cards);
     renderPlayerList(status.playerList);
     renderPlayerScores(status.playerList)
+    renderLastPlayedCard(status.lastPlayedCard)
 }
 
 function showColorPicker() {
@@ -97,8 +98,6 @@ let gameStatus = {};
 var socket = io();
 
 socket.on('gameStatus', setGameStatus);
-
-socket.on('lastPlayed', renderLastPlayedCard);
 
 let inRoom = ''
 socket.on('joinRoom', function(data){

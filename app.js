@@ -81,6 +81,7 @@ io.sockets.on('connection', function(socket){
             ROOM_LIST[data] = newGC
             player.room = data
             player.cards = newGC.dealCards()
+            player.hasTurn = false
             socket.emit('joinRoom', data)
             newGC.turnAssign()
             newGC.sendGameStatus()
@@ -108,6 +109,7 @@ io.sockets.on('connection', function(socket){
             room.connected.push(socket.id)
             player.room = data
             player.cards = room.dealCards()
+            player.hasTurn = false
             room.turnAssign()
             room.sendGameStatus()
             socket.emit('joinRoom', data)
@@ -159,10 +161,6 @@ io.sockets.on('connection', function(socket){
                 return
             }
             if (card.color == 'black') card.color = data.color;
-            for(let i in PLAYER_LIST){
-                let currentPlayer = PLAYER_LIST[i];
-                currentPlayer.emit('lastPlayed',card);
-                }
             room.lastPlayedCard = card;
             if (card.value == '+4') room.plusFourInPlay = true
             if (card.value == '+2') room.plusTwoInPlay = room.plusTwoInPlay + 1;

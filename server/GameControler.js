@@ -85,11 +85,9 @@ export function GameControler(room, playerList, roomList) {
         for(let i = 0; i < this.connected.length; i++){
             let currentPlayer = playerList[this.connected[i]]
             if (currentPlayer.hasTurn) hasTurn = true;
-            currentPlayer.emit('lastPlayed', this.lastPlayedCard)
         }
         if (!hasTurn) {
-            let ids = Object.keys(playerList);
-            let randomId = ids[Math.floor(Math.random() * ids.length)];
+            let randomId = this.connected[Math.floor(Math.random() * this.connected.length)];
             playerList[randomId].hasTurn = true;
         }
     }
@@ -105,8 +103,8 @@ export function GameControler(room, playerList, roomList) {
             }
             nextPlayer++;
         }
-        if (nextPlayerTurn > (Object.keys(playerList).length - 1)) nextPlayerTurn = (nextPlayerTurn - (Object.keys(playerList).length - 1) - 1);
-        if (nextPlayerTurn < 0) nextPlayerTurn = ((Object.keys(playerList).length) + nextPlayerTurn);
+        while(nextPlayerTurn > (this.connected.length - 1)) nextPlayerTurn = nextPlayerTurn - this.connected.length - 1 - 1;
+        while(nextPlayerTurn < 0) nextPlayerTurn = this.connected.length + nextPlayerTurn
         nextPlayer = 0;
         for(let i = 0; i < this.connected.length; i++){
             let currentPlayer = playerList[this.connected[i]]
@@ -133,6 +131,7 @@ export function GameControler(room, playerList, roomList) {
                 cards: currentPlayer.cards,
                 hasTurn: currentPlayer.hasTurn,
                 playerList: pack,
+                lastPlayedCard: this.lastPlayedCard
             };
             currentPlayer.emit('gameStatus', gameStatus);
         }
