@@ -5,6 +5,7 @@ export function Player(id, socketList) {
         name: '',
         room: '',
         scores: [],
+        hasDrawn: false,
         hasTurn: false,
 
     }

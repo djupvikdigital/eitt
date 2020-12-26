@@ -120,8 +120,9 @@ io.sockets.on('connection', function(socket){
 
     socket.on('drawCards',function(){
         let room = ROOM_LIST[player.room]
-        if (player.hasTurn) {
+        if (player.hasTurn && !player.hasDrawn) {
             player.cards = player.cards.concat(room.drawCards());
+            player.hasDrawn = true;
             if (room.plusFourInPlay) {
                 room.plusFourInPlay = false
                 room.turnSwitch()
@@ -136,15 +137,8 @@ io.sockets.on('connection', function(socket){
 
     socket.on('pass',function(){
         let room = ROOM_LIST[player.room]
-        if (player.hasTurn) {
-            if (room.plusFourInPlay) {
-                player.cards = player.cards.concat(room.drawCards())
-                room.plusFourInPlay = false
-            }
-            else if (room.plusTwoInPlay > 0) {
-                player.cards = player.cards.concat(room.drawCards());
-                room.plusTwoInPlay = 0;
-            }
+        if (player.hasTurn && player.hasDrawn) {
+            player.hasDrawn = false
             room.turnSwitch();
             room.sendGameStatus();
         }
@@ -160,6 +154,7 @@ io.sockets.on('connection', function(socket){
                 room.dealNewRound()
                 return
             }
+            player.hasDrawn = false
             if (card.color == 'black') card.color = data.color;
             room.lastPlayedCard = card;
             if (card.value == '+4') room.plusFourInPlay = true
