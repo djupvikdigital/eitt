@@ -2,7 +2,6 @@ export function GameControler(room, playerList, roomList) {
     let self = {
         room: room,
         connected: [],
-        lastPlayedCard: generateCard(false),
         lastPlayerId: 0,
         plusTwoInPlay: 0,
         plusFourInPlay: false,
@@ -63,12 +62,12 @@ export function GameControler(room, playerList, roomList) {
             currentPlayer.hasTurn = false
             currentPlayer.pressedEitt = false
         }
-        this.lastPlayedCard = generateCard(false)
         this.plusFourInPlay = false
         this.plusTwoInPlay = 0
         this.turnRotation = 1
         this.turnSkip = 1
         playerList[idWithHighestScore].hasTurn = true
+        this.playCard(generateCard(false))
         this.turnSwitch()
         this.sendGameStatus()
     }
@@ -85,6 +84,14 @@ export function GameControler(room, playerList, roomList) {
         }
         return cards;
     }
+    self.playCard = function (card) {
+        this.lastPlayedCard = card
+        if (card.value == '+4') this.plusFourInPlay = true
+        else if (card.value == '+2') this.plusTwoInPlay = this.plusTwoInPlay + 1
+        else if (card.value == 'R') this.turnRotation = (this.turnRotation * -1)
+        else if (card.value == 'S') this.turnSkip = 2
+        this.pressedEitt = false
+}
     self.turnAssign = function () {
         let hasTurn = false;
         for(let i = 0; i < this.connected.length; i++){
@@ -157,6 +164,7 @@ export function GameControler(room, playerList, roomList) {
             currentPlayer.emit('roomStatus', pack);
         }
     }
+    self.playCard(generateCard(false))
     return self
 }
 

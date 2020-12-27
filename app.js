@@ -178,6 +178,10 @@ io.sockets.on('connection', function(socket){
             console.log("Yay! " + player.name + " played a " + card.color + " " + card.value + " in " + player.room);
             // remove played card from player cards
             player.cards.splice(data.index, 1);
+            player.hasDrawn = false
+            if (card.color == 'black') card.color = data.color;
+            room.lastPlayerId = player.id
+            room.playCard(card)
             if (player.cards.length === 0) {
                 room.dealNewRound()
                 for (let i = 0; i < room.connected.length; i++) {
@@ -187,15 +191,6 @@ io.sockets.on('connection', function(socket){
                 setTOinRoom(player.room)
                 return
             }
-            player.hasDrawn = false
-            if (card.color == 'black') card.color = data.color;
-            room.lastPlayedCard = card;
-            if (card.value == '+4') room.plusFourInPlay = true
-            if (card.value == '+2') room.plusTwoInPlay = room.plusTwoInPlay + 1;
-            if (card.value == 'R') room.turnRotation = (room.turnRotation * -1);
-            if (card.value == 'S') room.turnSkip = 2;
-            room.lastPlayerId = player.id
-            room.pressedEitt = false
             room.turnSwitch();
             room.sendGameStatus();
         }
