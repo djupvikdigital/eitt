@@ -104,7 +104,7 @@ export function GameControler(room, playerList, roomList) {
             }
             nextPlayer++;
         }
-        while(nextPlayerTurn > (this.connected.length - 1)) nextPlayerTurn = nextPlayerTurn - this.connected.length - 1 - 1;
+        while(nextPlayerTurn > (this.connected.length - 1)) nextPlayerTurn = nextPlayerTurn - this.connected.length;
         while(nextPlayerTurn < 0) nextPlayerTurn = this.connected.length + nextPlayerTurn
         nextPlayer = 0;
         for(let i = 0; i < this.connected.length; i++){

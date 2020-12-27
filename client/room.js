@@ -151,6 +151,31 @@ function createClickHandlerJoinRoom(room) {
     }
 }
 
+socket.on('roundWinner', function(data){
+    let divElement = document.getElementById('roundWinner')
+    let h1 = document.createElement('h2')
+    let h2 = document.createElement('h2')
+    h1.textContent = 'The round winner is..... ' + data + '!!'
+    h2.textContent = 'Starting new round in just a moment'
+    divElement.appendChild(h1)
+    divElement.appendChild(h2)
+    changeButtonDisableState(true)
+})
+
+socket.on('newRound', function(){
+    let divElement = document.getElementById('roundWinner')
+    divElement.textContent = ''
+    changeButtonDisableState(false)
+})
+
+function changeButtonDisableState(state) {
+    let buttonArray = document.getElementsByClassName('card')
+    for (let i = 0; i < buttonArray.length; i++) {
+        let button = buttonArray[i]
+        button.disabled = state
+    }
+}
+
 document.getElementById('createNewRoomButton').addEventListener('click', function () {
     let newRoom = document.getElementById('newRoomNameInput').value;
     socket.emit('createNewRoom', newRoom);
