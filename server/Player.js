@@ -7,7 +7,7 @@ export function Player(id, socketList) {
         scores: [],
         hasDrawn: false,
         hasTurn: false,
-
+        pressedEitt: false
     }
     self.emit = function (arg1, arg2) {
         let mySocket = socketList[this.id]

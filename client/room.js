@@ -40,10 +40,22 @@ function renderPlayerList(playerList) {
     playerListELement.textContent = '';
     let fragment = document.createDocumentFragment();
     for (let player of playerList) {
+        console.log(player)
         let element = document.createElement('li');
         element.textContent = player.name + ', ' + player.numberOfCards;
         if (player.hasTurn) {
             element.style.fontWeight = 'bold';
+        }
+        if (player.pressedEitt) {
+            element.style.color = 'red'
+        }
+        else {
+            let didntPressEittButton = document.createElement('button')
+            didntPressEittButton.textContent = "Didn't press eitt"
+            didntPressEittButton.addEventListener('click', function () {
+                socket.emit('didntPressEitt', player.id)
+            })
+            element.appendChild(didntPressEittButton)
         }
         fragment.appendChild(element);
     }
@@ -156,6 +168,10 @@ document.getElementById('draw-card').addEventListener('click', function () {
 document.getElementById('pass').addEventListener('click', function () {
     socket.emit('pass');
 });
+
+document.getElementById('eitt').addEventListener('click', function () {
+    socket.emit('eitt')
+})
 
 document.getElementById('pick-blue').addEventListener('click', function () {
     hideColorPicker();

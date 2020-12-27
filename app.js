@@ -123,6 +123,7 @@ io.sockets.on('connection', function(socket){
         if (player.hasTurn && !player.hasDrawn) {
             player.cards = player.cards.concat(room.drawCards());
             player.hasDrawn = true;
+            player.pressedEitt = false
             if (room.plusFourInPlay) {
                 room.plusFourInPlay = false
                 room.turnSwitch()
@@ -134,6 +135,21 @@ io.sockets.on('connection', function(socket){
             room.sendGameStatus();
         }
     });
+
+    socket.on('didntPressEitt', function(playerId) {
+        let accusedPlayer = PLAYER_LIST[playerId]
+        let room = ROOM_LIST[player.room]
+        if (room.lastPlayerId === playerId && accusedPlayer.cards.length === 1 && accusedPlayer.pressedEitt == false) {
+            accusedPlayer.cards = accusedPlayer.cards.concat(room.drawCards(3))
+        }
+        room.sendGameStatus()
+    })
+
+    socket.on('eitt', function() {
+        let room = ROOM_LIST[player.room]
+        player.pressedEitt = true
+        room.sendGameStatus()
+    })
 
     socket.on('pass',function(){
         let room = ROOM_LIST[player.room]
@@ -161,6 +177,8 @@ io.sockets.on('connection', function(socket){
             if (card.value == '+2') room.plusTwoInPlay = room.plusTwoInPlay + 1;
             if (card.value == 'R') room.turnRotation = (room.turnRotation * -1);
             if (card.value == 'S') room.turnSkip = 2;
+            room.lastPlayerId = player.id
+            room.pressedEitt = false
             room.turnSwitch();
             room.sendGameStatus();
         }

@@ -3,6 +3,7 @@ export function GameControler(room, playerList, roomList) {
         room: room,
         connected: [],
         lastPlayedCard: generateCard(false),
+        lastPlayerId: 0,
         plusTwoInPlay: 0,
         plusFourInPlay: false,
         turnRotation: 1,
@@ -56,6 +57,7 @@ export function GameControler(room, playerList, roomList) {
             currentPlayer.scores.push(scores[id])
             currentPlayer.cards = this.dealCards()
             currentPlayer.hasTurn = false
+            currentPlayer.pressedEitt = false
         }
         this.lastPlayedCard = generateCard(false)
         this.plusFourInPlay = false
@@ -66,9 +68,8 @@ export function GameControler(room, playerList, roomList) {
         this.turnSwitch()
         this.sendGameStatus()
     }
-    self.drawCards = function () {
+    self.drawCards = function (number = 1) {
         let cards = [];
-        let number = 1;
         if (this.lastPlayedCard.value == '+4') {
             number = 4
         }
@@ -119,9 +120,11 @@ export function GameControler(room, playerList, roomList) {
         for(let i = 0; i < this.connected.length; i++){
             let currentPlayer = playerList[this.connected[i]]
             pack.push({
+                id:currentPlayer.id,
                 name:currentPlayer.name,
                 numberOfCards:currentPlayer.cards.length,
                 hasTurn:currentPlayer.hasTurn,
+                pressedEitt:currentPlayer.pressedEitt,
                 scores:currentPlayer.scores
             });
         }
