@@ -131,6 +131,7 @@ export function GameControler(room, playerList, roomList) {
         for(let i = 0; i < this.connected.length; i++){
             let currentPlayer = playerList[this.connected[i]]
             let gameStatus = {
+                id: currentPlayer.id,
                 cards: currentPlayer.cards,
                 hasTurn: currentPlayer.hasTurn,
                 playerList: pack,

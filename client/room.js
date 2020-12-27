@@ -35,11 +35,11 @@ function renderLastPlayedCard(card) {
     lastPlayedCardElement.textContent = card.value;
 }
 
-function renderPlayerList(playerList) {
+function renderPlayerList(status) {
     let playerListELement = document.getElementById('player-list');
     playerListELement.textContent = '';
     let fragment = document.createDocumentFragment();
-    for (let player of playerList) {
+    for (let player of status.playerList) {
         let element = document.createElement('li');
         element.textContent = player.name + ', ' + player.numberOfCards;
         if (player.hasTurn) {
@@ -48,7 +48,7 @@ function renderPlayerList(playerList) {
         if (player.pressedEitt) {
             element.style.color = 'red'
         }
-        else {
+        else if (player.id !== status.id) {
             let didntPressEittButton = document.createElement('button')
             didntPressEittButton.textContent = "Didn't press eitt"
             didntPressEittButton.addEventListener('click', function () {
@@ -94,7 +94,7 @@ function renderPlayerScores(playerList) {
 function setGameStatus(status) {
     gameStatus = status;
     renderCards(status.cards);
-    renderPlayerList(status.playerList);
+    renderPlayerList(status);
     renderPlayerScores(status.playerList)
     renderLastPlayedCard(status.lastPlayedCard)
 }
