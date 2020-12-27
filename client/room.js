@@ -40,7 +40,6 @@ function renderPlayerList(playerList) {
     playerListELement.textContent = '';
     let fragment = document.createDocumentFragment();
     for (let player of playerList) {
-        console.log(player)
         let element = document.createElement('li');
         element.textContent = player.name + ', ' + player.numberOfCards;
         if (player.hasTurn) {
