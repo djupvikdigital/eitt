@@ -54,7 +54,11 @@ export function GameControler(room, playerList, roomList) {
         for (let i = 0; i < this.connected.length; i++) {
             let id = this.connected[i]
             let currentPlayer = playerList[id]
-            currentPlayer.scores.push(scores[id])
+            let score = scores[id]
+            if (currentPlayer.scores.length > 0) {
+                score += currentPlayer.scores[currentPlayer.scores.length - 1]
+            }
+            currentPlayer.scores.push(score)
             currentPlayer.cards = this.dealCards()
             currentPlayer.hasTurn = false
             currentPlayer.pressedEitt = false
