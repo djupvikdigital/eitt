@@ -73,8 +73,9 @@ export function GameControler(room, playerList, roomList) {
     }
     self.drawCards = function (number = 1) {
         let cards = [];
-        if (this.lastPlayedCard.value == '+4') {
+        if (this.plusFourInPlay) {
             number = 4
+            this.plusFourInPlay = false
         }
         else if (this.plusTwoInPlay) {
             number = this.plusTwoInPlay * 2;
