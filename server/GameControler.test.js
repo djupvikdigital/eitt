@@ -9,12 +9,15 @@ function noop() {
     return
 }
 
-function setupControlerWithMocks() {
-    const playerId = 0
-    const player = Player(playerId, { 0: { emit: noop }})
-    const controler = GameControler('', { [playerId]: player }, { 0: {}})
-    controler.connected = [playerId]
+function setupControlerWithMocks(player = setupMockPlayer()) {
+    const controler = GameControler('', { [player.id]: player }, { 0: {}})
+    controler.connected = [player.id]
     return controler
+}
+
+function setupMockPlayer() {
+    const playerId = 0
+    return Player(playerId, { 0: { emit: noop }})
 }
 
 describe('GameControler', () => {
@@ -42,5 +45,15 @@ describe('GameControler', () => {
         const cards = controler.drawCards()
         expect(cards.length).toBe(2)
         expect(controler.roundFinished).toBe(false)
+    })
+
+    it('gives new cards after round finish with +2', () => {
+        const player = setupMockPlayer()
+        const controler = setupControlerWithMocks(player)
+        controler.roundFinished = true
+        controler.playCard({ value: '+2' })
+        const cards = controler.drawCards()
+        expect(cards.length).toBe(2)
+        expect(player.cards.length).toBe(7)
     })
 })
