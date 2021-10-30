@@ -29,31 +29,23 @@ describe('GameControler', () => {
     })
 
     it('does not draw 4 two times after plusFourInPlay', () => {
-        const controler = setupControlerWithMocks()
+        const player = setupMockPlayer()
+        const controler = setupControlerWithMocks(player)
         controler.playCard({ value: '+4' })
-        let cards = controler.drawCards()
-        expect(cards.length).toBe(4)
-        cards = controler.drawCards()
-        expect(cards.length).toBe(1)
+        controler.drawCards(player)
+        expect(player.cards.length).toBe(4)
+        controler.drawCards(player)
+        expect(player.cards.length).toBe(5)
     })
 
     it('allows round to continue while +2 is in play', () => {
-        const controler = setupControlerWithMocks()
-        controler.roundFinished = true
-        controler.playCard({ value: '+2' })
-        expect(controler.roundFinished).toBe(true)
-        const cards = controler.drawCards()
-        expect(cards.length).toBe(2)
-        expect(controler.roundFinished).toBe(false)
-    })
-
-    it('gives new cards after round finish with +2', () => {
         const player = setupMockPlayer()
         const controler = setupControlerWithMocks(player)
         controler.roundFinished = true
         controler.playCard({ value: '+2' })
-        const cards = controler.drawCards()
-        expect(cards.length).toBe(2)
+        expect(controler.roundFinished).toBe(true)
+        controler.drawCards(player)
         expect(player.cards.length).toBe(7)
+        expect(controler.roundFinished).toBe(false)
     })
 })

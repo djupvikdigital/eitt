@@ -74,22 +74,26 @@ export function GameControler(room, playerList, roomList) {
         this.turnSwitch()
         this.sendGameStatus()
     }
-    self.drawCards = function (number = 1) {
+    self.drawCards = function (player, number = 1) {
         let cards = [];
+        let turn = false
         if (this.plusFourInPlay) {
             number = 4
             this.plusFourInPlay = false
-            this.turnSwitch()
+            turn = true
         }
         else if (this.plusTwoInPlay) {
             number = this.plusTwoInPlay * 2;
             this.plusTwoInPlay = 0
-            this.turnSwitch()
+            turn = true
         }
         for (let i = 0; i < number; i++) {
             cards.push(generateCard(true));
         }
-        return cards;
+        player.cards = player.cards.concat(cards);
+        if (turn) {
+            this.turnSwitch()
+        }
     }
     self.playCard = function (card) {
         this.lastPlayedCard = card

@@ -122,7 +122,7 @@ io.sockets.on('connection', function(socket){
         let room = ROOM_LIST[player.room]
         if (player.hasTurn && !player.hasDrawn) {
             let plusInPlay = room.plusFourInPlay || room.plusTwoInPlay > 0
-            player.cards = player.cards.concat(room.drawCards());
+            room.drawCards(player);
             player.pressedEitt = false
             if (!plusInPlay) {
                 player.hasDrawn = true
@@ -135,7 +135,7 @@ io.sockets.on('connection', function(socket){
         let accusedPlayer = PLAYER_LIST[playerId]
         let room = ROOM_LIST[player.room]
         if (room.lastPlayerId === playerId && accusedPlayer.cards.length === 1 && accusedPlayer.pressedEitt == false) {
-            accusedPlayer.cards = accusedPlayer.cards.concat(room.drawCards(3))
+            room.drawCards(accusedPlayer, 3)
         }
         room.sendGameStatus()
     })
