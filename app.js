@@ -37,16 +37,6 @@ function pickRand(array) {
     return rand
 }
 
-function setTOinRoom(inRoom) {
-    setTimeout(function () {
-        let currentRoom = ROOM_LIST[inRoom]
-        for (let i = 0; i < currentRoom.connected.length; i++) {
-            let currentSocket = SOCKET_LIST[currentRoom.connected[i]]
-            currentSocket.emit('newRound')
-        }
-    }, 5000);
-}
-
 let io = socketio(serv,{});
 io.sockets.on('connection', function(socket){
     
@@ -131,17 +121,10 @@ io.sockets.on('connection', function(socket){
     socket.on('drawCards',function(){
         let room = ROOM_LIST[player.room]
         if (player.hasTurn && !player.hasDrawn) {
-            player.cards = player.cards.concat(room.drawCards());
+            let plusInPlay = room.plusFourInPlay || room.plusTwoInPlay > 0
+            room.drawCards(player);
             player.pressedEitt = false
-            if (room.plusFourInPlay) {
-                room.plusFourInPlay = false
-                room.turnSwitch()
-            }
-            else if (room.plusTwoInPlay > 0) {
-                room.plusTwoInPlay = 0;
-                room.turnSwitch();
-            }
-            else {
+            if (!plusInPlay) {
                 player.hasDrawn = true
             }
             room.sendGameStatus();
@@ -152,15 +135,17 @@ io.sockets.on('connection', function(socket){
         let accusedPlayer = PLAYER_LIST[playerId]
         let room = ROOM_LIST[player.room]
         if (room.lastPlayerId === playerId && accusedPlayer.cards.length === 1 && accusedPlayer.pressedEitt == false) {
-            accusedPlayer.cards = accusedPlayer.cards.concat(room.drawCards(3))
+            room.drawCards(accusedPlayer, 3)
         }
         room.sendGameStatus()
     })
 
     socket.on('eitt', function() {
         let room = ROOM_LIST[player.room]
-        player.pressedEitt = true
-        room.sendGameStatus()
+        if (player.cards.length <= 2) {
+            player.pressedEitt = true
+            room.sendGameStatus()
+        }
     })
 
     socket.on('pass',function(){
@@ -183,13 +168,8 @@ io.sockets.on('connection', function(socket){
             room.lastPlayerId = player.id
             room.playCard(card)
             if (player.cards.length === 0) {
-                room.dealNewRound()
-                for (let i = 0; i < room.connected.length; i++) {
-                    let currentSocket = SOCKET_LIST[room.connected[i]]
-                    currentSocket.emit('roundWinner', player.name)
-                }
-                setTOinRoom(player.room)
-                return
+                room.roundFinished = true
+                room.roundWinner = player.name
             }
             room.turnSwitch();
             room.sendGameStatus();

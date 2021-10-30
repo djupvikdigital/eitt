@@ -5,6 +5,8 @@ export function GameControler(room, playerList, roomList) {
         lastPlayerId: 0,
         plusTwoInPlay: 0,
         plusFourInPlay: false,
+        roundFinished: false,
+        roundWinner: '',
         turnRotation: 1,
         turnSkip: 1
     }
@@ -64,6 +66,7 @@ export function GameControler(room, playerList, roomList) {
         }
         this.plusFourInPlay = false
         this.plusTwoInPlay = 0
+        this.roundFinished = false
         this.turnRotation = 1
         this.turnSkip = 1
         playerList[idWithHighestScore].hasTurn = true
@@ -71,18 +74,26 @@ export function GameControler(room, playerList, roomList) {
         this.turnSwitch()
         this.sendGameStatus()
     }
-    self.drawCards = function (number = 1) {
+    self.drawCards = function (player, number = 1) {
         let cards = [];
-        if (this.lastPlayedCard.value == '+4') {
+        let turn = false
+        if (this.plusFourInPlay) {
             number = 4
+            this.plusFourInPlay = false
+            turn = true
         }
         else if (this.plusTwoInPlay) {
             number = this.plusTwoInPlay * 2;
+            this.plusTwoInPlay = 0
+            turn = true
         }
         for (let i = 0; i < number; i++) {
             cards.push(generateCard(true));
         }
-        return cards;
+        player.cards = player.cards.concat(cards);
+        if (turn) {
+            this.turnSwitch()
+        }
     }
     self.playCard = function (card) {
         this.lastPlayedCard = card
@@ -104,6 +115,21 @@ export function GameControler(room, playerList, roomList) {
         }
     }
     self.turnSwitch = function () {
+        if (this.roundFinished && !this.plusTwoInPlay && !this.plusFourInPlay) {
+            self.dealNewRound()
+            let connected = this.connected
+            for (let i = 0; i < connected.length; i++) {
+                let currentPlayer = playerList[connected[i]]
+                currentPlayer.emit('roundWinner', this.roundWinner)
+            }
+            setTimeout(function () {
+                for(let i = 0; i < connected.length; i++){
+                    let currentPlayer = playerList[connected[i]]
+                    currentPlayer.emit('newRound');
+                }
+            }, 5000)
+            return
+        }
         let nextPlayer = 0;
         let nextPlayerTurn = 99;
         for(let i = 0; i < this.connected.length; i++){
