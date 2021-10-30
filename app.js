@@ -159,8 +159,10 @@ io.sockets.on('connection', function(socket){
 
     socket.on('eitt', function() {
         let room = ROOM_LIST[player.room]
-        player.pressedEitt = true
-        room.sendGameStatus()
+        if (player.cards.length <= 2) {
+            player.pressedEitt = true
+            room.sendGameStatus()
+        }
     })
 
     socket.on('pass',function(){
