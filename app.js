@@ -169,10 +169,7 @@ io.sockets.on('connection', function(socket){
             room.playCard(card)
             if (player.cards.length === 0) {
                 room.roundFinished = true
-                for (let i = 0; i < room.connected.length; i++) {
-                    let currentSocket = SOCKET_LIST[room.connected[i]]
-                    currentSocket.emit('roundWinner', player.name)
-                }
+                room.roundWinner = player.name
             }
             room.turnSwitch();
             room.sendGameStatus();

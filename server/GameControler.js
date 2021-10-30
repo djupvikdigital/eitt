@@ -6,6 +6,7 @@ export function GameControler(room, playerList, roomList) {
         plusTwoInPlay: 0,
         plusFourInPlay: false,
         roundFinished: false,
+        roundWinner: '',
         turnRotation: 1,
         turnSkip: 1
     }
@@ -112,6 +113,10 @@ export function GameControler(room, playerList, roomList) {
     self.turnSwitch = function () {
         if (this.roundFinished && !this.plusTwoInPlay && !this.plusFourInPlay) {
             self.dealNewRound()
+            for (let i = 0; i < this.connected.length; i++) {
+                let currentPlayer = playerList[this.connected[i]]
+                currentPlayer.emit('roundWinner', this.roundWinner)
+            }
             setTimeout(function () {
                 for(let i = 0; i < this.connected.length; i++){
                     let currentPlayer = playerList[this.connected[i]]
