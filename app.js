@@ -37,16 +37,6 @@ function pickRand(array) {
     return rand
 }
 
-function setTOinRoom(inRoom) {
-    setTimeout(function () {
-        let currentRoom = ROOM_LIST[inRoom]
-        for (let i = 0; i < currentRoom.connected.length; i++) {
-            let currentSocket = SOCKET_LIST[currentRoom.connected[i]]
-            currentSocket.emit('newRound')
-        }
-    }, 5000);
-}
-
 let io = socketio(serv,{});
 io.sockets.on('connection', function(socket){
     
@@ -178,13 +168,11 @@ io.sockets.on('connection', function(socket){
             room.lastPlayerId = player.id
             room.playCard(card)
             if (player.cards.length === 0) {
-                room.dealNewRound()
+                room.roundFinished = true
                 for (let i = 0; i < room.connected.length; i++) {
                     let currentSocket = SOCKET_LIST[room.connected[i]]
                     currentSocket.emit('roundWinner', player.name)
                 }
-                setTOinRoom(player.room)
-                return
             }
             room.turnSwitch();
             room.sendGameStatus();

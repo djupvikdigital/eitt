@@ -5,6 +5,7 @@ export function GameControler(room, playerList, roomList) {
         lastPlayerId: 0,
         plusTwoInPlay: 0,
         plusFourInPlay: false,
+        roundFinished: false,
         turnRotation: 1,
         turnSkip: 1
     }
@@ -64,6 +65,7 @@ export function GameControler(room, playerList, roomList) {
         }
         this.plusFourInPlay = false
         this.plusTwoInPlay = 0
+        this.roundFinished = false
         this.turnRotation = 1
         this.turnSkip = 1
         playerList[idWithHighestScore].hasTurn = true
@@ -108,6 +110,16 @@ export function GameControler(room, playerList, roomList) {
         }
     }
     self.turnSwitch = function () {
+        if (this.roundFinished && !this.plusTwoInPlay && !this.plusFourInPlay) {
+            self.dealNewRound()
+            setTimeout(function () {
+                for(let i = 0; i < this.connected.length; i++){
+                    let currentPlayer = playerList[this.connected[i]]
+                    currentPlayer.emit('newRound');
+                }
+            }, 5000)
+            return
+        }
         let nextPlayer = 0;
         let nextPlayerTurn = 99;
         for(let i = 0; i < this.connected.length; i++){
