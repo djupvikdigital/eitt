@@ -76,9 +76,12 @@ export function GameControler(room, playerList, roomList) {
         if (this.plusFourInPlay) {
             number = 4
             this.plusFourInPlay = false
+            this.turnSwitch()
         }
         else if (this.plusTwoInPlay) {
             number = this.plusTwoInPlay * 2;
+            this.plusTwoInPlay = 0
+            this.turnSwitch()
         }
         for (let i = 0; i < number; i++) {
             cards.push(generateCard(true));
