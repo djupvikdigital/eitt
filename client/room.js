@@ -95,6 +95,7 @@ function setGameStatus(status) {
     gameStatus = status;
     renderCards(status.cards);
     renderPlayerList(status);
+    document.getElementById('your-turn').style.visibility = status.hasTurn ? 'inherit' : 'hidden'
     renderPlayerScores(status.playerList)
     renderLastPlayedCard(status.lastPlayedCard)
 }
