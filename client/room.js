@@ -1,8 +1,9 @@
 function createClickHandler(i, card) {
-    return function clickHandler() {
+    return function clickHandler(event) {
         currentIndex = i;
         if (card.color === 'black') {
             showColorPicker();
+            event.stopPropagation()
         }
         else {
             socket.emit('playCard', { index: i });
@@ -184,6 +185,8 @@ function changeButtonDisableState(state) {
     }
 }
 
+document.addEventListener('click', hideColorPicker)
+
 document.getElementById('createNewRoomButton').addEventListener('click', function () {
     let newRoom = document.getElementById('newRoomNameInput').value;
     socket.emit('createNewRoom', newRoom);
@@ -207,21 +210,17 @@ document.getElementById('eitt').addEventListener('click', function () {
 })
 
 document.getElementById('pick-blue').addEventListener('click', function () {
-    hideColorPicker();
     socket.emit('playCard', { color: 'blue', index: currentIndex });
 });
 
 document.getElementById('pick-green').addEventListener('click', function () {
-    hideColorPicker();
     socket.emit('playCard', { color: 'green', index: currentIndex });
 });
 
 document.getElementById('pick-red').addEventListener('click', function () {
-    hideColorPicker();
     socket.emit('playCard', { color: 'red', index: currentIndex });
 });
 
 document.getElementById('pick-yellow').addEventListener('click', function () {
-    hideColorPicker();
     socket.emit('playCard', { color: 'yellow', index: currentIndex });
 });
