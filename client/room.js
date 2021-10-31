@@ -98,6 +98,7 @@ function setGameStatus(status) {
     document.getElementById('your-turn').style.visibility = status.hasTurn ? 'inherit' : 'hidden'
     renderPlayerScores(status.playerList)
     renderLastPlayedCard(status.lastPlayedCard)
+    render3DRoom(status)
 }
 
 function showColorPicker() {
