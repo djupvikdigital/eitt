@@ -1,7 +1,3 @@
-let cards = [{color: 'Red', value: '8'}, {color: 'Red', value: '8'}, {color: 'Red', value: '8'}, {color: 'Black', value: '+4'}]
-
-let myCards = []
-
 function getCardTexture(width, height, color, value) {
     const canvas = document.createElement("canvas")
     const resWidth = width * 8
@@ -64,7 +60,7 @@ function ModelTable() {
     return table
 }
 
-function ModelPlayer(own) {
+function ModelPlayer(own, cards) {
     const player = new THREE.Group()
 
     const body = new THREE.Mesh(
@@ -98,25 +94,16 @@ function ModelPlayer(own) {
 
     const cardLength = -70
 
-    function dealCardsInCircle(cards, own) {
-        for (let i = 0; i < cards.length; i++) {
-            let dir = Math.PI / cards.length * i - Math.PI / 3
-            let tempX = Math.cos(dir) * cardLength
-            let tempY = Math.sin(dir) * cardLength
-            let card
-            if (own) {
-                card = ModelCard(cards[i].color, cards[i].value)
-                myCards.push(dir)
-            }
-            if (!own) card = ModelCard('Grey', '')
-            card.position.set(tempX, 20, tempY)
-            card.rotation.y = 2 * Math.PI - dir
-            card.rotation.y += Math.PI / 2
-            player.add(card)
-        }
+    for (let i = 0; i < cards.length; i++) {
+        let dir = Math.PI / cards.length * i - Math.PI / 3
+        let tempX = Math.cos(dir) * cardLength
+        let tempY = Math.sin(dir) * cardLength
+        let card = ModelCard(cards[i].color, cards[i].value)
+        card.position.set(tempX, 20, tempY)
+        card.rotation.y = 2 * Math.PI - dir
+        card.rotation.y += Math.PI / 2
+        player.add(card)
     }
-
-    dealCardsInCircle(cards, own)
 
     return player
 }
