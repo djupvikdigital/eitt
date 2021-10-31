@@ -50,11 +50,12 @@ renderer.setSize(window.innerWidth -20, window.innerHeight -20)
 
 let controls = new THREE.PointerLockControls(camera, document.body)
 
-document.body.appendChild(renderer.domElement)
+document.getElementById('3dRoom').appendChild(renderer.domElement)
 
 window.addEventListener( 'click', function () {
-
-    controls.lock();
+    if (document.getElementById('3dRoom').style.display == 'block') {
+        controls.lock();
+    }
 
 } );
 
