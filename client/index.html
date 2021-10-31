@@ -15,6 +15,10 @@
             </div>
         </div>
         <h1>This is the main lobby!</h1>
+        <div>
+            <input id="change-name-input" maxlength="20" type="text" placeholder="Username">
+            <button id="change-name-button">Change name</button>
+        </div>
         <h2>Choose a open room</h2>
         <div id='openRooms'>
             <p>Sorry, no rooms seem to be open, but you can create one yourself?!</p>
@@ -23,31 +27,39 @@
         <p>Room name</p>
         <input type="text" id="newRoomNameInput" maxlength="20">
         <button id="createNewRoomButton">Create room!</button>
+        <p>View:</p>
+        <label for="">
+            <input type="radio" name="view" checked value="2D">2D
+        </label>
+        <label for="">
+            <input type="radio" name="view" value="3D">3D
+        </label>
     </div>
 
     <div id='room'>
-        <h1 id="roomNameHeadline">Det her er mega fedt!!!!</h1>
-        <div id="roundWinner"></div>
-        <ul id="player-list"></ul>
-        <div>
-            <input id="change-name-input" maxlength="20" type="text">
-            <button id="change-name-button">Change name</button>
+        <div id="2dRoom">
+            <h1 id="roomNameHeadline">Det her er mega fedt!!!!</h1>
+            <div id="roundWinner"></div>
+            <ul id="player-list"></ul>
+            <div class="cards">
+                <button class="card" id="draw-card">Draw card</button>
+                <span class="card" id="last-played-card"></span>
+                <button id="pass">Pass</button>
+                <button id="eitt">Eitt</button>
+                <span id="color-picker" style="display: none;">
+                    <button class="card" id="pick-blue"></button>
+                    <button class="card" id="pick-green"></button>
+                    <button class="card" id="pick-red"></button>
+                    <button class="card" id="pick-yellow"></button>
+                </span>
+            </div>
+            <div class="cards" id="cards"></div>
+            <div id="your-turn">Your turn</div>
+            <table id="player-scores"></table>
         </div>
-        <div class="cards">
-            <button class="card" id="draw-card">Draw card</button>
-            <span class="card" id="last-played-card"></span>
-            <button id="pass">Pass</button>
-            <button id="eitt">Eitt</button>
-            <span id="color-picker" style="display: none;">
-                <button class="card" id="pick-blue"></button>
-                <button class="card" id="pick-green"></button>
-                <button class="card" id="pick-red"></button>
-                <button class="card" id="pick-yellow"></button>
-            </span>
+        <div id="3dRoom">
+
         </div>
-        <div class="cards" id="cards"></div>
-        <div id="your-turn">Your turn</div>
-        <table id="player-scores"></table>
     </div>
 
     <script>
@@ -55,7 +67,11 @@
         document.getElementById("mainlobby").style.display = "none";
     </script>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="/client/mainlobby.js"></script>
     <script src="/client/room.js"></script>
+    <script src="/client/3dTest/PointerLockControls.js"></script>
+    <script src="/client/3dTest/modelsTextures.js"></script>
+    <script src="/client/3dTest/3dTest.js"></script>
 </body>
 </html>

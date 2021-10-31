@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="ctx" width="500" height="500" style="border:1px solid #000000;"></canvas>
+    <script>
+        let ctx = document.getElementById("ctx").getContext("2d");
+
+        let numPlayers = 8
+        let circleLength = 50
+
+        function calcPointInCircle(numPlayers, circleLength) {
+            for (let i = 0; i < numPlayers; i++) {
+                let dir = 2 * Math.PI / numPlayers * i
+                let tempX = Math.cos(dir) * circleLength;
+                let tempY = Math.sin(dir) * circleLength;
+                ctx.rect(tempX+200, tempY+200, 50, 50);
+                ctx.stroke();
+            }
+        }
+
+        calcPointInCircle(numPlayers, circleLength)
+
+
+    </script>
+</body>
+</html>
