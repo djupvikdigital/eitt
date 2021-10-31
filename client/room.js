@@ -120,6 +120,14 @@ socket.on('joinRoom', function(data){
     if (inRoom != 'mainlobby' && inRoom != '' ) {
         document.getElementById("mainlobby").style.display = "none";
         document.getElementById("room").style.display = "block";
+        if (document.querySelector('input[name="view"]:checked').value == '2D') {
+            document.getElementById("3dRoom").style.display = "none";
+            document.getElementById("2dRoom").style.display = "block";
+        }
+        if (document.querySelector('input[name="view"]:checked').value == '3D') {
+            document.getElementById("3dRoom").style.display = "block";
+            document.getElementById("2dRoom").style.display = "none";
+        }
         document.getElementById("roomNameHeadline").textContent = 'Room: ' + data
     }
 })
