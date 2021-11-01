@@ -79,7 +79,7 @@ function ModelPlayer(own, cards) {
     armLeft.rotation.z = Math.PI / 3
     armLeft.rotation.x = Math.PI / 5
 
-    player.add(armLeft)
+    if (!own) player.add(armLeft)
 
     const armRight = new THREE.Mesh(
         new THREE.BoxBufferGeometry(10, 50, 10),
@@ -90,7 +90,7 @@ function ModelPlayer(own, cards) {
     armRight.rotation.z = Math.PI / 3
     armRight.rotation.x = -1*Math.PI / 5
 
-    player.add(armRight)
+    if (!own) player.add(armRight)
 
     const cardLength = -70
 
