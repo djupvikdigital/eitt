@@ -1,7 +1,14 @@
 const scene = new THREE.Scene();
-scene.background = new THREE.Color( 0xffffff );
+scene.background = new THREE.Color('white');
 
-const aspectRatio = window.innerWidth / window.innerHeight
+const renderer = new THREE.WebGLRenderer({ antialias: true})
+
+let innerWidth = window.innerWidth -20
+let innerHeight = window.innerHeight -20
+
+renderer.setSize(innerWidth, innerHeight)
+
+let aspectRatio = window.innerWidth / window.innerHeight
 
 const camera = new THREE.PerspectiveCamera(
     30,
@@ -12,8 +19,7 @@ const camera = new THREE.PerspectiveCamera(
 
 camera.lookAt(0, 0, 0)
 
-const renderer = new THREE.WebGLRenderer({ antialias: true})
-renderer.setSize(window.innerWidth -20, window.innerHeight -20)
+
 
 let controls = new THREE.PointerLockControls(camera, document.body)
 
@@ -26,8 +32,12 @@ window.addEventListener( 'click', function () {
 
 } );
 
+let firstTime = true
+
 function render3DRoom(gameStatus) {
     scene.clear()
+
+    scene.add(camera)
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6)
     scene.add(ambientLight)
@@ -49,6 +59,7 @@ function render3DRoom(gameStatus) {
         let tempY = Math.sin(dir) * 200
         let own = false
         if (currentPlayer.id == gameStatus.id) own = true
+        cardsRayCast = []
         let cards = []
         if (own) cards = gameStatus.cards
         if (!own) {
@@ -63,15 +74,44 @@ function render3DRoom(gameStatus) {
         if (own) camera.position.set(tempX, 75, tempY)
     }
 
-    camera.lookAt(0, 0, 0)
+    if (firstTime) camera.lookAt(0, 0, 0)
+    firstTime = false
     
 }
 
-setInterval(function(){
-    let worldDir = new THREE.Vector3
-    camera.rotation.toVector3(worldDir)
-    if (worldDir.y < 1) console.log(Math.PI - worldDir.z - Math.PI / 2)
+let raycaster = new THREE.Raycaster();
 
+let lookCounter = 0
+let lookObject = -1
+
+
+setInterval(function(){
+    if (innerWidth != window.innerWidth -20 || innerHeight != window.innerHeight -20) {
+        innerWidth = window.innerWidth -20
+        innerHeight = window.innerHeight -20
+
+        renderer.setSize(innerWidth, innerHeight)
+        aspectRatio = window.innerWidth / window.innerHeight
+        camera.aspect = aspectRatio
+        camera.updateProjectionMatrix
+    }
+
+    raycaster.setFromCamera({x:0, y:0}, camera);
+    const intersectedObjects = raycaster.intersectObjects(cardsRayCast);
+    if (intersectedObjects.length) {
+        if (lookObject > -1 && intersectedObjects[0].object.cardId == lookObject) {
+            lookCounter++
+        } else {
+            lookObject = intersectedObjects[0].object.cardId
+            lookCounter = 0
+        }
+    } else {
+        lookObject = -1
+        lookCounter = 0
+    }
+
+    if (lookCounter == 100) socket.emit('playCard', { index: lookObject });
+    
     renderer.render(scene, camera)
     
 },1000/50)

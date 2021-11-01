@@ -1,3 +1,5 @@
+let cardsRayCast = []
+
 function getCardTexture(width, height, color, value) {
     const canvas = document.createElement("canvas")
     const resWidth = width * 8
@@ -23,14 +25,13 @@ function getCardTexture(width, height, color, value) {
 }
 
 function ModelCard(color, value) {
-    const card = new THREE.Group()
     const width = 20
     const height = 50
 
     const cardTexture = getCardTexture(width, height, color, value)
 
-    const main = new THREE.Mesh(
-        new THREE.BoxBufferGeometry(width, 2, height), [
+    const card = new THREE.Mesh(
+        new THREE.BoxGeometry(width, 2, height), [
         new THREE.MeshLambertMaterial({color: 0x9fb4c7}),
         new THREE.MeshLambertMaterial({color: 0x9fb4c7}),
         new THREE.MeshLambertMaterial({map: cardTexture}),
@@ -39,7 +40,6 @@ function ModelCard(color, value) {
         new THREE.MeshLambertMaterial({color: 0x9fb4c7}),
     ])
 
-    card.add(main)
     card.rotation.y = Math.PI /2
 
     return card
@@ -49,7 +49,7 @@ function ModelTable() {
     const table = new THREE.Group()
 
     const tablePlate = new THREE.Mesh(
-        new THREE.CircleBufferGeometry(160, 50),
+        new THREE.CircleGeometry(160, 50),
         new THREE.MeshLambertMaterial({ color: 0x102b0b})
     )
 
@@ -99,9 +99,11 @@ function ModelPlayer(own, cards) {
         let tempX = Math.cos(dir) * cardLength
         let tempY = Math.sin(dir) * cardLength
         let card = ModelCard(cards[i].color, cards[i].value)
+        card.cardId = i
         card.position.set(tempX, 20, tempY)
         card.rotation.y = 2 * Math.PI - dir
         card.rotation.y += Math.PI / 2
+        if (own) cardsRayCast.push(card)
         player.add(card)
     }
 
