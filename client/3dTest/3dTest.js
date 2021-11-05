@@ -13,7 +13,7 @@ renderer.setSize(innerWidth, innerHeight)
 let aspectRatio = window.innerWidth / window.innerHeight
 
 const camera = new THREE.PerspectiveCamera(
-    30,
+    60,
     aspectRatio,
     0.1,
     2000
@@ -81,8 +81,8 @@ function drag(e) {
 
             _euler.setFromQuaternion( camera.quaternion );
 
-            _euler.y -= movementX * 0.002;
-            _euler.x -= movementY * 0.002;
+            _euler.y += movementX * 0.002;
+            _euler.x += movementY * 0.002;
             _euler.x = Math.max( _PI_2 - Math.PI, Math.min( _PI_2, _euler.x ) );
             camera.quaternion.setFromEuler( _euler );
             touchX = touch.clientX
