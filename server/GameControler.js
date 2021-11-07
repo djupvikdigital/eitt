@@ -18,7 +18,7 @@ export function GameControler(room, playerList, roomList) {
             let currentPlayer = playerList[id]
             for (let j = 0; j < currentPlayer.cards.length; j++) {
                 let card = currentPlayer.cards[j]
-                if (isNaN(Number(card.value))) {
+                if (isNaN(Number(card.value.slice(0, 1)))) {
                     if (card.color === 'black') {
                         score += 50
                     }
