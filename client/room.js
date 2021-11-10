@@ -225,3 +225,25 @@ document.getElementById('pick-red').addEventListener('click', function () {
 document.getElementById('pick-yellow').addEventListener('click', function () {
     socket.emit('playCard', { color: 'yellow', index: currentIndex });
 });
+
+//Card shuffler 
+
+document.getElementById('showCardShuffler').addEventListener('click', function () {
+    document.getElementById('cardShufflerDiv').style = 'block'
+});
+
+document.getElementById('emptyDeck').addEventListener('click', function () {
+    socket.emit('emptyDeck');
+});
+
+document.getElementById('addCrewDeck').addEventListener('click', function () {
+    socket.emit('addCrewDeck');
+});
+
+document.getElementById('drawShuffledCard').addEventListener('click', function () {
+    socket.emit('drawShuffledCard', document.getElementById('manyDrawCard').value);
+});
+
+socket.on('drewCardz',function(data){
+    document.getElementById('drewnCardz').innerHTML = data
+})
