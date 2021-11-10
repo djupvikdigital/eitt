@@ -48,4 +48,39 @@ describe('GameControler', () => {
         expect(player.cards.length).toBe(7)
         expect(controler.roundFinished).toBe(false)
     })
+
+    it('correctly calculates scores for numbered cards', () => {
+        const player = setupMockPlayer()
+        const cards = [
+            { value: '0' },
+            { value: '1' },
+            { value: '2' },
+            { value: '3' },
+            { value: '4' },
+            { value: '5' },
+            { value: '6' },
+            { value: '7' },
+            { value: '8' },
+            { value: '9' }
+        ]
+        player.cards = cards
+        const controler = setupControlerWithMocks(player)
+        const scores = controler.calculateScores()
+        expect(scores[0]).toBe(45)
+    })
+
+    it('correctly calculates scores for special cards', () => {
+        const player = setupMockPlayer()
+        const cards = [
+            { value: '+2' },
+            { color: 'black', value: '+4' },
+            { value: 'R' },
+            { value: 'S' },
+            { color: 'black', value: 'W' }
+        ]
+        player.cards = cards
+        const controler = setupControlerWithMocks(player)
+        const scores = controler.calculateScores()
+        expect(scores[0]).toBe(160)
+    })
 })
