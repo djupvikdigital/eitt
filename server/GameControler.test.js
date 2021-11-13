@@ -83,4 +83,12 @@ describe('GameControler', () => {
         const scores = controler.calculateScores()
         expect(scores[0]).toBe(160)
     })
+
+    it('draws 3 cards even when plusFourInPlay is true', () => {
+        const player = setupMockPlayer()
+        const controler = setupControlerWithMocks(player)
+        controler.plusFourInPlay = true
+        controler.drawCards(player, 3)
+        expect(player.cards.length).toBe(3)
+    })
 })
