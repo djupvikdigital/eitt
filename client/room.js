@@ -7,6 +7,7 @@ function createClickHandler(i, card) {
         }
         else {
             socket.emit('playCard', { index: i });
+            console.log('playCard emitted, index = ' + i)
         }
     }
 }
@@ -63,7 +64,6 @@ function renderPlayerList(status) {
 } 
 
 function renderPlayerScores(playerList) {
-    console.log(playerList)
     let playerScoresElement = document.getElementById('player-scores')
     playerScoresElement.textContent = ''
     let fragment = document.createDocumentFragment()
@@ -93,6 +93,8 @@ function renderPlayerScores(playerList) {
 }
 
 function setGameStatus(status) {
+    console.log('Gamestatus received:')
+    console.log(status)
     gameStatus = status;
     renderCards(status.cards);
     renderPlayerList(status);
