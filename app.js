@@ -37,6 +37,31 @@ function pickRand(array) {
     return rand
 }
 
+// card shuffler
+let nytDeck = []
+function newCrewDeck(nytDeck) {
+    let farve = ''
+    for (let i = 0; i < 4; i++) {
+        if (i == 0) farve = 'Rød'
+        if (i == 1) farve = 'Grøn'
+        if (i == 2) farve = 'Blå'
+        if (i == 3) farve = 'Gul'
+        for (let a = 0; a < 9; a++) {
+            nytDeck.push(farve + ' ' + (a +1))
+        }
+    }
+    for (let i = 0; i < 4; i++) {
+        nytDeck.push('Raket ' + (i+1))
+    }
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
 let io = socketio(serv,{});
 io.sockets.on('connection', function(socket){
     
@@ -203,6 +228,29 @@ io.sockets.on('connection', function(socket){
         player.name = data;
         room.sendGameStatus();
     });
+
+    //card shuffler
+
+    socket.on('emptyDeck',function(){
+        nytDeck = []
+        console.log('Deck has been emptied')
+    })
+
+    socket.on('addCrewDeck',function(){
+        newCrewDeck(nytDeck)
+        shuffleArray(nytDeck)
+        console.log('New crew deck added')
+        console.log(nytDeck)
+    })
+
+    socket.on('drawShuffledCard',function(data){
+        let string = ''
+        for (let i = 0; i < data; i++) {
+            string = string + ', ' + nytDeck.splice(0, 1)
+        }
+        socket.emit('drewCardz', string)
+        console.log(string)
+    })
 
     socket.on('disconnect',function(){
         let room = ROOM_LIST[player.room].room
