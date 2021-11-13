@@ -96,6 +96,7 @@ function setGameStatus(status) {
     console.log('Gamestatus received:')
     console.log(status)
     gameStatus = status;
+    document.getElementById('draw-card').textContent = 'Draw ' + status.drawCount
     renderCards(status.cards);
     renderPlayerList(status);
     document.getElementById('your-turn').style.visibility = status.hasTurn ? 'inherit' : 'hidden'

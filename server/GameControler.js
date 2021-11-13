@@ -169,9 +169,17 @@ export function GameControler(room, playerList, roomList) {
         }
         for(let i = 0; i < this.connected.length; i++){
             let currentPlayer = playerList[this.connected[i]]
+            let drawCount = 1
+            if (this.plusFourInPlay) {
+                drawCount = 4
+            }
+            else if (this.plusTwoInPlay) {
+                drawCount = this.plusTwoInPlay * 2
+            }
             let gameStatus = {
                 id: currentPlayer.id,
                 cards: currentPlayer.cards,
+                drawCount: drawCount, 
                 hasTurn: currentPlayer.hasTurn,
                 playerList: pack,
                 lastPlayedCard: this.lastPlayedCard
