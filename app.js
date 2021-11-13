@@ -213,7 +213,12 @@ io.sockets.on('connection', function(socket){
         for (let i = 0; i < ROOM_LIST[room].connected.length; i++) {
             if (ROOM_LIST[room].connected[i] == goodbyeID) ROOM_LIST[room].connected.splice(i, 1)
         }
-        ROOM_LIST[room].sendGameStatus();
+        if (ROOM_LIST[room].connected.length === 0) {
+            delete ROOM_LIST[room]
+        }
+        else {
+            ROOM_LIST[room].sendGameStatus();
+        }
         console.log('socket disconnected');
         console.log(ROOM_LIST);
     });
