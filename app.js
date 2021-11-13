@@ -261,7 +261,7 @@ io.sockets.on('connection', function(socket){
         for (let i = 0; i < ROOM_LIST[room].connected.length; i++) {
             if (ROOM_LIST[room].connected[i] == goodbyeID) ROOM_LIST[room].connected.splice(i, 1)
         }
-        if (ROOM_LIST[room].connected.length === 0) {
+        if (ROOM_LIST[room].connected.length === 0 && room !== 'mainlobby') {
             delete ROOM_LIST[room]
         }
         else {
