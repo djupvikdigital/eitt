@@ -1,10 +1,10 @@
 import { CardDeck } from './CardDeck.js'
 
 export function GameControler(room, playerList, roomList) {
-    let deck = CardDeck()
     let self = {
         room: room,
         connected: [],
+        deck: CardDeck(),
         lastPlayerId: 0,
         plusTwoInPlay: 0,
         plusFourInPlay: false,
@@ -40,7 +40,7 @@ export function GameControler(room, playerList, roomList) {
     self.dealCards = function () {
         let cards = [];
         for (let i = 0; i < 7; i++) {
-            cards.push(deck.drawCard());
+            cards.push(this.deck.drawCard());
         }
         return cards
     }
@@ -73,12 +73,12 @@ export function GameControler(room, playerList, roomList) {
         this.turnRotation = 1
         this.turnSkip = 1
         playerList[idWithHighestScore].hasTurn = true
-        deck = CardDeck()
-        let card = deck.drawCard()
+        this.deck = CardDeck()
+        let card = this.deck.drawCard()
         while (card.value === '+4') {
             // can't start with a +4, try again
-            deck = CardDeck()
-            card = deck.drawCard()
+            this.deck = CardDeck()
+            card = this.deck.drawCard()
         }
         this.playCard(card)
         this.turnSwitch()
@@ -100,7 +100,7 @@ export function GameControler(room, playerList, roomList) {
             }
         }
         for (let i = 0; i < number; i++) {
-            cards.push(deck.drawCard());
+            cards.push(this.deck.drawCard());
         }
         player.cards = player.cards.concat(cards);
         if (turn) {
@@ -109,7 +109,7 @@ export function GameControler(room, playerList, roomList) {
     }
     self.playCard = function (card) {
         this.lastPlayedCard = card
-        deck.playCard(card)
+        this.deck.playCard(card)
         if (card.value == '+4') this.plusFourInPlay = true
         else if (card.value == '+2') this.plusTwoInPlay = this.plusTwoInPlay + 1
         else if (card.value == 'R') this.turnRotation = (this.turnRotation * -1)
@@ -211,11 +211,11 @@ export function GameControler(room, playerList, roomList) {
             currentPlayer.emit('roomStatus', pack);
         }
     }
-    let card = deck.drawCard()
+    let card = self.deck.drawCard()
     while (card.value === '+4') {
         // can't start with a +4, try again
-        deck = CardDeck()
-        card = deck.drawCard()
+        self.deck = CardDeck()
+        card = self.deck.drawCard()
     }
     self.playCard(card)
     return self
