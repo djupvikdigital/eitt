@@ -5,6 +5,13 @@ describe('CardDeck', () => {
         const deck = CardDeck()
         expect(deck.availableCards.length).toBe(108)
     })
+    it('always returns a card object', () => {
+        const deck = CardDeck()
+        const length = deck.availableCards.length
+        for (let i = 0; i < length; i++) {
+            expect(Object.keys(deck.drawCard())).toEqual(['color', 'value'])
+        }
+    })
     it('reshuffles played cards when no available cards are left', () => {
         const deck = CardDeck()
         const drawnCard = deck.drawCard()
