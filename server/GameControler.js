@@ -1,4 +1,7 @@
+import { CardDeck } from './CardDeck.js'
+
 export function GameControler(room, playerList, roomList) {
+    let deck = CardDeck()
     let self = {
         room: room,
         connected: [],
@@ -37,7 +40,7 @@ export function GameControler(room, playerList, roomList) {
     self.dealCards = function () {
         let cards = [];
         for (let i = 0; i < 7; i++) {
-            cards.push(generateCard(true));
+            cards.push(deck.drawCard());
         }
         return cards
     }
@@ -70,7 +73,14 @@ export function GameControler(room, playerList, roomList) {
         this.turnRotation = 1
         this.turnSkip = 1
         playerList[idWithHighestScore].hasTurn = true
-        this.playCard(generateCard(false))
+        deck = CardDeck()
+        let card = deck.drawCard()
+        while (card.value === '+4') {
+            // can't start with a +4, try again
+            deck = CardDeck()
+            card = deck.drawCard()
+        }
+        this.playCard(card)
         this.turnSwitch()
         this.sendGameStatus()
     }
@@ -90,7 +100,7 @@ export function GameControler(room, playerList, roomList) {
             }
         }
         for (let i = 0; i < number; i++) {
-            cards.push(generateCard(true));
+            cards.push(deck.drawCard());
         }
         player.cards = player.cards.concat(cards);
         if (turn) {
@@ -99,6 +109,7 @@ export function GameControler(room, playerList, roomList) {
     }
     self.playCard = function (card) {
         this.lastPlayedCard = card
+        deck.playCard(card)
         if (card.value == '+4') this.plusFourInPlay = true
         else if (card.value == '+2') this.plusTwoInPlay = this.plusTwoInPlay + 1
         else if (card.value == 'R') this.turnRotation = (this.turnRotation * -1)
@@ -200,20 +211,12 @@ export function GameControler(room, playerList, roomList) {
             currentPlayer.emit('roomStatus', pack);
         }
     }
-    self.playCard(generateCard(false))
+    let card = deck.drawCard()
+    while (card.value === '+4') {
+        // can't start with a +4, try again
+        deck = CardDeck()
+        card = deck.drawCard()
+    }
+    self.playCard(card)
     return self
-}
-
-function generateCard(allowPlusFour) {
-    let colors = ['blue', 'red', 'green', 'yellow'];
-    let values = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+2', 'R', 'S', 'W'];
-    if (allowPlusFour) {
-        values.push('+4')
-    }
-    let color = 'black';
-    let value = values[Math.floor(Math.random() * values.length)];
-    if (value !== '+4' && value !== 'W') {
-        color = colors[Math.floor(Math.random() * colors.length)];
-    }
-    return { color, value };
 }
