@@ -182,6 +182,34 @@ io.sockets.on('connection', function(socket){
         }
     });
 
+    socket.on('checkPlusFour', function(){
+        let room = ROOM_LIST[player.room]
+        if (room.plusFourInPlay) {
+            const playedCards = room.deck.playedCards
+            const index = playedCards.length - 2
+            const prevColor = index >= 0 && playedCards[index] ? playedCards[index].color : ''
+            const checkedPlayer = PLAYER_LIST[room.lastPlayerId]
+            if (checkedPlayer) {
+                const cardsWithPrevColor = checkedPlayer.cards.filter(function(card){
+                    return card.color === prevColor
+                })
+                if (cardsWithPrevColor.length > 0) {
+                    // checked player played +4 while still having previous color
+                    // checked player must draw 4 instead, and turn doesn't switch
+                    room.drawCards(checkedPlayer, 4)
+                    room.plusFourInPlay = false
+                }
+                else {
+                    // checked player is innocent, checking player gets 6 cards
+                    room.drawCards(player, 6)
+                    room.plusFourInPlay = false
+                    room.turnSwitch()
+                }
+                room.sendGameStatus()
+            }
+        }
+    })
+
     socket.on('playCard',function(data){
         let room = ROOM_LIST[player.room]
         function legitPlay(){

@@ -213,6 +213,10 @@ document.getElementById('eitt').addEventListener('click', function () {
     socket.emit('eitt')
 })
 
+document.getElementById('check-plus-four').addEventListener('click', function () {
+    socket.emit('checkPlusFour')
+})
+
 document.getElementById('pick-blue').addEventListener('click', function () {
     socket.emit('playCard', { color: 'blue', index: currentIndex });
 });
