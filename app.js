@@ -272,9 +272,14 @@ io.sockets.on('connection', function(socket){
     })
 
     socket.on('drawShuffledCard',function(data){
+        let newArr = []
+        for (let i = 0; i < data; i++) {
+            newArr.push(nytDeck.splice(0, 1))
+        }
+        newArr.sort()
         let string = ''
         for (let i = 0; i < data; i++) {
-            string = string + ', ' + nytDeck.splice(0, 1)
+            string = string + ', ' + newArr.splice(0, 1)
         }
         socket.emit('drewCardz', string)
         console.log(string)
