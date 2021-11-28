@@ -44,7 +44,7 @@ export function GameControler(room, playerList, roomList) {
         }
         return cards
     }
-    self.dealNewRound = function () {
+    self.dealNewRound = function (deck = CardDeck()) {
         let scores = this.calculateScores()
         let idWithHighestScore = 0
         let highestScore = 0
@@ -73,7 +73,7 @@ export function GameControler(room, playerList, roomList) {
         this.turnRotation = 1
         this.turnSkip = 1
         playerList[idWithHighestScore].hasTurn = true
-        this.deck = CardDeck()
+        this.deck = deck
         let card = this.deck.drawCard()
         while (card.value === '+4') {
             // can't start with a +4, try again
@@ -81,7 +81,10 @@ export function GameControler(room, playerList, roomList) {
             card = this.deck.drawCard()
         }
         this.playCard(card)
-        this.turnSwitch()
+        if (card.value !== 'R') {
+            // let dealer start if starting with reverse card
+            this.turnSwitch()
+        }
         this.sendGameStatus()
     }
     self.drawCards = function (player, number = 1) {

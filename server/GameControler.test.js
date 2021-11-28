@@ -1,5 +1,6 @@
 import { jest } from '@jest/globals'
 
+import { CardDeck } from './CardDeck'
 import { GameControler } from './GameControler'
 import { Player } from './Player'
 
@@ -90,5 +91,22 @@ describe('GameControler', () => {
         controler.plusFourInPlay = true
         controler.drawCards(player, 3)
         expect(player.cards.length).toBe(3)
+    })
+
+    it('starts with the dealer if first card is reverse', () => {
+        const players = {
+            0: Player(0, { 0: { emit: noop } }),
+            1: Player(1, { 1: { emit: noop } }),
+        }
+        const controler = GameControler('', players, { 0: {}})
+        controler.connected = [0, 1]
+        players[0].cards = [{ value: '1' }]
+        players[1].cards = []
+        const deck = CardDeck()
+        deck.availableCards.push({ value: 'R' })
+        controler.dealNewRound(deck)
+        expect(players[0].hasTurn).toBe(true)
+        expect(players[1].hasTurn).toBe(false)
+        expect(controler.turnRotation).toBe(-1)
     })
 })
