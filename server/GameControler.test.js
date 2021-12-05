@@ -1,10 +1,6 @@
-import { jest } from '@jest/globals'
-
 import { CardDeck } from './CardDeck'
 import { GameControler } from './GameControler'
 import { Player } from './Player'
-
-jest.useFakeTimers()
 
 function noop() {
     return
