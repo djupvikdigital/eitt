@@ -37,6 +37,7 @@ export function GameControler(room, playerList, roomList) {
             currentPlayer.pressedEitt = false
         }
         playerList[idWithHighestScore].hasTurn = true
+        this.sendGameStatus()
     }
     self.calculateScores = function () {
         let scores = {}
