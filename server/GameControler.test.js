@@ -42,8 +42,8 @@ describe('GameControler', () => {
         controler.playCard({ value: '+2' })
         expect(controler.roundFinished).toBe(true)
         controler.drawCards(player)
-        expect(player.cards.length).toBe(7)
-        expect(controler.roundFinished).toBe(false)
+        expect(player.cards.length).toBe(2)
+        expect(controler.roundFinished).toBe(true)
     })
 
     it('correctly calculates scores for numbered cards', () => {
