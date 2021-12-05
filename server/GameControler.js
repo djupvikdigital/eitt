@@ -13,6 +13,31 @@ export function GameControler(room, playerList, roomList) {
         turnRotation: 1,
         turnSkip: 1
     }
+    self.addScoresForRound = function () {
+        let scores = this.calculateScores()
+        let idWithHighestScore = 0
+        let highestScore = 0
+        for (let id in scores) {
+            let score = scores[id]
+            if (score >= highestScore) {
+                highestScore = score
+                idWithHighestScore = id
+            }
+        }
+        for (let i = 0; i < this.connected.length; i++) {
+            let id = this.connected[i]
+            let currentPlayer = playerList[id]
+            let score = scores[id]
+            if (currentPlayer.scores.length > 0) {
+                score += currentPlayer.scores[currentPlayer.scores.length - 1]
+            }
+            currentPlayer.scores.push(score)
+            currentPlayer.cards = this.dealCards()
+            currentPlayer.hasTurn = false
+            currentPlayer.pressedEitt = false
+        }
+        playerList[idWithHighestScore].hasTurn = true
+    }
     self.calculateScores = function () {
         let scores = {}
         for (let i = 0; i < this.connected.length; i++) {
@@ -45,34 +70,16 @@ export function GameControler(room, playerList, roomList) {
         return cards
     }
     self.dealNewRound = function (deck = CardDeck()) {
-        let scores = this.calculateScores()
-        let idWithHighestScore = 0
-        let highestScore = 0
-        for (let id in scores) {
-            let score = scores[id]
-            if (score >= highestScore) {
-                highestScore = score
-                idWithHighestScore = id
-            }
-        }
         for (let i = 0; i < this.connected.length; i++) {
             let id = this.connected[i]
             let currentPlayer = playerList[id]
-            let score = scores[id]
-            if (currentPlayer.scores.length > 0) {
-                score += currentPlayer.scores[currentPlayer.scores.length - 1]
-            }
-            currentPlayer.scores.push(score)
             currentPlayer.cards = this.dealCards()
-            currentPlayer.hasTurn = false
-            currentPlayer.pressedEitt = false
         }
         this.plusFourInPlay = false
         this.plusTwoInPlay = 0
         this.roundFinished = false
         this.turnRotation = 1
         this.turnSkip = 1
-        playerList[idWithHighestScore].hasTurn = true
         this.deck = deck
         let card = this.deck.drawCard()
         while (card.value === '+4') {
@@ -132,6 +139,7 @@ export function GameControler(room, playerList, roomList) {
     }
     self.turnSwitch = function () {
         if (this.roundFinished && !this.plusTwoInPlay && !this.plusFourInPlay) {
+            self.addScoresForRound()
             self.dealNewRound()
             let connected = this.connected
             for (let i = 0; i < connected.length; i++) {

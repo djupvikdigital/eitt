@@ -85,6 +85,20 @@ describe('GameControler', () => {
         expect(scores[0]).toBe(160)
     })
 
+    it('adds scores to players for each round', () => {
+        const players = {
+            0: Player(0, { 0: { emit: noop } }),
+            1: Player(1, { 1: { emit: noop } }),
+        }
+        const controler = GameControler('', players, { 0: {}})
+        controler.connected = [0, 1]
+        controler.addScoresForRound()
+        expect(typeof players[0].scores[0]).toBe('number')
+        controler.dealNewRound()
+        controler.addScoresForRound()
+        expect(typeof players[0].scores[1]).toBe('number')
+    })
+
     it('draws 3 cards even when plusFourInPlay is true', () => {
         const player = setupMockPlayer()
         const controler = setupControlerWithMocks(player)
@@ -104,6 +118,7 @@ describe('GameControler', () => {
         players[1].cards = []
         const deck = CardDeck()
         deck.availableCards.push({ value: 'R' })
+        controler.addScoresForRound()
         controler.dealNewRound(deck)
         expect(players[0].hasTurn).toBe(true)
         expect(players[1].hasTurn).toBe(false)
