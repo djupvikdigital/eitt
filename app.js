@@ -258,6 +258,11 @@ io.sockets.on('connection', function(socket){
         room.sendGameStatus();
     });
 
+    socket.on('newRound',function(){
+        let room = ROOM_LIST[player.room]
+        room.dealNewRound()
+    })
+
     //card shuffler
 
     socket.on('emptyDeck',function(){

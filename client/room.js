@@ -167,18 +167,30 @@ function createClickHandlerJoinRoom(room) {
 socket.on('roundWinner', function(data){
     let divElement = document.getElementById('roundWinner')
     let h1 = document.createElement('h2')
-    let h2 = document.createElement('h2')
     h1.textContent = 'The round winner is..... ' + data + '!!'
-    h2.textContent = 'Starting new round in just a moment'
     divElement.appendChild(h1)
-    divElement.appendChild(h2)
     changeButtonDisableState(true)
+    let highestScore = 0
+    let playerWithHightestScore = null
+    let playerList = gameStatus.playerList
+    for (let i = 0; i < playerList.length; i++) {
+        let player = playerList[i]
+        let score = player.scores[player.scores.length - 1]
+        if (score >= highestScore) {
+            highestScore = score
+            playerWithHightestScore = player
+        }
+    }
+    if (playerWithHightestScore.id === gameStatus.id) {
+        document.getElementById('round-controls').style.visibility = 'inherit'
+    }
 })
 
 socket.on('newRound', function(){
     let divElement = document.getElementById('roundWinner')
     divElement.textContent = ''
     changeButtonDisableState(false)
+    document.getElementById('round-controls').style.visibility = ''
 })
 
 function changeButtonDisableState(state) {
@@ -232,6 +244,10 @@ document.getElementById('pick-red').addEventListener('click', function () {
 document.getElementById('pick-yellow').addEventListener('click', function () {
     socket.emit('playCard', { color: 'yellow', index: currentIndex });
 });
+
+document.getElementById('new-round').addEventListener('click', function () {
+    socket.emit('newRound')
+})
 
 //Card shuffler 
 

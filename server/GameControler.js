@@ -32,7 +32,6 @@ export function GameControler(room, playerList, roomList) {
                 score += currentPlayer.scores[currentPlayer.scores.length - 1]
             }
             currentPlayer.scores.push(score)
-            currentPlayer.cards = this.dealCards()
             currentPlayer.hasTurn = false
             currentPlayer.pressedEitt = false
         }
@@ -93,6 +92,11 @@ export function GameControler(room, playerList, roomList) {
             // let dealer start if starting with reverse card
             this.turnSwitch()
         }
+        let connected = this.connected
+        for(let i = 0; i < connected.length; i++){
+            let currentPlayer = playerList[connected[i]]
+            currentPlayer.emit('newRound');
+        }
         this.sendGameStatus()
     }
     self.drawCards = function (player, number = 1) {
@@ -141,18 +145,11 @@ export function GameControler(room, playerList, roomList) {
     self.turnSwitch = function () {
         if (this.roundFinished && !this.plusTwoInPlay && !this.plusFourInPlay) {
             self.addScoresForRound()
-            self.dealNewRound()
             let connected = this.connected
             for (let i = 0; i < connected.length; i++) {
                 let currentPlayer = playerList[connected[i]]
                 currentPlayer.emit('roundWinner', this.roundWinner)
             }
-            setTimeout(function () {
-                for(let i = 0; i < connected.length; i++){
-                    let currentPlayer = playerList[connected[i]]
-                    currentPlayer.emit('newRound');
-                }
-            }, 5000)
             return
         }
         let nextPlayer = 0;

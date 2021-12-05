@@ -67,6 +67,10 @@
 	margin: 1em 0;
 }
 
+#round-controls {
+	visibility: hidden;
+}
+
 .fireworks {
 	margin: 0;
 	padding: 0;
