@@ -116,6 +116,9 @@ export function GameControler(room, playerList, roomList) {
                 this.plusTwoInPlay = 0
                 turn = true
             }
+            else {
+                player.hasDrawn = true
+            }
         }
         for (let i = 0; i < number; i++) {
             cards.push(this.deck.drawCard());

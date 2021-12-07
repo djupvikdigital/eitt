@@ -58,6 +58,35 @@ describe('GameControler', () => {
         expect(player.pressedEitt).toBe(false)
     })
 
+    it('sets hasDrawn after regular drawing', () => {
+        const player = setupMockPlayer()
+        const controler = setupControlerWithMocks(player)
+        player.hasTurn = true
+        controler.drawCards(player)
+        expect(player.hasDrawn).toBe(true)
+    })
+
+    it('does not set hasDrawn when +2 or +4 in play', () => {
+        const player = setupMockPlayer()
+        const controler = setupControlerWithMocks(player)
+        controler.plusTwoInPlay = 1
+        player.hasTurn = true
+        controler.drawCards(player)
+        expect(player.hasDrawn).toBe(false)
+        controler.plusFourInPlay = true
+        player.hasTurn = true
+        controler.drawCards(player)
+        expect(player.hasDrawn).toBe(false)
+    })
+
+    it('does not set hasDrawn when drawing specified number of cards', () => {
+        const player = setupMockPlayer()
+        const controler = setupControlerWithMocks(player)
+        player.hasTurn = true
+        controler.drawCards(player, 2)
+        expect(player.hasDrawn).toBe(false)
+    })
+
     it('disallows regular drawing unless player has turn', () => {
         const player = setupMockPlayer()
         const controler = setupControlerWithMocks(player)
