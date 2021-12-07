@@ -62,6 +62,32 @@ export function GameControler(room, playerList, roomList) {
         }
         return scores
     }
+    self.checkPlusFour = function (player) {
+        if (this.plusFourInPlay) {
+            const playedCards = this.deck.playedCards
+            const index = playedCards.length - 2
+            const prevColor = index >= 0 && playedCards[index] ? playedCards[index].color : ''
+            const checkedPlayer = playerList[this.lastPlayerId]
+            if (checkedPlayer) {
+                const cardsWithPrevColor = checkedPlayer.cards.filter(function(card){
+                    return card.color === prevColor
+                })
+                if (cardsWithPrevColor.length > 0) {
+                    // checked player played +4 while still having previous color
+                    // checked player must draw 4 instead, and turn doesn't switch
+                    this.drawCards(checkedPlayer, 4)
+                    this.plusFourInPlay = false
+                }
+                else {
+                    // checked player is innocent, checking player gets 6 cards
+                    this.drawCards(player, 6)
+                    this.plusFourInPlay = false
+                    this.turnSwitch()
+                }
+                this.sendGameStatus()
+            }
+        }
+    }
     self.dealCards = function () {
         let cards = [];
         for (let i = 0; i < 7; i++) {

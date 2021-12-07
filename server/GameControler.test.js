@@ -87,6 +87,36 @@ describe('GameControler', () => {
         expect(controler.deck.playedCards.pop()).toEqual(card)
     })
 
+    it('allows checking +4, giving 4 cards if color is found', () => {
+        const players = {
+            0: Player(0, { 0: { emit: noop } }),
+            1: Player(1, { 1: { emit: noop } }),
+        }
+        const controler = GameControler('', players, { 0: {}})
+        controler.connected = [0, 1]
+        players[0].cards = [{ color: 'blue' }]
+        controler.deck.playedCards = [{ color: 'blue' }]
+        controler.playCard({ value: '+4' })
+        controler.lastPlayerId = 0
+        controler.checkPlusFour(players[1])
+        expect(players[0].cards.length).toEqual(5)
+    })
+
+    it('allows checking +4, giving 6 cards if color is not found', () => {
+        const players = {
+            0: Player(0, { 0: { emit: noop } }),
+            1: Player(1, { 1: { emit: noop } }),
+        }
+        const controler = GameControler('', players, { 0: {}})
+        controler.connected = [0, 1]
+        players[0].cards = [{ color: 'blue' }]
+        controler.deck.playedCards = [{ color: 'green' }]
+        controler.playCard({ value: '+4' })
+        controler.lastPlayerId = 0
+        controler.checkPlusFour(players[1])
+        expect(players[1].cards.length).toEqual(6)
+    })
+
     it('resets pressedEitt when drawing cards', () => {
         const player = setupMockPlayer()
         const controler = setupControlerWithMocks(player)
