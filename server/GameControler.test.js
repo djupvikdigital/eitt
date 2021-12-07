@@ -41,12 +41,32 @@ describe('GameControler', () => {
         const player = setupMockPlayer()
         const controler = setupControlerWithMocks(player)
         controler.roundFinished = true
+        controler.deck.playedCards = []
         controler.playCard({ value: '+2' })
         expect(controler.roundFinished).toBe(true)
         player.hasTurn = true
         controler.drawCards(player)
         expect(player.cards.length).toBe(2)
         expect(controler.roundFinished).toBe(true)
+    })
+
+    it('disallows playing cards other than +2 while +2 is in play', () => {
+        const controler = setupControlerWithMocks()
+        const card = { color: 'blue', value: '+2' }
+        controler.deck.playedCards = []
+        controler.playCard(card)
+        controler.playCard({ color: 'blue', value: '0' })
+        expect(controler.deck.playedCards.pop()).toEqual(card)
+    })
+
+    it('allows playing cards other than +2 after +2 was in play', () => {
+        const controler = setupControlerWithMocks()
+        const card = { color: 'blue', value: '0' }
+        controler.deck.playedCards = []
+        controler.playCard({ color: 'blue', value: '+2' })
+        controler.plusTwoInPlay = 0
+        controler.playCard(card)
+        expect(controler.deck.playedCards.pop()).toEqual(card)
     })
 
     it('resets pressedEitt when drawing cards', () => {

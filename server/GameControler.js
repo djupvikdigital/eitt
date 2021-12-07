@@ -131,13 +131,20 @@ export function GameControler(room, playerList, roomList) {
         this.sendGameStatus()
     }
     self.playCard = function (card) {
+        if (this.plusTwoInPlay > 0 && card.value !== '+2') {
+            return false
+        }
+        const gotPlayed = this.deck.playCard(card)
+        if (!gotPlayed) {
+            return false
+        }
         this.lastPlayedCard = card
-        this.deck.playCard(card)
         if (card.value == '+4') this.plusFourInPlay = true
         else if (card.value == '+2') this.plusTwoInPlay = this.plusTwoInPlay + 1
         else if (card.value == 'R') this.turnRotation = (this.turnRotation * -1)
         else if (card.value == 'S') this.turnSkip = 2
         this.pressedEitt = false
+        return true
 }
     self.turnAssign = function () {
         let hasTurn = false;
