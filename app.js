@@ -182,30 +182,14 @@ io.sockets.on('connection', function(socket){
         let room = ROOM_LIST[player.room]
         function legitPlay(){
             console.log("Yay! " + player.name + " played a " + card.color + " " + card.value + " in " + player.room);
-            // remove played card from player cards
-            player.cards.splice(data.index, 1);
-            player.hasDrawn = false
-            room.lastPlayerId = player.id
-            if (player.cards.length === 0) {
-                room.roundFinished = true
-                room.roundWinner = player.name
-            }
-            room.turnSwitch();
-            room.sendGameStatus();
         }
 
         function unlegitPlay(){
             console.log("Oh now! We've got a cheater over here! He tried to play a " + card.color + " " + card.value + " on top of a " + room.lastPlayedCard.color + " " + room.lastPlayedCard.value);
         }
 
-        if (!(data.index < player.cards.length)) {
-            // we got invalid input
-            console.log(data.index + ' is not in range');
-            return;
-        }
         let card = player.cards[data.index];
-        if (card.color == 'black') card.color = data.color;
-        if (player.hasTurn && room.playCard(card)) legitPlay();
+        if (room.playCardFromPlayer(player, data.index, data.color)) legitPlay();
         else unlegitPlay();
     });
 

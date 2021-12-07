@@ -13,9 +13,8 @@ function setupControlerWithMocks(player = setupMockPlayer()) {
     return controler
 }
 
-function setupMockPlayer() {
-    const playerId = 0
-    return Player(playerId, { 0: { emit: noop }})
+function setupMockPlayer(playerId = 0) {
+    return Player(playerId, { [playerId]: { emit: noop }})
 }
 
 describe('GameControler', () => {
@@ -255,5 +254,85 @@ describe('GameControler', () => {
         expect(players[0].hasTurn).toBe(true)
         expect(players[1].hasTurn).toBe(false)
         expect(controler.turnRotation).toBe(-1)
+    })
+
+    it('removes the card from the player when playing card from player', () => {
+        const player = setupMockPlayer()
+        const controler = setupControlerWithMocks(player)
+        player.hasTurn = true
+        player.cards = [{ color: 'black', value: 'W' }]
+        controler.playCardFromPlayer(player, 0)
+        expect(player.cards.length).toBe(0)
+    })
+
+    it('does nothing when playing card with invalid index from player', () => {
+        const player = setupMockPlayer()
+        const controler = setupControlerWithMocks(player)
+        player.hasTurn = true
+        player.cards = [{ color: 'black', value: 'W' }]
+        controler.playCardFromPlayer(player, 1)
+        expect(player.cards.length).toBe(1)
+    })
+
+    it('resets player.hasDrawn when playing card from player', () => {
+        const player = setupMockPlayer()
+        const controler = setupControlerWithMocks(player)
+        player.hasTurn = true
+        player.cards = [{ color: 'black', value: 'W' }]
+        player.hasDrawn = true
+        controler.playCardFromPlayer(player, 0)
+        expect(player.hasDrawn).toBe(false)
+    })
+
+    it('sets lastPlayerId when playing card from player', () => {
+        const player = setupMockPlayer(1)
+        const controler = setupControlerWithMocks(player)
+        player.hasTurn = true
+        player.cards = [{ color: 'black', value: 'W' }]
+        controler.playCardFromPlayer(player, 0)
+        expect(controler.lastPlayerId).toBe(1)
+    })
+
+    it('sets roundFinished when playing last card from player', () => {
+        const player = setupMockPlayer()
+        player.name = 'foo'
+        const controler = setupControlerWithMocks(player)
+        player.hasTurn = true
+        player.cards = [{ color: 'black', value: '+4' }]
+        controler.playCardFromPlayer(player, 0)
+        expect(controler.roundFinished).toBe(true)
+        expect(controler.roundWinner).toBe('foo')
+    })
+
+    it('disallows playing unless player has turn when playing card from player', () => {
+        const player = setupMockPlayer()
+        const controler = setupControlerWithMocks(player)
+        player.hasTurn = false
+        player.cards = [{ color: 'black', value: 'W' }]
+        controler.playCardFromPlayer(player, 0)
+        expect(player.cards.length).toBe(1)
+    })
+
+    it('switches turn when playing card from player', () => {
+        const players = {
+            0: Player(0, { 0: { emit: noop } }),
+            1: Player(1, { 1: { emit: noop } }),
+        }
+        const controler = GameControler('', players, { 0: {}})
+        controler.connected = [0, 1]
+        players[0].cards = [{ color: 'black', value: 'W' }, { color: 'black', value: 'W' }]
+        players[0].hasTurn = true
+        controler.playCardFromPlayer(players[0], 0)
+        expect(players[0].hasTurn).toBe(false)
+        expect(players[1].hasTurn).toBe(true)
+    })
+
+    it('changes the card color when playing wildcard from player', () => {
+        const player = setupMockPlayer()
+        const controler = setupControlerWithMocks(player)
+        player.hasTurn = true
+        player.cards = [{ color: 'black', value: 'W' }]
+        controler.playCardFromPlayer(player, 0, 'blue')
+        expect(controler.deck.playedCards.pop().color).toBe('blue')
     })
 })

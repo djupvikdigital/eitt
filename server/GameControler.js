@@ -171,7 +171,31 @@ export function GameControler(room, playerList, roomList) {
         else if (card.value == 'S') this.turnSkip = 2
         this.pressedEitt = false
         return true
-}
+    }
+    self.playCardFromPlayer = function (player, index, color = '') {
+        if (!player.hasTurn || index < 0 || index >= player.cards.length) {
+            return false
+        }
+        const card = player.cards[index]
+        if (card.color === 'black' && color) {
+            card.color = color
+        }
+        const gotPlayed = this.playCard(card)
+        if (!gotPlayed) {
+            return false
+        }
+        // remove played card from player cards
+        player.cards.splice(index, 1)
+        player.hasDrawn = false
+        this.lastPlayerId = player.id
+        if (player.cards.length === 0) {
+            this.roundFinished = true
+            this.roundWinner = player.name
+        }
+        this.turnSwitch()
+        this.sendGameStatus()
+        return true
+    }
     self.turnAssign = function () {
         let hasTurn = false;
         for(let i = 0; i < this.connected.length; i++){
