@@ -103,6 +103,9 @@ export function GameControler(room, playerList, roomList) {
         let cards = [];
         let turn = false
         if (number === 1) {
+            if (!player.hasTurn || player.hasDrawn) {
+                return
+            }
             if (this.plusFourInPlay) {
                 number = 4
                 this.plusFourInPlay = false

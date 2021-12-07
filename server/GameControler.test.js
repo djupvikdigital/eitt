@@ -29,8 +29,10 @@ describe('GameControler', () => {
         const player = setupMockPlayer()
         const controler = setupControlerWithMocks(player)
         controler.playCard({ value: '+4' })
+        player.hasTurn = true
         controler.drawCards(player)
         expect(player.cards.length).toBe(4)
+        player.hasTurn = true
         controler.drawCards(player)
         expect(player.cards.length).toBe(5)
     })
@@ -41,6 +43,7 @@ describe('GameControler', () => {
         controler.roundFinished = true
         controler.playCard({ value: '+2' })
         expect(controler.roundFinished).toBe(true)
+        player.hasTurn = true
         controler.drawCards(player)
         expect(player.cards.length).toBe(2)
         expect(controler.roundFinished).toBe(true)
@@ -49,9 +52,37 @@ describe('GameControler', () => {
     it('resets pressedEitt when drawing cards', () => {
         const player = setupMockPlayer()
         const controler = setupControlerWithMocks(player)
+        player.hasTurn = true
         player.pressedEitt = true
         controler.drawCards(player)
         expect(player.pressedEitt).toBe(false)
+    })
+
+    it('disallows regular drawing unless player has turn', () => {
+        const player = setupMockPlayer()
+        const controler = setupControlerWithMocks(player)
+        controler.drawCards(player)
+        expect(player.cards.length).toBe(0)
+        player.hasTurn = true
+        controler.drawCards(player)
+        expect(player.cards.length).toBe(1)
+    })
+
+    it('disallows regular drawing if player already has drawn', () => {
+        const player = setupMockPlayer()
+        const controler = setupControlerWithMocks(player)
+        player.hasTurn = true
+        player.hasDrawn = true
+        controler.drawCards(player)
+        expect(player.cards.length).toBe(0)
+    })
+
+    it('allows drawing specified number of cards outside turn', () => {
+        const player = setupMockPlayer()
+        const controler = setupControlerWithMocks(player)
+        player.hasDrawn = true
+        controler.drawCards(player, 2)
+        expect(player.cards.length).toBe(2)
     })
 
     it('correctly calculates scores for numbered cards', () => {
