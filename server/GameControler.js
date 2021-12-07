@@ -131,7 +131,7 @@ export function GameControler(room, playerList, roomList) {
         this.sendGameStatus()
     }
     self.playCard = function (card) {
-        if (this.plusTwoInPlay > 0 && card.value !== '+2') {
+        if (this.plusFourInPlay || (this.plusTwoInPlay > 0 && card.value !== '+2')) {
             return false
         }
         const gotPlayed = this.deck.playCard(card)

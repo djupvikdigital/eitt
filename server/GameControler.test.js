@@ -69,6 +69,23 @@ describe('GameControler', () => {
         expect(controler.deck.playedCards.pop()).toEqual(card)
     })
 
+    it('disallows playing a card while +4 is in play', () => {
+        const controler = setupControlerWithMocks()
+        const card = { value: '+4' }
+        controler.playCard(card)
+        controler.playCard({ color: 'blue', value: '0' })
+        expect(controler.deck.playedCards.pop()).toEqual(card)
+    })
+
+    it('allows playing a card after +4 was in play', () => {
+        const controler = setupControlerWithMocks()
+        const card = { color: 'blue', value: '0' }
+        controler.playCard({ color: 'blue', value: '+4' })
+        controler.plusFourInPlay = false
+        controler.playCard(card)
+        expect(controler.deck.playedCards.pop()).toEqual(card)
+    })
+
     it('resets pressedEitt when drawing cards', () => {
         const player = setupMockPlayer()
         const controler = setupControlerWithMocks(player)
