@@ -29,6 +29,12 @@ export function CardDeck() {
         return this.availableCards.pop()
     }
     self.playCard = function(card) {
+        if (!wildCards.includes(card.value) && this.playedCards.length > 0) {
+            const lastPlayedCard = this.playedCards[this.playedCards.length - 1]
+            if (lastPlayedCard.color !== 'black' && card.color !== lastPlayedCard.color && card.value !== lastPlayedCard.value) {
+                return
+            }
+        }
         this.playedCards.push(card)
     }
     self.shuffleCards = function(array) {
