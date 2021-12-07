@@ -148,7 +148,6 @@ io.sockets.on('connection', function(socket){
         if (player.hasTurn && !player.hasDrawn) {
             let plusInPlay = room.plusFourInPlay || room.plusTwoInPlay > 0
             room.drawCards(player);
-            player.pressedEitt = false
             if (!plusInPlay) {
                 player.hasDrawn = true
             }
@@ -197,7 +196,6 @@ io.sockets.on('connection', function(socket){
                     // checked player played +4 while still having previous color
                     // checked player must draw 4 instead, and turn doesn't switch
                     room.drawCards(checkedPlayer, 4)
-                    checkedPlayer.pressedEitt = false
                     room.plusFourInPlay = false
                 }
                 else {

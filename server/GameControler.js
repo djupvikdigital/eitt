@@ -118,6 +118,7 @@ export function GameControler(room, playerList, roomList) {
             cards.push(this.deck.drawCard());
         }
         player.cards = player.cards.concat(cards);
+        player.pressedEitt = false
         if (turn) {
             this.turnSwitch()
         }

@@ -46,6 +46,14 @@ describe('GameControler', () => {
         expect(controler.roundFinished).toBe(true)
     })
 
+    it('resets pressedEitt when drawing cards', () => {
+        const player = setupMockPlayer()
+        const controler = setupControlerWithMocks(player)
+        player.pressedEitt = true
+        controler.drawCards(player)
+        expect(player.pressedEitt).toBe(false)
+    })
+
     it('correctly calculates scores for numbered cards', () => {
         const player = setupMockPlayer()
         const cards = [
