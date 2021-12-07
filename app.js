@@ -208,9 +208,7 @@ io.sockets.on('connection', function(socket){
             // remove played card from player cards
             player.cards.splice(data.index, 1);
             player.hasDrawn = false
-            if (card.color == 'black') card.color = data.color;
             room.lastPlayerId = player.id
-            room.playCard(card)
             if (player.cards.length === 0) {
                 room.roundFinished = true
                 room.roundWinner = player.name
@@ -229,12 +227,8 @@ io.sockets.on('connection', function(socket){
             return;
         }
         let card = player.cards[data.index];
-        if (room.plusFourInPlay) unlegitPlay();
-        else if (room.plusTwoInPlay > 0 && card.value != '+2') unlegitPlay();
-        else if (card.color == 'black' && player.hasTurn) legitPlay();
-        else if (room.lastPlayedCard.color == 'black' && player.hasTurn) legitPlay();
-        else if (room.lastPlayedCard.color == card.color && player.hasTurn) legitPlay();
-        else if (room.lastPlayedCard.value == card.value && player.hasTurn) legitPlay();
+        if (card.color == 'black') card.color = data.color;
+        if (player.hasTurn && room.playCard(card)) legitPlay();
         else unlegitPlay();
     });
 
