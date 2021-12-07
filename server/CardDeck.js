@@ -32,10 +32,11 @@ export function CardDeck() {
         if (!wildCards.includes(card.value) && this.playedCards.length > 0) {
             const lastPlayedCard = this.playedCards[this.playedCards.length - 1]
             if (lastPlayedCard.color !== 'black' && card.color !== lastPlayedCard.color && card.value !== lastPlayedCard.value) {
-                return
+                return false
             }
         }
         this.playedCards.push(card)
+        return true
     }
     self.shuffleCards = function(array) {
         let currentIndex = array.length
