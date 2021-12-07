@@ -128,6 +128,7 @@ export function GameControler(room, playerList, roomList) {
         if (turn) {
             this.turnSwitch()
         }
+        this.sendGameStatus()
     }
     self.playCard = function (card) {
         this.lastPlayedCard = card
