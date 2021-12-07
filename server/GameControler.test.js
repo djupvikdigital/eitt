@@ -9,6 +9,7 @@ function noop() {
 function setupControlerWithMocks(player = setupMockPlayer()) {
     const controler = GameControler('', { [player.id]: player }, { 0: {}})
     controler.connected = [player.id]
+    controler.plusTwoInPlay = 0
     return controler
 }
 
