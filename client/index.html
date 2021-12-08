@@ -27,67 +27,31 @@
         <p>Room name</p>
         <input type="text" id="newRoomNameInput" maxlength="20">
         <button id="createNewRoomButton">Create room!</button>
-        <p>View:</p>
-        <label for="">
-            <input type="radio" name="view" checked value="2D">2D
-        </label>
-        <label for="">
-            <input type="radio" name="view" value="3D">3D
-        </label>
-
-        <br>
-
-        <br>
-
-
-        <button id="showCardShuffler">Card Shuffler</button>
-
-        <div id="cardShufflerDiv" style="display: none;">
-            <br>
-            <br>
-            
-            <button id="emptyDeck">Tøm bunke</button>
-            <br>
-            <br>
-            <Button id="addCrewDeck">Tilføj crew deck</Button>
-            <br>
-            <br>
-            <input type="text" placeholder="Antal" id="manyDrawCard">
-            <button id="drawShuffledCard">Træk kort</button>
-            <br>
-            <br>
-            <p id="drewnCardz"></p>
-        </div>
     </div>
 
     <div id='room'>
-        <div id="2dRoom">
-            <h1 id="roomNameHeadline">Det her er mega fedt!!!!</h1>
-            <div id="roundWinner"></div>
-            <ul id="player-list"></ul>
-            <div class="cards">
-                <button class="card" id="draw-card">Draw 1</button>
-                <span class="card" id="last-played-card"></span>
-                <button id="pass">Pass</button>
-                <button id="eitt">Eitt</button>
-                <button id="check-plus-four">Check +4</button>
-                <span id="color-picker" style="display: none;">
-                    <button class="card" id="pick-blue"></button>
-                    <button class="card" id="pick-green"></button>
-                    <button class="card" id="pick-red"></button>
-                    <button class="card" id="pick-yellow"></button>
-                </span>
-            </div>
-            <div class="cards" id="cards"></div>
-            <div id="your-turn">Your turn</div>
-            <div id="round-controls">
-                <button id="new-round">New round</button>
-            </div>
-            <table id="player-scores"></table>
+        <h1 id="roomNameHeadline">Det her er mega fedt!!!!</h1>
+        <div id="roundWinner"></div>
+        <ul id="player-list"></ul>
+        <div class="cards">
+            <button class="card" id="draw-card">Draw 1</button>
+            <span class="card" id="last-played-card"></span>
+            <button id="pass">Pass</button>
+            <button id="eitt">Eitt</button>
+            <button id="check-plus-four">Check +4</button>
+            <span id="color-picker" style="display: none;">
+                <button class="card" id="pick-blue"></button>
+                <button class="card" id="pick-green"></button>
+                <button class="card" id="pick-red"></button>
+                <button class="card" id="pick-yellow"></button>
+            </span>
         </div>
-        <div id="3dRoom" class="threeDRoom">
-            <canvas id="threeDCanvas"></canvas>
+        <div class="cards" id="cards"></div>
+        <div id="your-turn">Your turn</div>
+        <div id="round-controls">
+            <button id="new-round">New round</button>
         </div>
+        <table id="player-scores"></table>
     </div>
 
     <script>
@@ -95,10 +59,6 @@
         document.getElementById("mainlobby").style.display = "none";
     </script>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="/client/3dTest/PointerLockControls.js"></script>
-    <script src="/client/3dTest/modelsTextures.js"></script>
-    <script src="/client/3dTest/3dTest.js"></script>
     <script src="/client/mainlobby.js"></script>
     <script src="/client/room.js"></script>
 </body>

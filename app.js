@@ -208,34 +208,6 @@ io.sockets.on('connection', function(socket){
         room.dealNewRound()
     })
 
-    //card shuffler
-
-    socket.on('emptyDeck',function(){
-        nytDeck = []
-        console.log('Deck has been emptied')
-    })
-
-    socket.on('addCrewDeck',function(){
-        newCrewDeck(nytDeck)
-        shuffleArray(nytDeck)
-        console.log('New crew deck added')
-        console.log(nytDeck)
-    })
-
-    socket.on('drawShuffledCard',function(data){
-        let newArr = []
-        for (let i = 0; i < data; i++) {
-            newArr.push(nytDeck.splice(0, 1))
-        }
-        newArr.sort()
-        let string = ''
-        for (let i = 0; i < data; i++) {
-            string = string + ', ' + newArr.splice(0, 1)
-        }
-        socket.emit('drewCardz', string)
-        console.log(string)
-    })
-
     socket.on('disconnect',function(){
         let room = ROOM_LIST[player.room].room
         if (player.hasTurn) ROOM_LIST[player.room].turnSwitch();

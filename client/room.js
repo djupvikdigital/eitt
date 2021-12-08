@@ -102,7 +102,6 @@ function setGameStatus(status) {
     document.getElementById('your-turn').style.visibility = status.hasTurn ? 'inherit' : 'hidden'
     renderPlayerScores(status.playerList)
     renderLastPlayedCard(status.lastPlayedCard)
-    render3DRoom(status)
 }
 
 function showColorPicker() {
@@ -126,14 +125,6 @@ socket.on('joinRoom', function(data){
     if (inRoom != 'mainlobby' && inRoom != '' ) {
         document.getElementById("mainlobby").style.display = "none";
         document.getElementById("room").style.display = "block";
-        if (document.querySelector('input[name="view"]:checked').value == '2D') {
-            document.getElementById("3dRoom").style.display = "none";
-            document.getElementById("2dRoom").style.display = "block";
-        }
-        if (document.querySelector('input[name="view"]:checked').value == '3D') {
-            document.getElementById("3dRoom").style.display = "block";
-            document.getElementById("2dRoom").style.display = "none";
-        }
         document.getElementById("roomNameHeadline").textContent = 'Room: ' + data
     }
 })
@@ -247,26 +238,4 @@ document.getElementById('pick-yellow').addEventListener('click', function () {
 
 document.getElementById('new-round').addEventListener('click', function () {
     socket.emit('newRound')
-})
-
-//Card shuffler 
-
-document.getElementById('showCardShuffler').addEventListener('click', function () {
-    document.getElementById('cardShufflerDiv').style = 'block'
-});
-
-document.getElementById('emptyDeck').addEventListener('click', function () {
-    socket.emit('emptyDeck');
-});
-
-document.getElementById('addCrewDeck').addEventListener('click', function () {
-    socket.emit('addCrewDeck');
-});
-
-document.getElementById('drawShuffledCard').addEventListener('click', function () {
-    socket.emit('drawShuffledCard', document.getElementById('manyDrawCard').value);
-});
-
-socket.on('drewCardz',function(data){
-    document.getElementById('drewnCardz').innerHTML = data
 })
