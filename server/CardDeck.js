@@ -18,6 +18,7 @@ export function CardDeck() {
         }
     }
     let self = {
+        colors: colors,
         playedCards: []
     }
     self.drawCard = function() {

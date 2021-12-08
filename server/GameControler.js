@@ -178,6 +178,9 @@ export function GameControler(room, playerList, roomList) {
         }
         const card = player.cards[index]
         if (card.color === 'black' && color) {
+            if (!this.deck.colors.includes(color)) {
+                return false
+            }
             card.color = color
         }
         const gotPlayed = this.playCard(card)
