@@ -88,11 +88,28 @@ export function GameControler(room, playerList, roomList) {
             }
         }
     }
+    self.sortCards = function (cards) {
+        cards.sort(function(a, b){
+            let stringA = '' + a.color + a.value;
+            let stringB = '' + b.color + b.value;
+
+            if (stringA < stringB) {
+                return -1;
+            }
+
+            if (stringA > stringB) {
+                return 1;
+            }
+
+            return 0;
+        })
+    }
     self.dealCards = function () {
         let cards = [];
         for (let i = 0; i < 7; i++) {
             cards.push(this.deck.drawCard());
         }
+        this.sortCards(cards);
         return cards
     }
     self.dealNewRound = function (deck = CardDeck()) {
@@ -150,6 +167,7 @@ export function GameControler(room, playerList, roomList) {
             cards.push(this.deck.drawCard());
         }
         player.cards = player.cards.concat(cards);
+        this.sortCards(player.cards);
         player.pressedEitt = false
         if (turn) {
             this.turnSwitch()
