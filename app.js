@@ -37,31 +37,6 @@ function pickRand(array) {
     return rand
 }
 
-// card shuffler
-let nytDeck = []
-function newCrewDeck(nytDeck) {
-    let farve = ''
-    for (let i = 0; i < 4; i++) {
-        if (i == 0) farve = 'Rød'
-        if (i == 1) farve = 'Grøn'
-        if (i == 2) farve = 'Blå'
-        if (i == 3) farve = 'Gul'
-        for (let a = 0; a < 9; a++) {
-            nytDeck.push(farve + ' ' + (a +1))
-        }
-    }
-    for (let i = 0; i < 4; i++) {
-        nytDeck.push('Raket ' + (i+1))
-    }
-}
-
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-}
-
 let io = socketio(serv,{});
 io.sockets.on('connection', function(socket){
     
@@ -86,6 +61,7 @@ io.sockets.on('connection', function(socket){
 
     socket.on('createNewRoom', function(data){
         let roomExist = false;
+        if (data == '') return false;
         for (let i in ROOM_LIST) {
             let room = ROOM_LIST[i].room
             if (room == data) {
@@ -194,6 +170,7 @@ io.sockets.on('connection', function(socket){
     });
 
     socket.on('nameChanged',function(data){
+        if (data == '') return false;
         let room = ROOM_LIST[player.room]
         if (data.length > 20) {
             data = data.slice(0, 20);

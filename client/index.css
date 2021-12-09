@@ -1,3 +1,52 @@
+.headliner {
+	font-family: monospace;
+	text-align: center;
+	font-size: calc(1rem + 15vw);
+}
+
+.headliner2 {
+	font-family: monospace;
+	text-align: center;
+	font-size: calc(1rem + 7vw);
+}
+
+.headliner3 {
+	font-family: monospace;
+	font-size: calc(1rem + 3vw);
+}
+
+.joinButton {
+	background-color: #4CAF50; /* Green */
+	border: none;
+	color: white;
+	padding: 15px 32px;
+	margin: 0px 16px 16px 0px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: calc(1rem + 0.5vw);
+}
+
+.createButton {
+	background-color: #008CBA; /* Green */
+	border: none;
+	color: white;
+	padding: 15px 32px;
+	margin: 0px 16px 16px 0px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: calc(1rem + 0.5vw);
+}
+
+.inputStyle {
+	padding: 12px 20px;
+	margin: 8px 0;
+	box-sizing: border-box;
+	-moz-box-sizing:border-box; /* Firefox */
+    -webkit-box-sizing:border-box; /* Safari */
+}
+
 .threeDRoom {
 	margin:0;
 	overflow: hidden; /* Hide scrollbars */

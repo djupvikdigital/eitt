@@ -1,3 +1,5 @@
+let atLoginPage = true;
+
 function createClickHandler(i, card) {
     return function clickHandler(event) {
         currentIndex = i;
@@ -118,12 +120,15 @@ socket.on('gameStatus', setGameStatus);
 let inRoom = ''
 socket.on('joinRoom', function(data){
     inRoom = data
+    /*
     if (inRoom == 'mainlobby') {
         document.getElementById("mainlobby").style.display = "block";
         document.getElementById("room").style.display = "none";
     }
+    */
     if (inRoom != 'mainlobby' && inRoom != '' ) {
         document.getElementById("mainlobby").style.display = "none";
+        document.getElementById("createNewRoomDiv").style.display = "none";
         document.getElementById("room").style.display = "block";
         document.getElementById("roomNameHeadline").textContent = 'Room: ' + data
     }
@@ -138,22 +143,31 @@ socket.on('roomStatus', function(data){
         let room = data[i]
         if (room.room != 'mainlobby') {
             let element = document.createElement('button');
+            element.className = 'joinButton';
             element.addEventListener('click', createClickHandlerJoinRoom(room.room));
             element.textContent = room.room
             divElement.appendChild(element)
         }
     }
-    if (data.length == 1) {
-        let p = document.createElement('p')
-        p.textContent = 'Sorry, no rooms seem to be open, but you can create one yourself?!'
-        divElement.appendChild(p)
-    }
+    let element = document.createElement('button');
+    element.className = 'createButton';
+    element.addEventListener('click', function(){
+        document.getElementById("mainlobby").style.display = "none";
+        document.getElementById("createNewRoomDiv").style.display = "block";
+    });
+    element.textContent = 'Create a room';
+    divElement.appendChild(element)
+
 })
 function createClickHandlerJoinRoom(room) {
     return function clickHandler() {
         socket.emit('joinRoom', room)
     }
 }
+document.getElementById("backToLobbyFromCreateRoom").addEventListener('click', function(){
+    document.getElementById("mainlobby").style.display = "block";
+    document.getElementById("createNewRoomDiv").style.display = "none";
+});
 
 socket.on('roundWinner', function(data){
     let divElement = document.getElementById('roundWinner')
@@ -199,10 +213,24 @@ document.getElementById('createNewRoomButton').addEventListener('click', functio
     socket.emit('createNewRoom', newRoom);
 })
 
-document.getElementById('change-name-button').addEventListener('click', function () {
+function changeName() {
     let name = document.getElementById('change-name-input').value;
     socket.emit('nameChanged', name);
-})
+    document.getElementById("loginDiv").style.display = "none";
+    document.getElementById("mainlobby").style.display = "block";
+    atLoginPage = false;
+}
+
+document.getElementById('change-name-button').addEventListener('click', changeName);
+
+document.addEventListener('keyup', logKeyUp);
+
+function logKeyUp(e) {
+    if (e.keyCode == 13 && atLoginPage) {
+        changeName();
+        console.log(e.keyCode)
+    }
+}
 
 document.getElementById('draw-card').addEventListener('click', function () {
     socket.emit('drawCards');

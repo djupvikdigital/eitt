@@ -5,28 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eitt!</title>
     <link rel="stylesheet" href="/client/index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@1,700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div id='loginDiv'>
+        <h1 class="headliner">Eitt!</h1>
+        <div style="text-align: center;">
+            <input id="change-name-input" maxlength="20" type="text" placeholder="Username" class="inputStyle">
+            <button id="change-name-button" class="inputStyle">Let's Play!</button>
+        </div>
+    </div>
     <div id='mainlobby'>
+        <!-- 
         <div class="fireworks">
             <div class="pyro">
                 <div class="before"></div>
                 <div class="after"></div>
             </div>
         </div>
-        <h1>This is the main lobby!</h1>
-        <div>
-            <input id="change-name-input" maxlength="20" type="text" placeholder="Username">
-            <button id="change-name-button">Change name</button>
-        </div>
-        <h2>Choose a open room</h2>
+        -->
+        <h1 class="headliner2">Main lobby</h1>
+        <h2 class="headliner3">Rooms</h2>
         <div id='openRooms'>
-            <p>Sorry, no rooms seem to be open, but you can create one yourself?!</p>
         </div>
-        <h2>Or create your own</h2>
-        <p>Room name</p>
-        <input type="text" id="newRoomNameInput" maxlength="20">
-        <button id="createNewRoomButton">Create room!</button>
+    </div>
+
+    <div id="createNewRoomDiv" style="display: none;">
+        <button id="backToLobbyFromCreateRoom" class="inputStyle">Back</button>
+        <h1 class="headliner2">Room options</h1>
+        <h2 class="headliner3">Room name</h2>
+        <input type="text" id="newRoomNameInput" maxlength="20" class="inputStyle">
+        <button id="createNewRoomButton" class="inputStyle">Create room!</button>
     </div>
 
     <div id='room'>
