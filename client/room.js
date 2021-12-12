@@ -76,7 +76,14 @@ function renderPlayerScores(playerList) {
     let scores = []
     for (let i = 0; i < playerList.length; i++) {
         let player = playerList[i]
-        let column = [player.name].concat(player.scores)
+        let column = [player.name].concat(player.scores.reduce(function (array, score) {
+            if (array.length > 0) {
+                return array.concat(array[array.length - 1] + score)
+            }
+            else {
+                return [score]
+            }
+        }, []))
         for (let j = 0; j < column.length; j++) {
             if (scores[j]) {
                 scores[j].push(column[j])
