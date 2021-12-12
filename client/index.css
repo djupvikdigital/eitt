@@ -1,3 +1,7 @@
+html {
+	font-family: sans-serif;
+}
+
 .headliner {
 	font-family: monospace;
 	text-align: center;
@@ -52,6 +56,16 @@
 	overflow: hidden; /* Hide scrollbars */
 }
 
+#player-list dd {
+	line-height: 44px;
+	margin-left: 0;
+	vertical-align: middle;
+}
+
+#player-list button {
+	margin: 0 1.5em;
+}
+
 .cards {
 	margin-left: 70px;
 }
@@ -65,7 +79,6 @@
 	box-sizing: content-box;
 	color: white;
     display: inline-block;
-    font-family: sans-serif;
     font-size: calc(1rem + 0.5vw);
     height: 0;
 	margin-left: -70px;
@@ -351,6 +364,7 @@
 }
 
 #your-turn {
+	font-family: sans-serif;
 	font-size: 1.5em;
 	font-weight: bold;
 	margin: 1em 0;
@@ -358,6 +372,14 @@
 
 #round-controls {
 	visibility: hidden;
+}
+
+#player-scores {
+	text-align: right;
+}
+
+#player-scores th, #player-scores td {
+	padding-right: 1.5em;
 }
 
 .fireworks {

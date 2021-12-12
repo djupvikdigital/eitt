@@ -48,23 +48,27 @@ function renderPlayerList(status) {
     playerListELement.textContent = '';
     let fragment = document.createDocumentFragment();
     for (let player of status.playerList) {
-        let element = document.createElement('li');
-        element.textContent = player.name + ', ' + player.numberOfCards;
+        let dt = document.createElement('dt');
+        let dd = document.createElement('dd');
+        dt.textContent = player.name;
+        dd.textContent = player.numberOfCards + ' cards ';
         if (player.hasTurn) {
-            element.style.fontWeight = 'bold';
+            dt.style.fontWeight = 'bold';
         }
         if (player.pressedEitt) {
-            element.style.color = 'red'
+            dt.style.color = 'red'
         }
         else if (player.id !== status.id) {
             let didntPressEittButton = document.createElement('button')
+            didntPressEittButton.className = 'inputStyle'
             didntPressEittButton.textContent = "Didn't press eitt"
             didntPressEittButton.addEventListener('click', function () {
                 socket.emit('didntPressEitt', player.id)
             })
-            element.appendChild(didntPressEittButton)
+            dd.appendChild(didntPressEittButton)
         }
-        fragment.appendChild(element);
+        fragment.appendChild(dt);
+        fragment.appendChild(dd);
     }
     playerListELement.appendChild(fragment);
 } 
