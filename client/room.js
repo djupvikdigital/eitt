@@ -14,6 +14,10 @@ function createClickHandler(i, card) {
     }
 }
 
+function getClassNameForCard(card) {
+    return 'card card-' + card.color + ' card-' + card.color + '-' + card.value.replace('+', 'plus-')
+}
+
 function hideColorPicker() {
     document.getElementById('color-picker').style.display = 'none';
 }
@@ -26,7 +30,7 @@ function renderCards(cards) {
         let card = cards[i];
         let element = document.createElement('button');
         element.addEventListener('click', createClickHandler(i, card));
-        element.className = 'card card-' + card.color;
+        element.className = getClassNameForCard(card);
         element.textContent = card.value;
         fragment.appendChild(element);
     }
@@ -35,7 +39,7 @@ function renderCards(cards) {
 
 function renderLastPlayedCard(card) {
     let lastPlayedCardElement = document.getElementById('last-played-card');
-    lastPlayedCardElement.className = 'card card-' + card.color;
+    lastPlayedCardElement.className = getClassNameForCard(card);
     lastPlayedCardElement.textContent = card.value;
 }
 
