@@ -6,7 +6,6 @@ import socketio from 'socket.io';
 import { fileURLToPath } from 'url';
 
 import { GameControler } from './server/GameControler.js'
-import {Player} from './server/Player.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
