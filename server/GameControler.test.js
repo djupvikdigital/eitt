@@ -23,9 +23,21 @@ describe('GameControler', () => {
         let socket = { id: Math.random() }
         let player = controler.connect(socket)
         const playerId = player.id
+        controler.disconnect(socket.id)
         socket = { id: Math.random() }
         player = controler.connect(socket, playerId)
         expect(player.id).toBe(playerId)
+        expect(player.socket.id).toBe(socket.id)
+    })
+
+    it('disallows connecting as an already connected player', () => {
+        const controler = setupControlerWithMocks()
+        let socket = { id: Math.random() }
+        let player = controler.connect(socket)
+        const playerId = player.id
+        socket = { id: Math.random() }
+        player = controler.connect(socket, playerId)
+        expect(player.id).not.toBe(playerId)
         expect(player.socket.id).toBe(socket.id)
     })
 

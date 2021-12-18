@@ -89,6 +89,10 @@ export function GameControler(room, roomList) {
         let player = null
         if (playerId) {
             player = this.getPlayerByPlayerId(playerId)
+            if (player.socket) {
+                // this player is already connected
+                player = null
+            }
         }
         if (!player) {
             player = Player()
