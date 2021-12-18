@@ -132,9 +132,12 @@ var socket = io();
 
 socket.on('gameStatus', setGameStatus);
 
-let inRoom = ''
+let inRoom = sessionStorage.getItem('room') || ''
+if (inRoom) {
+    socket.emit('joinRoom', { playerId: sessionStorage.getItem('playerId'), room: inRoom })
+}
 socket.on('joinRoom', function(data){
-    inRoom = data
+    inRoom = data.room
     /*
     if (inRoom == 'mainlobby') {
         document.getElementById("mainlobby").style.display = "block";
@@ -142,11 +145,14 @@ socket.on('joinRoom', function(data){
     }
     */
     if (inRoom != 'mainlobby' && inRoom != '' ) {
+        document.getElementById("loginDiv").style.display = "none";
         document.getElementById("mainlobby").style.display = "none";
         document.getElementById("createNewRoomDiv").style.display = "none";
         document.getElementById("room").style.display = "block";
-        document.getElementById("roomNameHeadline").textContent = 'Room: ' + data
+        document.getElementById("roomNameHeadline").textContent = 'Room: ' + data.room
     }
+    sessionStorage.setItem('playerId', data.playerId)
+    sessionStorage.setItem('room', data.room)
 })
 socket.on('roomExists', function(){
     alert('Sorry, this room already exists, please be more creative and find another name!')
@@ -176,7 +182,7 @@ socket.on('roomStatus', function(data){
 })
 function createClickHandlerJoinRoom(room) {
     return function clickHandler() {
-        socket.emit('joinRoom', room)
+        socket.emit('joinRoom', { room: room })
     }
 }
 document.getElementById("backToLobbyFromCreateRoom").addEventListener('click', function(){

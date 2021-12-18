@@ -48,7 +48,7 @@ io.sockets.on('connection', function(socket){
 
     let room = ROOM_LIST.mainlobby
     room.connect(socket)
-    socket.emit('joinRoom', 'mainlobby')
+    socket.emit('joinRoom', { room: 'mainlobby' })
     console.log(ROOM_LIST);
 
     room.sendRoomStatus()
@@ -74,7 +74,7 @@ io.sockets.on('connection', function(socket){
             player.cards = room.dealCards()
             player.hasTurn = false
             player.name = name
-            socket.emit('joinRoom', data)
+            socket.emit('joinRoom', { playerId: player.id, room: data })
             room.turnAssign()
             room.sendGameStatus()
             ROOM_LIST.mainlobby.sendRoomStatus()
@@ -86,7 +86,7 @@ io.sockets.on('connection', function(socket){
         let roomExist = false;
         for (let i in ROOM_LIST) {
             let currentRoom = ROOM_LIST[i].room
-            if (currentRoom == data) {
+            if (currentRoom == data.room) {
                 roomExist = true;
             }
         }
@@ -94,14 +94,17 @@ io.sockets.on('connection', function(socket){
             for (let i in ROOM_LIST) {
                 ROOM_LIST[i].leave(socket.id)
             }
-            room = ROOM_LIST[data]
-            let player = room.connect(socket)
-            player.cards = room.dealCards()
-            player.hasTurn = false
-            player.name = name
+            room = ROOM_LIST[data.room]
+            let player = room.connect(socket, data.playerId)
+            if (player.cards.length === 0) {
+                player.cards = room.dealCards()
+            }
+            if (!player.name) {
+                player.name = name
+            }
             room.turnAssign()
             room.sendGameStatus()
-            socket.emit('joinRoom', data)
+            socket.emit('joinRoom', { playerId: player.id, room: data.room })
             ROOM_LIST.mainlobby.sendRoomStatus()
             console.log(ROOM_LIST)
         }
