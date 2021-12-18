@@ -309,6 +309,7 @@ export function GameControler(room, roomList) {
                 id:currentPlayer.id,
                 name:currentPlayer.name,
                 numberOfCards:currentPlayer.cards.length,
+                connected:Boolean(currentPlayer.socket),
                 hasTurn:currentPlayer.hasTurn,
                 pressedEitt:currentPlayer.pressedEitt,
                 scores:currentPlayer.scores

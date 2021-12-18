@@ -50,7 +50,7 @@ function renderPlayerList(status) {
     for (let player of status.playerList) {
         let dt = document.createElement('dt');
         let dd = document.createElement('dd');
-        dt.textContent = player.name;
+        dt.textContent = player.name + (player.connected ? '' : ' (not connected)');
         dd.textContent = player.numberOfCards + ' cards ';
         if (player.hasTurn) {
             dt.style.fontWeight = 'bold';
