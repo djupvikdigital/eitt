@@ -89,7 +89,7 @@ export function GameControler(room, roomList) {
         let player = null
         if (playerId) {
             player = this.getPlayerByPlayerId(playerId)
-            if (player.socket) {
+            if (player && player.socket) {
                 // this player is already connected
                 player = null
             }
