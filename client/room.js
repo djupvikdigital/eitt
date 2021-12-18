@@ -185,10 +185,12 @@ function createClickHandlerJoinRoom(room) {
         socket.emit('joinRoom', { room: room })
     }
 }
-document.getElementById("backToLobbyFromCreateRoom").addEventListener('click', function(){
+function backToLobby() {
     document.getElementById("mainlobby").style.display = "block";
     document.getElementById("createNewRoomDiv").style.display = "none";
-});
+    document.getElementById("room").style.display = "none";
+}
+document.getElementById("backToLobbyFromCreateRoom").addEventListener('click', backToLobby);
 
 socket.on('roundWinner', function(data){
     let divElement = document.getElementById('roundWinner')
@@ -252,6 +254,11 @@ function logKeyUp(e) {
         console.log(e.keyCode)
     }
 }
+
+document.getElementById('leave-room').addEventListener('click', function () {
+    socket.emit('joinRoom', { room: 'mainlobby' })
+    backToLobby()
+})
 
 document.getElementById('draw-card').addEventListener('click', function () {
     socket.emit('drawCards');
