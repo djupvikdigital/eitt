@@ -23,7 +23,7 @@ export function GameControler(room, roomList) {
             let score = scores[id]
             if (score >= highestScore) {
                 highestScore = score
-                idWithHighestScore = Number(id)
+                idWithHighestScore = id
             }
         }
         for (let i = 0; i < this.players.length; i++) {

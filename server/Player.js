@@ -1,6 +1,6 @@
 export function Player() {
     let self = {
-        id: Math.random(),
+        id: '' + Math.random(),
         cards: [],
         name: '',
         scores: [],
