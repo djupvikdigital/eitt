@@ -67,6 +67,9 @@ io.sockets.on('connection', function(socket){
         if (roomExist == false) {
             for (let i in ROOM_LIST) {
                 ROOM_LIST[i].leave(socket.id)
+                if (ROOM_LIST[i].getConnectedPlayers().length === 0 && i !== 'mainlobby') {
+                    delete ROOM_LIST[i]
+                }
             }
             room = GameControler(data, ROOM_LIST)
             let player = room.connect(socket)
@@ -93,6 +96,9 @@ io.sockets.on('connection', function(socket){
         if (roomExist) {
             for (let i in ROOM_LIST) {
                 ROOM_LIST[i].leave(socket.id)
+                if (ROOM_LIST[i].getConnectedPlayers().length === 0 && i !== 'mainlobby') {
+                    delete ROOM_LIST[i]
+                }
             }
             room = ROOM_LIST[data.room]
             let player = room.connect(socket, data.playerId)
