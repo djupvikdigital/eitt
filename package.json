@@ -7,7 +7,7 @@
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "start": "node app.js",
-    "startCpanel": "node --experimental-modules app.js"
+    "startCpanel": "node -r esm app.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/thirdhand/eitt#readme",
   "dependencies": {
+    "esm": "^3.2.25",
     "express": "^4.17.1",
     "socket.io": "^2.3.0"
   },
