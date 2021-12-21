@@ -14,6 +14,10 @@ function createClickHandler(i, card) {
     }
 }
 
+function getClassNameForCard(card) {
+    return 'card card-' + card.color + ' card-' + card.color + '-' + card.value.replace('+', 'plus-')
+}
+
 function hideColorPicker() {
     document.getElementById('color-picker').style.display = 'none';
 }
@@ -26,7 +30,7 @@ function renderCards(cards) {
         let card = cards[i];
         let element = document.createElement('button');
         element.addEventListener('click', createClickHandler(i, card));
-        element.className = 'card card-' + card.color;
+        element.className = getClassNameForCard(card);
         element.textContent = card.value;
         fragment.appendChild(element);
     }
@@ -35,7 +39,7 @@ function renderCards(cards) {
 
 function renderLastPlayedCard(card) {
     let lastPlayedCardElement = document.getElementById('last-played-card');
-    lastPlayedCardElement.className = 'card card-' + card.color;
+    lastPlayedCardElement.className = getClassNameForCard(card);
     lastPlayedCardElement.textContent = card.value;
 }
 
@@ -44,23 +48,27 @@ function renderPlayerList(status) {
     playerListELement.textContent = '';
     let fragment = document.createDocumentFragment();
     for (let player of status.playerList) {
-        let element = document.createElement('li');
-        element.textContent = player.name + ', ' + player.numberOfCards;
+        let dt = document.createElement('dt');
+        let dd = document.createElement('dd');
+        dt.textContent = player.name + (player.connected ? '' : ' (not connected)');
+        dd.textContent = player.numberOfCards + ' cards ';
         if (player.hasTurn) {
-            element.style.fontWeight = 'bold';
+            dt.style.fontWeight = 'bold';
         }
         if (player.pressedEitt) {
-            element.style.color = 'red'
+            dt.style.color = 'red'
         }
         else if (player.id !== status.id) {
             let didntPressEittButton = document.createElement('button')
+            didntPressEittButton.className = 'inputStyle'
             didntPressEittButton.textContent = "Didn't press eitt"
             didntPressEittButton.addEventListener('click', function () {
                 socket.emit('didntPressEitt', player.id)
             })
-            element.appendChild(didntPressEittButton)
+            dd.appendChild(didntPressEittButton)
         }
-        fragment.appendChild(element);
+        fragment.appendChild(dt);
+        fragment.appendChild(dd);
     }
     playerListELement.appendChild(fragment);
 } 
@@ -72,7 +80,14 @@ function renderPlayerScores(playerList) {
     let scores = []
     for (let i = 0; i < playerList.length; i++) {
         let player = playerList[i]
-        let column = [player.name].concat(player.scores)
+        let column = [player.name].concat(player.scores.reduce(function (array, score) {
+            if (array.length > 0) {
+                return array.concat(array[array.length - 1] + score)
+            }
+            else {
+                return [score]
+            }
+        }, []))
         for (let j = 0; j < column.length; j++) {
             if (scores[j]) {
                 scores[j].push(column[j])
@@ -117,9 +132,12 @@ var socket = io();
 
 socket.on('gameStatus', setGameStatus);
 
-let inRoom = ''
+let inRoom = sessionStorage.getItem('room') || ''
+if (inRoom) {
+    socket.emit('joinRoom', { playerId: sessionStorage.getItem('playerId'), room: inRoom })
+}
 socket.on('joinRoom', function(data){
-    inRoom = data
+    inRoom = data.room
     /*
     if (inRoom == 'mainlobby') {
         document.getElementById("mainlobby").style.display = "block";
@@ -127,11 +145,14 @@ socket.on('joinRoom', function(data){
     }
     */
     if (inRoom != 'mainlobby' && inRoom != '' ) {
+        document.getElementById("loginDiv").style.display = "none";
         document.getElementById("mainlobby").style.display = "none";
         document.getElementById("createNewRoomDiv").style.display = "none";
         document.getElementById("room").style.display = "block";
-        document.getElementById("roomNameHeadline").textContent = 'Room: ' + data
+        document.getElementById("roomNameHeadline").textContent = 'Room: ' + data.room
     }
+    sessionStorage.setItem('playerId', data.playerId)
+    sessionStorage.setItem('room', data.room)
 })
 socket.on('roomExists', function(){
     alert('Sorry, this room already exists, please be more creative and find another name!')
@@ -161,13 +182,15 @@ socket.on('roomStatus', function(data){
 })
 function createClickHandlerJoinRoom(room) {
     return function clickHandler() {
-        socket.emit('joinRoom', room)
+        socket.emit('joinRoom', { room: room })
     }
 }
-document.getElementById("backToLobbyFromCreateRoom").addEventListener('click', function(){
+function backToLobby() {
     document.getElementById("mainlobby").style.display = "block";
     document.getElementById("createNewRoomDiv").style.display = "none";
-});
+    document.getElementById("room").style.display = "none";
+}
+document.getElementById("backToLobbyFromCreateRoom").addEventListener('click', backToLobby);
 
 socket.on('roundWinner', function(data){
     let divElement = document.getElementById('roundWinner')
@@ -231,6 +254,11 @@ function logKeyUp(e) {
         console.log(e.keyCode)
     }
 }
+
+document.getElementById('leave-room').addEventListener('click', function () {
+    socket.emit('joinRoom', { room: 'mainlobby' })
+    backToLobby()
+})
 
 document.getElementById('draw-card').addEventListener('click', function () {
     socket.emit('drawCards');

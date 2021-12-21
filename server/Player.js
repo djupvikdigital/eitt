@@ -1,17 +1,18 @@
-export function Player(id, socketList) {
+export function Player() {
     let self = {
-        id: id,
+        id: '' + Math.random(),
         cards: [],
         name: '',
-        room: '',
         scores: [],
+        socket: null,
         hasDrawn: false,
         hasTurn: false,
         pressedEitt: false
     }
     self.emit = function (arg1, arg2) {
-        let mySocket = socketList[this.id]
-        mySocket.emit(arg1, arg2)
+        if (this.socket) {
+            this.socket.emit(arg1, arg2)
+        }
     }
     return self
 }

@@ -1,3 +1,7 @@
+html {
+	font-family: sans-serif;
+}
+
 .headliner {
 	font-family: monospace;
 	text-align: center;
@@ -52,65 +56,315 @@
 	overflow: hidden; /* Hide scrollbars */
 }
 
+#player-list dd {
+	line-height: 44px;
+	margin-left: 0;
+	vertical-align: middle;
+}
+
+#player-list button {
+	margin: 0 1.5em;
+}
+
 .cards {
-    display: table;
+	margin: 1.5em 0 1.5em 70px;
 }
 
 .card {
-    background-color: black;
+    background-color: transparent;
+	background-image: url(/client/images/black.svg);
+	background-repeat: no-repeat;
+	background-size: contain;
     border: 0;
-    border-radius: 5px;
-    box-sizing: content-box;
-    box-shadow: inset 0 0 0 1px black, inset 0 0 0 5px white;
-    color: white;
-    display: table-cell;
-    font-family: sans-serif;
+	box-sizing: content-box;
+	color: white;
+    display: inline-block;
     font-size: calc(1rem + 0.5vw);
-    height: 5em;
-    padding: 0 1em;
+    height: 0;
+	margin-left: -70px;
+	overflow: hidden;
+    padding: 181px 0 0 0;
     text-align: center;
     vertical-align: middle;
-    width: 2em;
+    width: 121px;
 }
 
-.card-black {
-    background-color: black;
+#draw-card {
+	height: 181px;
+	margin-left: 0;
+	padding: 0;
 }
 
-.card-blue {
-    background-color: blue;
+.pick-card, #last-played-card {
+	margin-left: 0;
 }
 
-.card-green {
-    background-color: green;
+.card-black-W {
+	background-image: url(/client/images/black-W.svg);
 }
 
-.card-red {
-    background-color: red;
+.card-black-plus-4 {
+	background-image: url(/client/images/black-plus-4.svg);
 }
 
-.card-yellow {
-    background-color: yellow;
-    color: black;
+.card-blue-0 {
+	background-image: url(/client/images/blue-0.svg);
+}
+
+.card-blue-1 {
+	background-image: url(/client/images/blue-1.svg);
+}
+
+.card-blue-2 {
+	background-image: url(/client/images/blue-2.svg);
+}
+
+.card-blue-3 {
+	background-image: url(/client/images/blue-3.svg);
+}
+
+.card-blue-4 {
+	background-image: url(/client/images/blue-4.svg);
+}
+
+.card-blue-5 {
+	background-image: url(/client/images/blue-5.svg);
+}
+
+.card-blue-6 {
+	background-image: url(/client/images/blue-6.svg);
+}
+
+.card-blue-7 {
+	background-image: url(/client/images/blue-7.svg);
+}
+
+.card-blue-8 {
+	background-image: url(/client/images/blue-8.svg);
+}
+
+.card-blue-9 {
+	background-image: url(/client/images/blue-9.svg);
+}
+
+.card-blue-R {
+	background-image: url(/client/images/blue-R.svg);
+}
+
+.card-blue-S {
+	background-image: url(/client/images/blue-S.svg);
+}
+
+.card-blue-plus-2 {
+	background-image: url(/client/images/blue-plus-2.svg);
+}
+
+.card-blue-W {
+	background-image: url(/client/images/blue-W.svg);
+}
+
+.card-blue-plus-4 {
+	background-image: url(/client/images/blue-plus-4.svg);
+}
+
+.card-green-0 {
+	background-image: url(/client/images/green-0.svg);
+}
+
+.card-green-1 {
+	background-image: url(/client/images/green-1.svg);
+}
+
+.card-green-2 {
+	background-image: url(/client/images/green-2.svg);
+}
+
+.card-green-3 {
+	background-image: url(/client/images/green-3.svg);
+}
+
+.card-green-4 {
+	background-image: url(/client/images/green-4.svg);
+}
+
+.card-green-5 {
+	background-image: url(/client/images/green-5.svg);
+}
+
+.card-green-6 {
+	background-image: url(/client/images/green-6.svg);
+}
+
+.card-green-7 {
+	background-image: url(/client/images/green-7.svg);
+}
+
+.card-green-8 {
+	background-image: url(/client/images/green-8.svg);
+}
+
+.card-green-9 {
+	background-image: url(/client/images/green-9.svg);
+}
+
+.card-green-R {
+	background-image: url(/client/images/green-R.svg);
+}
+
+.card-green-S {
+	background-image: url(/client/images/green-S.svg);
+}
+
+.card-green-plus-2 {
+	background-image: url(/client/images/green-plus-2.svg);
+}
+
+.card-green-W {
+	background-image: url(/client/images/green-W.svg);
+}
+
+.card-green-plus-4 {
+	background-image: url(/client/images/green-plus-4.svg);
+}
+
+.card-red-0 {
+	background-image: url(/client/images/red-0.svg);
+}
+
+.card-red-1 {
+	background-image: url(/client/images/red-1.svg);
+}
+
+.card-red-2 {
+	background-image: url(/client/images/red-2.svg);
+}
+
+.card-red-3 {
+	background-image: url(/client/images/red-3.svg);
+}
+
+.card-red-4 {
+	background-image: url(/client/images/red-4.svg);
+}
+
+.card-red-5 {
+	background-image: url(/client/images/red-5.svg);
+}
+
+.card-red-6 {
+	background-image: url(/client/images/red-6.svg);
+}
+
+.card-red-7 {
+	background-image: url(/client/images/red-7.svg);
+}
+
+.card-red-8 {
+	background-image: url(/client/images/red-8.svg);
+}
+
+.card-red-9 {
+	background-image: url(/client/images/red-9.svg);
+}
+
+.card-red-R {
+	background-image: url(/client/images/red-R.svg);
+}
+
+.card-red-S {
+	background-image: url(/client/images/red-S.svg);
+}
+
+.card-red-plus-2 {
+	background-image: url(/client/images/red-plus-2.svg);
+}
+
+.card-red-W {
+	background-image: url(/client/images/red-W.svg);
+}
+
+.card-red-plus-4 {
+	background-image: url(/client/images/red-plus-4.svg);
+}
+
+.card-yellow-0 {
+	background-image: url(/client/images/yellow-0.svg);
+}
+
+.card-yellow-1 {
+	background-image: url(/client/images/yellow-1.svg);
+}
+
+.card-yellow-2 {
+	background-image: url(/client/images/yellow-2.svg);
+}
+
+.card-yellow-3 {
+	background-image: url(/client/images/yellow-3.svg);
+}
+
+.card-yellow-4 {
+	background-image: url(/client/images/yellow-4.svg);
+}
+
+.card-yellow-5 {
+	background-image: url(/client/images/yellow-5.svg);
+}
+
+.card-yellow-6 {
+	background-image: url(/client/images/yellow-6.svg);
+}
+
+.card-yellow-7 {
+	background-image: url(/client/images/yellow-7.svg);
+}
+
+.card-yellow-8 {
+	background-image: url(/client/images/yellow-8.svg);
+}
+
+.card-yellow-9 {
+	background-image: url(/client/images/yellow-9.svg);
+}
+
+.card-yellow-R {
+	background-image: url(/client/images/yellow-R.svg);
+}
+
+.card-yellow-S {
+	background-image: url(/client/images/yellow-S.svg);
+}
+
+.card-yellow-plus-2 {
+	background-image: url(/client/images/yellow-plus-2.svg);
+}
+
+.card-yellow-W {
+	background-image: url(/client/images/yellow-W.svg);
+}
+
+.card-yellow-plus-4 {
+	background-image: url(/client/images/yellow-plus-4.svg);
 }
 
 #pick-blue {
-    background-color: blue;
+	background-image: url(/client/images/blue.svg);
 }
 
 #pick-green {
-    background-color: green;
+	background-image: url(/client/images/green.svg);
 }
 
 #pick-red {
-    background-color: red;
+	background-image: url(/client/images/red.svg);
 }
 
 #pick-yellow {
-    background-color: yellow;
+	background-image: url(/client/images/yellow.svg);
 }
 
 #your-turn {
+	font-family: sans-serif;
 	font-size: 1.5em;
 	font-weight: bold;
 	margin: 1em 0;
@@ -118,6 +372,14 @@
 
 #round-controls {
 	visibility: hidden;
+}
+
+#player-scores {
+	text-align: right;
+}
+
+#player-scores th, #player-scores td {
+	padding-right: 1.5em;
 }
 
 .fireworks {
