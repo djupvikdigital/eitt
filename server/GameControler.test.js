@@ -356,4 +356,14 @@ describe('GameControler', () => {
         controler.playCardFromPlayer(player, 0, 'blue')
         expect(controler.deck.playedCards.pop().color).toBe('blue')
     })
+
+    it('does not change the card color if playing wildcard is not allowed', () => {
+        const controler = setupControlerWithMocks()
+        const player = controler.players[0]
+        controler.plusFourInPlay = true
+        player.hasTurn = true
+        player.cards = [{ color: 'black', value: 'W' }]
+        controler.playCardFromPlayer(player, 0, 'blue')
+        expect(player.cards[0].color).toBe('black')
+    })
 })
