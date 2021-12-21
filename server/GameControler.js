@@ -246,12 +246,12 @@ export function GameControler(room, roomList) {
         if (!player.hasTurn || index < 0 || index >= player.cards.length) {
             return false
         }
-        const card = player.cards[index]
+        let card = player.cards[index]
         if (card.color === 'black' && color) {
             if (!this.deck.colors.includes(color)) {
                 return false
             }
-            card.color = color
+            card = Object.assign({}, card, { color: color })
         }
         const gotPlayed = this.playCard(card)
         if (!gotPlayed) {
