@@ -2,7 +2,7 @@
 import express from 'express';
 import * as http from 'http';
 import { dirname } from 'path';
-import socketio from 'socket.io';
+import { Server } from 'socket.io';
 import { fileURLToPath } from 'url';
 
 import { GameControler } from './server/GameControler.js'
@@ -34,7 +34,7 @@ function pickRand(array) {
     return rand
 }
 
-let io = socketio(serv,{});
+let io = new Server(serv,{});
 io.sockets.on('connection', function(socket){
     
     socket.id = Math.random();
