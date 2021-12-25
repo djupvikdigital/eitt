@@ -1,6 +1,6 @@
-import { CardDeck } from './CardDeck'
-import { GameControler } from './GameControler'
-import { Player } from './Player'
+let GameControler = require('./GameControler.js');
+let CardDeck = require('./CardDeck.js');
+let Player = require('./Player.js');
 
 function noop() {
     return

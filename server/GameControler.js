@@ -1,7 +1,7 @@
-import { CardDeck } from './CardDeck.js'
-import { Player } from './Player.js'
+let CardDeck = require('./CardDeck.js');
+let Player = require('./Player.js');
 
-export function GameControler(room, roomList) {
+module.exports = function GameControler(room, roomList) {
     let self = {
         room: room,
         connected: [],

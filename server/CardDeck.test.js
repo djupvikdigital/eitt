@@ -1,4 +1,4 @@
-import { CardDeck } from './CardDeck'
+let CardDeck = require('./CardDeck.js');
 
 describe('CardDeck', () => {
     it('has the correct number of cards', () => {

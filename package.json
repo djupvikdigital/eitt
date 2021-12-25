@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "description": "An unofficial implementation of a certain card game named after Spanish for \"one\"",
   "main": "app.js",
-  "type": "module",
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test": "node node_modules/jest/bin/jest.js",
     "start": "node app.js",
     "startCpanel": "node -r esm app.js"
   },
