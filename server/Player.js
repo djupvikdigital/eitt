@@ -1,4 +1,4 @@
-module.exports = function Player() {
+export function Player() {
     let self = {
         id: '' + Math.random(),
         cards: [],

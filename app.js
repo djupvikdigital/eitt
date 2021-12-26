@@ -1,9 +1,14 @@
 //express setup
-let express = require('express');
-let http = require('http');
-let { Server } = require('socket.io');
+import express from 'express';
+import * as http from 'http';
+import { dirname } from 'path';
+import { Server } from 'socket.io';
+import { fileURLToPath } from 'url';
 
-let GameControler = require('./server/GameControler.js');
+import { GameControler } from './server/GameControler.js'
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 let app = express();
 let serv = http.Server(app);

@@ -1,4 +1,4 @@
-module.exports = function CardDeck() {
+export function CardDeck() {
     let colors = ['blue', 'red', 'green', 'yellow'];
     let oneInEachColor = ['0']
     let twoInEachColor = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '+2', 'R', 'S'];
