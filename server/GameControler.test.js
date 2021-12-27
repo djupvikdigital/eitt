@@ -10,7 +10,9 @@ function setupControlerWithMocks(numberOfPlayers = 1) {
     const controler = GameControler('', { 0: {}})
     let players = []
     for (let i = 0; i < numberOfPlayers; i++) {
-        players.push(Player())
+        let player = Player()
+        player.socket = { id: Math.random(), emit: noop }
+        players.push(player)
     } 
     controler.players = players
     controler.plusTwoInPlay = 0
@@ -57,6 +59,31 @@ describe('GameControler', () => {
         expect(player.socket.id).toBe(socket.id)
         controler.disconnect(socket.id)
         expect(player.socket).toBe(null)
+    })
+
+    it('returns the player with the turn', () => {
+        const controler = setupControlerWithMocks(2)
+        const players = controler.players
+        controler.turn = 1
+        expect(controler.getPlayerWithTurn().id).toBe(players[1].id)
+    })
+
+    it('gives the turn to the next player when disconnecting', () => {
+        const controler = setupControlerWithMocks(2)
+        const players = controler.players
+        controler.turn = 1
+        controler.disconnect(players[1].socket.id)
+        expect(controler.getPlayerWithTurn().id).toBe(players[0].id)
+    })
+
+    it('gives the turn back when reconnecting', () => {
+        const controler = setupControlerWithMocks(2)
+        const players = controler.players
+        let socket = { id: Math.random() }
+        controler.turn = 1
+        controler.disconnect(players[1].socket.id)
+        controler.connect(socket, players[1].id)
+        expect(controler.getPlayerWithTurn().id).toBe(players[1].id)
     })
 
     it('sets plusFourInPlay to true', () => {

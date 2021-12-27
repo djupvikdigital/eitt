@@ -12,6 +12,7 @@ export function GameControler(room, roomList) {
         plusFourInPlay: false,
         roundFinished: false,
         roundWinner: '',
+        turn: 0,
         turnRotation: 1,
         turnSkip: 1
     }
@@ -130,6 +131,11 @@ export function GameControler(room, roomList) {
             }
         }
         return null
+    }
+    self.getPlayerWithTurn = function () {
+        let connectedPlayers = this.getConnectedPlayers()
+        let length = connectedPlayers.length
+        return length > 0 ? connectedPlayers[this.turn % length] : null
     }
     self.leave = function (socketId) {
         for (let i = 0; i < this.players.length; i++) {
