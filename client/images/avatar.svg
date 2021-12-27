@@ -1,0 +1,16 @@
+<svg width="196.98mm" height="223.17mm" version="1.1" viewBox="0 0 196.98 223.17" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <g transform="translate(-2.9585 12.844)">
+  <g transform="translate(100.54 64.972)">
+   <path d="m-47.013 124.61s-6.9183-45.64 0-65.027c5.3218-14.913 17.27-24.74 28.56-30.012 11.289-5.2726 24.41-5.2726 35.699 0 11.289 5.2726 23.238 15.099 28.56 30.012 6.9183 19.387 0 65.027 0 65.027z" style="fill:#47535a;stroke-width:.22361px;stroke:#000"/>
+   <path d="m-19.46 37.4s-29.326-6.3154-39.502 2.1382c-15.4 12.792-17.985 37.983-14.581 58.532 0.51273 3.0956 12.317 3.3313 12.991 0.26727 3.7071-16.853-1.4082-30.669 9.2791-40.091 4.9326-4.3486 19.354-3.4745 19.354-3.4745z" style="fill:#47535a;stroke-width:.26352px;stroke:#000"/>
+   <path d="m19.46 37.4s29.326-6.3154 39.502 2.1382c15.4 12.792 17.985 37.983 14.581 58.532-0.51273 3.0956-12.317 3.3313-12.991 0.26727-3.7071-16.853 1.4082-30.669-9.2791-40.091-4.9326-4.3486-19.354-3.4745-19.354-3.4745z" style="fill:#47535a;stroke-width:.26352px;stroke:#000"/>
+   <path d="m-5.5632 30v-10s-11.953-4.7647-14.879-10c-3.7368-6.6857-3.1222-15.633-0.99195-23 1.1295-3.9063 3.3637-8.121 6.9436-10 8.2118-4.3103 19.563-4.3103 27.774 0 3.5799 1.879 5.8141 6.0938 6.9436 10 2.1302 7.3673 2.7448 16.314-0.99195 23-2.9262 5.2354-14.879 10-14.879 10v10" style="fill:#f6d7d2;stroke-width:.26393;stroke:#000"/>
+   <ellipse cx="-7" cy="-8.8909" rx="3.866" ry="2.9751" style="fill-rule:evenodd;fill:#fff;stroke-width:.26794;stroke:#000"/>
+   <ellipse cx="6.9123" cy="-8.8909" rx="3.7798" ry="2.9766" style="fill-rule:evenodd;fill:#fff;stroke-width:.265;stroke:#000"/>
+   <ellipse cx="-6.7808" cy="-8.7879" rx="1.0867" ry=".75595" style="fill-rule:evenodd;stroke-width:.265;stroke:#000"/>
+   <ellipse cx="6.7812" cy="-8.7875" rx="1.0867" ry=".75595" style="fill-rule:evenodd;stroke-width:.265;stroke:#000"/>
+   <ellipse cx="-6.2585e-7" cy="6.214" rx="9.8681" ry="3.9428" style="fill-rule:evenodd;fill:#fff;stroke-width:.26385;stroke:#000"/>
+   <ellipse cx="1.5368" cy="8.8199" rx="3.4077" ry="1.2027" style="fill-rule:evenodd;fill:#b5535a;stroke-width:.265;stroke:#000"/>
+  </g>
+ </g>
+</svg>

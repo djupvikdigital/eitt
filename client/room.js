@@ -237,8 +237,12 @@ document.getElementById('createNewRoomButton').addEventListener('click', functio
 })
 
 function changeName() {
-    let name = document.getElementById('change-name-input').value;
-    socket.emit('nameChanged', name);
+    let pack = {};
+    pack.name = document.getElementById('change-name-input').value;
+    pack.body = document.getElementById('avatarBodySelector').dataset.currentColor;
+    pack.head = document.getElementById('avatarHeadSelector').dataset.currentColor;
+    pack.headGear = selectedHeadGear;
+    socket.emit('nameChanged', pack);
     document.getElementById("loginDiv").style.display = "none";
     document.getElementById("mainlobby").style.display = "block";
     atLoginPage = false;
@@ -295,3 +299,37 @@ document.getElementById('pick-yellow').addEventListener('click', function () {
 document.getElementById('new-round').addEventListener('click', function () {
     socket.emit('newRound')
 })
+
+function SVGupdateClass(picker, selector) {
+    let inClass = document.querySelectorAll(selector);
+    console.log(picker.toString());
+    for (let i = 0; i < inClass.length; i++) {
+        inClass[i].style.fill = picker;
+    }
+}
+
+let SVGheadGear = document.querySelectorAll(".SVGheadGear")
+let selectedHeadGear = 0;
+
+function swithSVGheadGear() {
+    for (let i = 0; i < SVGheadGear.length; i++) {
+        SVGheadGear[i].style.visibility = 'hidden';
+    }
+    if (selectedHeadGear > 0) {
+        document.getElementById('SVGheadGear' + selectedHeadGear).style.visibility = '';
+    }
+}
+
+document.getElementById('headGearSelectLeft').addEventListener('click', function () {
+    selectedHeadGear--;
+    if (selectedHeadGear < 0) selectedHeadGear = SVGheadGear.length;
+    swithSVGheadGear();
+})
+
+document.getElementById('headGearSelectRight').addEventListener('click', function () {
+    selectedHeadGear++;
+    if (selectedHeadGear > SVGheadGear.length) selectedHeadGear = 0;
+    swithSVGheadGear();
+})
+
+jscolor.trigger('input change');

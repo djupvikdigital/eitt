@@ -43,6 +43,11 @@ io.sockets.on('connection', function(socket){
     bName = bName.charAt(0).toUpperCase() + bName.slice(1)
     let name = pickRand(playerFName) + bName
 
+    let style = {};
+    style.body = '#47535a';
+    style.head = '#f6d7d2';
+    style.headGear = 0;
+
     SOCKET_LIST[socket.id] = socket
     console.log('socket connection');
 
@@ -171,13 +176,18 @@ io.sockets.on('connection', function(socket){
     });
 
     socket.on('nameChanged',function(data){
-        if (data == '') return false;
-        if (data.length > 20) {
-            data = data.slice(0, 20);
+        if (data.name != '') {
+            if (data.name.length > 20) {
+                data.name = data.name.slice(0, 20);
+            }
+            console.log('Socket id: ' + socket.id + " changed name to " + data.name);
+            name = data.name;
+            room.sendGameStatus();
         }
-        console.log('Socket id: ' + socket.id + " changed name to " + data);
-        name = data;
-        room.sendGameStatus();
+        style.body = data.body;
+        style.head = data.head;
+        style.headGear = data.headGear
+        console.log(style);
     });
 
     socket.on('newRound',function(){
