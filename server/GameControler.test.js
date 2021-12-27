@@ -86,6 +86,16 @@ describe('GameControler', () => {
         expect(controler.getPlayerWithTurn().id).toBe(players[1].id)
     })
 
+    it('switches turn when leaving, connecting again does not give you turn', () => {
+        const controler = setupControlerWithMocks(2)
+        const players = controler.players
+        let socket = { id: Math.random() }
+        controler.turn = 1
+        controler.leave(players[1].socket.id)
+        controler.connect(socket)
+        expect(controler.getPlayerWithTurn().id).toBe(players[0].id)
+    })
+
     it('sets plusFourInPlay to true', () => {
         const controler = setupControlerWithMocks()
         expect(controler.plusFourInPlay).toBe(false)

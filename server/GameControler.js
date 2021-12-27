@@ -151,6 +151,7 @@ export function GameControler(room, roomList) {
             let socket = this.players[i].socket
             if (socket && socket.id === socketId) {
                 this.players.splice(i, 1)
+                this.turnSwitch()
                 this.sendGameStatus()
                 return true
             }
