@@ -75,10 +75,8 @@ io.sockets.on('connection', function(socket){
             let player = room.connect(socket)
             ROOM_LIST[data] = room
             player.cards = room.dealCards()
-            player.hasTurn = false
             player.name = name
             socket.emit('joinRoom', { playerId: player.id, room: data })
-            room.turnAssign()
             room.sendGameStatus()
             ROOM_LIST.mainlobby.sendRoomStatus()
             console.log(ROOM_LIST);
@@ -108,7 +106,6 @@ io.sockets.on('connection', function(socket){
             if (!player.name) {
                 player.name = name
             }
-            room.turnAssign()
             room.sendGameStatus()
             socket.emit('joinRoom', { playerId: player.id, room: data.room })
             ROOM_LIST.mainlobby.sendRoomStatus()
@@ -138,7 +135,7 @@ io.sockets.on('connection', function(socket){
 
     socket.on('pass',function(){
         let player = room.getPlayerBySocketId(socket.id)
-        if (player.hasTurn && player.hasDrawn) {
+        if (room.hasTurn(player) && player.hasDrawn) {
             player.hasDrawn = false
             room.turnSwitch();
             room.sendGameStatus();
@@ -186,7 +183,6 @@ io.sockets.on('connection', function(socket){
 
     socket.on('disconnect',function(){
         let player = room.getPlayerBySocketId(socket.id)
-        if (player && player.hasTurn) room.turnSwitch();
         let goodbyeID = socket.id
         delete SOCKET_LIST[socket.id];
         room.disconnect(goodbyeID)

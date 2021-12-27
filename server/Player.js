@@ -6,7 +6,6 @@ export function Player() {
         scores: [],
         socket: null,
         hasDrawn: false,
-        hasTurn: false,
         pressedEitt: false
     }
     self.emit = function (arg1, arg2) {

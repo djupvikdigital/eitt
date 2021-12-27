@@ -32,7 +32,9 @@ export function GameControler(room, roomList) {
             let id = currentPlayer.id
             let score = scores[id]
             currentPlayer.scores.push(score)
-            currentPlayer.hasTurn = id === idWithHighestScore
+            if (id === idWithHighestScore) {
+                this.turn = i
+            }
             currentPlayer.pressedEitt = false
         }
         this.sendGameStatus()
@@ -137,6 +139,13 @@ export function GameControler(room, roomList) {
         let length = connectedPlayers.length
         return length > 0 ? connectedPlayers[this.turn % length] : null
     }
+    self.hasTurn = function (player) {
+        let playerWithTurn = this.getPlayerWithTurn()
+        if (!playerWithTurn) {
+            return false
+        }
+        return playerWithTurn.id === player.id
+    }
     self.leave = function (socketId) {
         for (let i = 0; i < this.players.length; i++) {
             let socket = this.players[i].socket
@@ -204,7 +213,7 @@ export function GameControler(room, roomList) {
         let cards = [];
         let turn = false
         if (number === 1) {
-            if (!player.hasTurn || player.hasDrawn) {
+            if (!this.hasTurn(player) || player.hasDrawn) {
                 return
             }
             if (this.plusFourInPlay) {
@@ -249,7 +258,7 @@ export function GameControler(room, roomList) {
         return true
     }
     self.playCardFromPlayer = function (player, index, color = '') {
-        if (!player.hasTurn || index < 0 || index >= player.cards.length) {
+        if (!this.hasTurn(player) || index < 0 || index >= player.cards.length) {
             return false
         }
         let card = player.cards[index]
@@ -275,17 +284,6 @@ export function GameControler(room, roomList) {
         this.sendGameStatus()
         return true
     }
-    self.turnAssign = function () {
-        let hasTurn = false;
-        for(let i = 0; i < this.players.length; i++){
-            let currentPlayer = this.players[i]
-            if (currentPlayer.hasTurn) hasTurn = true;
-        }
-        if (!hasTurn) {
-            let randomPlayer = this.players[Math.floor(Math.random() * this.players.length)];
-            randomPlayer.hasTurn = true;
-        }
-    }
     self.turnSwitch = function () {
         if (this.roundFinished && !this.plusTwoInPlay && !this.plusFourInPlay) {
             self.addScoresForRound()
@@ -296,16 +294,7 @@ export function GameControler(room, roomList) {
             return
         }
         let length = this.players.length
-        for (let i = 0; i < length; i++) {
-            let currentPlayer = this.players[i]
-            if (currentPlayer.hasTurn){
-                let nextPlayerTurn = (i + (1 * this.turnRotation * this.turnSkip) + length) % length;
-                currentPlayer.hasTurn = false;
-                this.players[nextPlayerTurn].hasTurn = true
-                this.turnSkip = 1;
-                break
-            }
-        }
+        this.turn = (this.turn + (1 * this.turnRotation * this.turnSkip) + length) % length
     }
     self.sendGameStatus = function () {
         let pack = [];
@@ -316,7 +305,7 @@ export function GameControler(room, roomList) {
                 name:currentPlayer.name,
                 numberOfCards:currentPlayer.cards.length,
                 connected:Boolean(currentPlayer.socket),
-                hasTurn:currentPlayer.hasTurn,
+                hasTurn:this.hasTurn(currentPlayer),
                 pressedEitt:currentPlayer.pressedEitt,
                 scores:currentPlayer.scores
             });
@@ -334,7 +323,7 @@ export function GameControler(room, roomList) {
                 id: currentPlayer.id,
                 cards: currentPlayer.cards,
                 drawCount: drawCount, 
-                hasTurn: currentPlayer.hasTurn,
+                hasTurn: this.hasTurn(currentPlayer),
                 playerList: pack,
                 lastPlayedCard: this.lastPlayedCard
             };
