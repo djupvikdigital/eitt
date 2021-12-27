@@ -10,7 +10,9 @@ function setupControlerWithMocks(numberOfPlayers = 1) {
     const controler = GameControler('', { 0: {}})
     let players = []
     for (let i = 0; i < numberOfPlayers; i++) {
-        players.push(Player())
+        let player = Player()
+        player.socket = { id: Math.random(), emit: noop }
+        players.push(player)
     } 
     controler.players = players
     controler.plusTwoInPlay = 0
@@ -59,6 +61,41 @@ describe('GameControler', () => {
         expect(player.socket).toBe(null)
     })
 
+    it('returns the player with the turn', () => {
+        const controler = setupControlerWithMocks(2)
+        const players = controler.players
+        controler.turn = 1
+        expect(controler.getPlayerWithTurn().id).toBe(players[1].id)
+    })
+
+    it('gives the turn to the next player when disconnecting', () => {
+        const controler = setupControlerWithMocks(2)
+        const players = controler.players
+        controler.turn = 1
+        controler.disconnect(players[1].socket.id)
+        expect(controler.getPlayerWithTurn().id).toBe(players[0].id)
+    })
+
+    it('gives the turn back when reconnecting', () => {
+        const controler = setupControlerWithMocks(2)
+        const players = controler.players
+        let socket = { id: Math.random() }
+        controler.turn = 1
+        controler.disconnect(players[1].socket.id)
+        controler.connect(socket, players[1].id)
+        expect(controler.getPlayerWithTurn().id).toBe(players[1].id)
+    })
+
+    it('switches turn when leaving, connecting again does not give you turn', () => {
+        const controler = setupControlerWithMocks(2)
+        const players = controler.players
+        let socket = { id: Math.random() }
+        controler.turn = 1
+        controler.leave(players[1].socket.id)
+        controler.connect(socket)
+        expect(controler.getPlayerWithTurn().id).toBe(players[0].id)
+    })
+
     it('sets plusFourInPlay to true', () => {
         const controler = setupControlerWithMocks()
         expect(controler.plusFourInPlay).toBe(false)
@@ -70,10 +107,8 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
         controler.playCard({ value: '+4' })
-        player.hasTurn = true
         controler.drawCards(player)
         expect(player.cards.length).toBe(4)
-        player.hasTurn = true
         controler.drawCards(player)
         expect(player.cards.length).toBe(5)
     })
@@ -85,7 +120,6 @@ describe('GameControler', () => {
         controler.deck.playedCards = []
         controler.playCard({ value: '+2' })
         expect(controler.roundFinished).toBe(true)
-        player.hasTurn = true
         controler.drawCards(player)
         expect(player.cards.length).toBe(2)
         expect(controler.roundFinished).toBe(true)
@@ -152,7 +186,6 @@ describe('GameControler', () => {
     it('resets pressedEitt when drawing cards', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
-        player.hasTurn = true
         player.pressedEitt = true
         controler.drawCards(player)
         expect(player.pressedEitt).toBe(false)
@@ -161,7 +194,6 @@ describe('GameControler', () => {
     it('sets hasDrawn after regular drawing', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
-        player.hasTurn = true
         controler.drawCards(player)
         expect(player.hasDrawn).toBe(true)
     })
@@ -170,11 +202,9 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
         controler.plusTwoInPlay = 1
-        player.hasTurn = true
         controler.drawCards(player)
         expect(player.hasDrawn).toBe(false)
         controler.plusFourInPlay = true
-        player.hasTurn = true
         controler.drawCards(player)
         expect(player.hasDrawn).toBe(false)
     })
@@ -182,17 +212,17 @@ describe('GameControler', () => {
     it('does not set hasDrawn when drawing specified number of cards', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
-        player.hasTurn = true
         controler.drawCards(player, 2)
         expect(player.hasDrawn).toBe(false)
     })
 
     it('disallows regular drawing unless player has turn', () => {
-        const controler = setupControlerWithMocks()
+        const controler = setupControlerWithMocks(2)
         const player = controler.players[0]
+        controler.turn = 1
         controler.drawCards(player)
         expect(player.cards.length).toBe(0)
-        player.hasTurn = true
+        controler.turn = 0
         controler.drawCards(player)
         expect(player.cards.length).toBe(1)
     })
@@ -200,7 +230,6 @@ describe('GameControler', () => {
     it('disallows regular drawing if player already has drawn', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
-        player.hasTurn = true
         player.hasDrawn = true
         controler.drawCards(player)
         expect(player.cards.length).toBe(0)
@@ -276,15 +305,14 @@ describe('GameControler', () => {
         deck.availableCards.push({ value: 'R' })
         controler.addScoresForRound()
         controler.dealNewRound(deck)
-        expect(players[0].hasTurn).toBe(true)
-        expect(players[1].hasTurn).toBe(false)
+        expect(controler.hasTurn(players[0])).toBe(true)
+        expect(controler.hasTurn(players[1])).toBe(false)
         expect(controler.turnRotation).toBe(-1)
     })
 
     it('removes the card from the player when playing card from player', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
-        player.hasTurn = true
         player.cards = [{ color: 'black', value: 'W' }]
         controler.playCardFromPlayer(player, 0)
         expect(player.cards.length).toBe(0)
@@ -293,7 +321,6 @@ describe('GameControler', () => {
     it('does nothing when playing card with invalid index from player', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
-        player.hasTurn = true
         player.cards = [{ color: 'black', value: 'W' }]
         controler.playCardFromPlayer(player, 1)
         expect(player.cards.length).toBe(1)
@@ -302,7 +329,6 @@ describe('GameControler', () => {
     it('resets player.hasDrawn when playing card from player', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
-        player.hasTurn = true
         player.cards = [{ color: 'black', value: 'W' }]
         player.hasDrawn = true
         controler.playCardFromPlayer(player, 0)
@@ -312,7 +338,6 @@ describe('GameControler', () => {
     it('sets lastPlayerId when playing card from player', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
-        player.hasTurn = true
         player.cards = [{ color: 'black', value: 'W' }]
         controler.playCardFromPlayer(player, 0)
         expect(controler.lastPlayerId).toBe(player.id)
@@ -322,7 +347,6 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
         player.name = 'foo'
-        player.hasTurn = true
         player.cards = [{ color: 'black', value: '+4' }]
         controler.playCardFromPlayer(player, 0)
         expect(controler.roundFinished).toBe(true)
@@ -330,9 +354,9 @@ describe('GameControler', () => {
     })
 
     it('disallows playing unless player has turn when playing card from player', () => {
-        const controler = setupControlerWithMocks()
+        const controler = setupControlerWithMocks(2)
         const player = controler.players[0]
-        player.hasTurn = false
+        controler.turn = 1
         player.cards = [{ color: 'black', value: 'W' }]
         controler.playCardFromPlayer(player, 0)
         expect(player.cards.length).toBe(1)
@@ -342,16 +366,14 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks(2)
         const players = controler.players
         players[0].cards = [{ color: 'black', value: 'W' }, { color: 'black', value: 'W' }]
-        players[0].hasTurn = true
         controler.playCardFromPlayer(players[0], 0)
-        expect(players[0].hasTurn).toBe(false)
-        expect(players[1].hasTurn).toBe(true)
+        expect(controler.hasTurn(players[0])).toBe(false)
+        expect(controler.hasTurn(players[1])).toBe(true)
     })
 
     it('changes the card color when playing wildcard from player', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
-        player.hasTurn = true
         player.cards = [{ color: 'black', value: 'W' }]
         controler.playCardFromPlayer(player, 0, 'blue')
         expect(controler.deck.playedCards.pop().color).toBe('blue')
@@ -361,7 +383,6 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
         controler.plusFourInPlay = true
-        player.hasTurn = true
         player.cards = [{ color: 'black', value: 'W' }]
         controler.playCardFromPlayer(player, 0, 'blue')
         expect(player.cards[0].color).toBe('black')
