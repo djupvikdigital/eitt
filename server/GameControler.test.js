@@ -68,15 +68,7 @@ describe('GameControler', () => {
         expect(controler.getPlayerWithTurn().id).toBe(players[1].id)
     })
 
-    it('gives the turn to the next player when disconnecting', () => {
-        const controler = setupControlerWithMocks(2)
-        const players = controler.players
-        controler.turn = 1
-        controler.disconnect(players[1].socket.id)
-        expect(controler.getPlayerWithTurn().id).toBe(players[0].id)
-    })
-
-    it('gives the turn back when reconnecting', () => {
+    it('allows reconnecting while still having turn', () => {
         const controler = setupControlerWithMocks(2)
         const players = controler.players
         let socket = { id: Math.random() }

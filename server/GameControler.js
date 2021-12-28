@@ -135,9 +135,8 @@ export function GameControler(room, roomList) {
         return null
     }
     self.getPlayerWithTurn = function () {
-        let connectedPlayers = this.getConnectedPlayers()
-        let length = connectedPlayers.length
-        return length > 0 ? connectedPlayers[this.turn % length] : null
+        let length = this.players.length
+        return length > 0 ? this.players[this.turn % length] : null
     }
     self.hasTurn = function (player) {
         let playerWithTurn = this.getPlayerWithTurn()
