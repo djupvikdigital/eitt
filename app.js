@@ -52,7 +52,8 @@ io.sockets.on('connection', function(socket){
     console.log('socket connection');
 
     let room = ROOM_LIST.mainlobby
-    room.connect(socket)
+    let player = room.connect(socket)
+    player.style = style;
     socket.emit('joinRoom', { room: 'mainlobby' })
     console.log(ROOM_LIST);
 
@@ -82,6 +83,7 @@ io.sockets.on('connection', function(socket){
             player.cards = room.dealCards()
             player.name = name
             player.style = style;
+            console.log(player);
             socket.emit('joinRoom', { playerId: player.id, room: data })
             room.sendGameStatus()
             ROOM_LIST.mainlobby.sendRoomStatus()

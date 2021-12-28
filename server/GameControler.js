@@ -307,7 +307,8 @@ export function GameControler(room, roomList) {
                 connected:Boolean(currentPlayer.socket),
                 hasTurn:this.hasTurn(currentPlayer),
                 pressedEitt:currentPlayer.pressedEitt,
-                scores:currentPlayer.scores
+                scores:currentPlayer.scores,
+                style:currentPlayer.style
             });
         }
         for(let i = 0; i < this.players.length; i++){

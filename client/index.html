@@ -15,9 +15,9 @@
         <div style="text-align: center; ">
             <input id="change-name-input" maxlength="20" type="text" placeholder="Username" class="inputStyle" style="vertical-align: middle;">
             <button id="change-name-button" class="inputStyle">Let's Play!</button>
-            <svg width="75.98mm" height="75.17mm" style="vertical-align: middle;" version="1.1" viewBox="0 0 196.98 223.17" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-                <g transform="translate(-2.9585 12.844)">
-                 <g transform="translate(100.54 64.972)">
+            <svg id="masterSVG" width="75.98mm" height="75.17mm" style="vertical-align: middle;" version="1.1" viewBox="0 0 196.98 223.17" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <g id="masterGroup" transform="translate(-2.9585 12.844)">
+                 <g id="SVGavatar" transform="translate(100.54 64.972)">
                   <path class="avatarBody" d="m-47.013 124.61s-6.9183-45.64 0-65.027c5.3218-14.913 17.27-24.74 28.56-30.012 11.289-5.2726 24.41-5.2726 35.699 0 11.289 5.2726 23.238 15.099 28.56 30.012 6.9183 19.387 0 65.027 0 65.027z" style="fill:#47535a;stroke: width 1px;;stroke:#000"/>
                   <path class="avatarBody" d="m-19.46 37.4s-29.326-6.3154-39.502 2.1382c-15.4 12.792-17.985 37.983-14.581 58.532 0.51273 3.0956 12.317 3.3313 12.991 0.26727 3.7071-16.853-1.4082-30.669 9.2791-40.091 4.9326-4.3486 19.354-3.4745 19.354-3.4745z" style="fill:#47535a;stroke-width:1px;stroke:#000"/>
                   <path class="avatarBody" d="m19.46 37.4s29.326-6.3154 39.502 2.1382c15.4 12.792 17.985 37.983 14.581 58.532-0.51273 3.0956-12.317 3.3313-12.991 0.26727-3.7071-16.853 1.4082-30.669-9.2791-40.091-4.9326-4.3486-19.354-3.4745-19.354-3.4745z" style="fill:#47535a;stroke-width:1px;stroke:#000"/>
@@ -62,12 +62,12 @@
                 <br>
                 <br>
                 <button id="avatarHeadSelector" data-jscolor="{
-                    onChange: 'SVGupdateClass(this, \'.avatarHead\')',
+                    onChange: 'SVGupdateClass(this, \'.avatarHead\', document)',
                     value:'#f6d7d2'}"></button>
                     <br>
                     <br>
                 <button id="avatarBodySelector" data-jscolor="{
-                    onChange: 'SVGupdateClass(this, \'.avatarBody\')',
+                    onChange: 'SVGupdateClass(this, \'.avatarBody\', document)',
                     value:'#47535a'}"></button>
 
             </span>

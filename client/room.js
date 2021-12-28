@@ -47,8 +47,25 @@ function renderPlayerList(status) {
     let playerListELement = document.getElementById('player-list');
     playerListELement.textContent = '';
     let fragment = document.createDocumentFragment();
+    let ns = 'http://www.w3.org/2000/svg'
     for (let i = 0; i < status.playerList.length; i++) {
         let player = status.playerList[i];
+        console.log(player);
+        //create avatar
+        let SVGavatar = document.getElementById('SVGavatar').cloneNode(true);
+        SVGavatar.removeAttribute('id');
+        let SVG = document.createElementNS(ns, 'svg');
+        let masterSVG = document.getElementById('masterSVG');
+        SVG.setAttribute('version', masterSVG.getAttribute('version'));
+        SVG.setAttribute('width', masterSVG.getAttribute('width'));
+        SVG.setAttribute('height', masterSVG.getAttribute('height'));
+        SVG.setAttribute('style', masterSVG.getAttribute('style'));
+        SVG.setAttribute('viewBox', masterSVG.getAttribute('viewBox'));
+        let group = document.createElementNS(ns, 'g');
+        let masterGroup = document.getElementById('masterGroup');
+        group.setAttribute('transform', masterGroup.getAttribute('transform'));
+        SVGupdateClass(status.playerList[i].style.body, '.avatarBody', SVGavatar);
+        SVGupdateClass(status.playerList[i].style.head, '.avatarHead', SVGavatar);
         let dt = document.createElement('dt');
         let dd = document.createElement('dd');
         dt.textContent = player.name + (player.connected ? '' : ' (not connected)');
@@ -68,6 +85,9 @@ function renderPlayerList(status) {
             })
             dd.appendChild(didntPressEittButton)
         }
+        group.appendChild(SVGavatar);
+        SVG.appendChild(group);
+        dd.appendChild(SVG);
         fragment.appendChild(dt);
         fragment.appendChild(dd);
     }
@@ -301,8 +321,8 @@ document.getElementById('new-round').addEventListener('click', function () {
     socket.emit('newRound')
 })
 
-function SVGupdateClass(picker, selector) {
-    let inClass = document.querySelectorAll(selector);
+function SVGupdateClass(picker, selector, node) {
+    let inClass = node.querySelectorAll(selector);
     console.log(picker.toString());
     for (let i = 0; i < inClass.length; i++) {
         inClass[i].style.fill = picker;
