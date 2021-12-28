@@ -47,7 +47,8 @@ function renderPlayerList(status) {
     let playerListELement = document.getElementById('player-list');
     playerListELement.textContent = '';
     let fragment = document.createDocumentFragment();
-    for (let player of status.playerList) {
+    for (let i = 0; i < status.playerList.length; i++) {
+        let player = status.playerList[i];
         let dt = document.createElement('dt');
         let dd = document.createElement('dd');
         dt.textContent = player.name + (player.connected ? '' : ' (not connected)');
@@ -58,12 +59,12 @@ function renderPlayerList(status) {
         if (player.pressedEitt) {
             dt.style.color = 'red'
         }
-        else if (player.id !== status.id) {
+        else if (i !== status.index) {
             let didntPressEittButton = document.createElement('button')
             didntPressEittButton.className = 'inputStyle'
             didntPressEittButton.textContent = "Didn't press eitt"
             didntPressEittButton.addEventListener('click', function () {
-                socket.emit('didntPressEitt', player.id)
+                socket.emit('didntPressEitt', i)
             })
             dd.appendChild(didntPressEittButton)
         }
@@ -209,7 +210,7 @@ socket.on('roundWinner', function(data){
             playerWithHightestScore = player
         }
     }
-    if (playerWithHightestScore.id === gameStatus.id) {
+    if (gameStatus.hasTurn) {
         document.getElementById('round-controls').style.visibility = 'inherit'
     }
 })

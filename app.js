@@ -125,9 +125,9 @@ io.sockets.on('connection', function(socket){
         room.drawCards(player);
     });
 
-    socket.on('didntPressEitt', function(playerId) {
-        let accusedPlayer = room.getPlayerByPlayerId(playerId)
-        if (room.lastPlayerId === playerId && accusedPlayer.cards.length === 1 && accusedPlayer.pressedEitt == false) {
+    socket.on('didntPressEitt', function(index) {
+        let accusedPlayer = room.players[index]
+        if (room.lastPlayerId === accusedPlayer.id && accusedPlayer.cards.length === 1 && accusedPlayer.pressedEitt == false) {
             room.drawCards(accusedPlayer, 3)
         }
     })
