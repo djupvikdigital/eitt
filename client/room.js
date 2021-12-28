@@ -68,6 +68,16 @@ function renderPlayerList(status) {
             })
             dd.appendChild(didntPressEittButton)
         }
+        if (!player.connected) {
+            let removePlayerButton = document.createElement('button')
+            removePlayerButton.className = 'inputStyle'
+            removePlayerButton.textContent = 'Remove player'
+            removePlayerButton.addEventListener('click', function () {
+                let index = i
+                socket.emit('removePlayer', index)
+            })
+            dd.appendChild(removePlayerButton)
+        }
         fragment.appendChild(dt);
         fragment.appendChild(dd);
     }

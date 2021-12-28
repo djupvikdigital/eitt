@@ -193,6 +193,11 @@ io.sockets.on('connection', function(socket){
         room.dealNewRound()
     })
 
+    socket.on('removePlayer', function(index) {
+        room.players.splice(index, 1)
+        room.sendGameStatus()
+    })
+
     socket.on('disconnect',function(){
         let player = room.getPlayerBySocketId(socket.id)
         let goodbyeID = socket.id
