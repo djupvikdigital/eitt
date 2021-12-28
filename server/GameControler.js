@@ -149,8 +149,17 @@ export function GameControler(room, roomList) {
         for (let i = 0; i < this.players.length; i++) {
             let socket = this.players[i].socket
             if (socket && socket.id === socketId) {
+                if (this.turn === i && this.turnRotation === -1) {
+                    // switch turn if leaving player has turn
+                    this.turnSwitch()
+                }
+                else if (this.turn > i) {
+                    // make sure later player doesn't lose turn
+                    this.turn = this.turn - 1
+                }
                 this.players.splice(i, 1)
-                this.turnSwitch()
+                let length = this.players.length
+                this.turn = this.turn % length
                 this.sendGameStatus()
                 return true
             }

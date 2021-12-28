@@ -88,6 +88,33 @@ describe('GameControler', () => {
         expect(controler.getPlayerWithTurn().id).toBe(players[0].id)
     })
 
+    it('switches turn to next player when leaving', () => {
+        const controler = setupControlerWithMocks(3)
+        const players = controler.players
+        let id = players[2].id
+        controler.turn = 1
+        controler.leave(players[1].socket.id)
+        expect(controler.getPlayerWithTurn().id).toBe(id)
+    })
+
+    it('switches turn to previous player when leaving and direction is reverse', () => {
+        const controler = setupControlerWithMocks(3)
+        const players = controler.players
+        controler.turn = 1
+        controler.turnRotation = -1
+        controler.leave(players[1].socket.id)
+        expect(controler.getPlayerWithTurn().id).toBe(players[0].id)
+    })
+
+    it('does not switch turn if a later player has the turn', () => {
+        const controler = setupControlerWithMocks(3)
+        const players = controler.players
+        let id = players[2].id
+        controler.turn = 2
+        controler.leave(players[1].socket.id)
+        expect(controler.getPlayerWithTurn().id).toBe(id)
+    })
+
     it('sets plusFourInPlay to true', () => {
         const controler = setupControlerWithMocks()
         expect(controler.plusFourInPlay).toBe(false)
