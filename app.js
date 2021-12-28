@@ -194,8 +194,7 @@ io.sockets.on('connection', function(socket){
     })
 
     socket.on('removePlayer', function(index) {
-        room.players.splice(index, 1)
-        room.sendGameStatus()
+        room.removePlayer(index)
     })
 
     socket.on('disconnect',function(){
