@@ -81,13 +81,24 @@ function renderPlayerList(status) {
             didntPressEittButton.className = 'inputStyle'
             didntPressEittButton.textContent = "Didn't press eitt"
             didntPressEittButton.addEventListener('click', function () {
-                socket.emit('didntPressEitt', i)
+                let index = i
+                socket.emit('didntPressEitt', index)
             })
             dd.appendChild(didntPressEittButton)
         }
         group.appendChild(SVGavatar);
         SVG.appendChild(group);
         dd.appendChild(SVG);
+        if (!player.connected) {
+            let removePlayerButton = document.createElement('button')
+            removePlayerButton.className = 'inputStyle'
+            removePlayerButton.textContent = 'Remove player'
+            removePlayerButton.addEventListener('click', function () {
+                let index = i
+                socket.emit('removePlayer', index)
+            })
+            dd.appendChild(removePlayerButton)
+        }
         fragment.appendChild(dt);
         fragment.appendChild(dd);
     }

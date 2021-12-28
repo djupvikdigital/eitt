@@ -195,6 +195,10 @@ io.sockets.on('connection', function(socket){
         room.dealNewRound()
     })
 
+    socket.on('removePlayer', function(index) {
+        room.removePlayer(index)
+    })
+
     socket.on('disconnect',function(){
         let player = room.getPlayerBySocketId(socket.id)
         let goodbyeID = socket.id

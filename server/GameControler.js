@@ -135,9 +135,8 @@ export function GameControler(room, roomList) {
         return null
     }
     self.getPlayerWithTurn = function () {
-        let connectedPlayers = this.getConnectedPlayers()
-        let length = connectedPlayers.length
-        return length > 0 ? connectedPlayers[this.turn % length] : null
+        let length = this.players.length
+        return length > 0 ? this.players[this.turn % length] : null
     }
     self.hasTurn = function (player) {
         let playerWithTurn = this.getPlayerWithTurn()
@@ -150,14 +149,29 @@ export function GameControler(room, roomList) {
         for (let i = 0; i < this.players.length; i++) {
             let socket = this.players[i].socket
             if (socket && socket.id === socketId) {
-                this.players.splice(i, 1)
-                this.turnSwitch()
-                this.sendGameStatus()
-                return true
+                return this.removePlayer(i)
             }
         }
         return false
     }
+    self.removePlayer = function (index) {
+        if (index < 0 || index >= this.players.length) {
+            return false
+        }
+        if (this.turn === index && this.turnRotation === -1) {
+            // switch turn if leaving player has turn
+            this.turnSwitch()
+        }
+        else if (this.turn > index) {
+            // make sure later player doesn't lose turn
+            this.turn = this.turn - 1
+        }
+        this.players.splice(index, 1)
+        let length = this.players.length
+        this.turn = this.turn % length
+        this.sendGameStatus()
+        return true
+}
     self.sortCards = function (cards) {
         cards.sort(function(a, b){
             let stringA = '' + a.color + a.value;
