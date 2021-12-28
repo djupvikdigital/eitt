@@ -81,6 +81,7 @@ io.sockets.on('connection', function(socket){
             ROOM_LIST[data] = room
             player.cards = room.dealCards()
             player.name = name
+            player.style = style;
             socket.emit('joinRoom', { playerId: player.id, room: data })
             room.sendGameStatus()
             ROOM_LIST.mainlobby.sendRoomStatus()
@@ -111,6 +112,7 @@ io.sockets.on('connection', function(socket){
             if (!player.name) {
                 player.name = name
             }
+            player.style = style;
             room.sendGameStatus()
             socket.emit('joinRoom', { playerId: player.id, room: data.room })
             ROOM_LIST.mainlobby.sendRoomStatus()
