@@ -210,7 +210,7 @@ socket.on('roundWinner', function(data){
             playerWithHightestScore = player
         }
     }
-    if (playerWithHightestScore.id === gameStatus.id) {
+    if (gameStatus.hasTurn) {
         document.getElementById('round-controls').style.visibility = 'inherit'
     }
 })
