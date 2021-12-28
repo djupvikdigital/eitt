@@ -47,7 +47,8 @@ function renderPlayerList(status) {
     let playerListELement = document.getElementById('player-list');
     playerListELement.textContent = '';
     let fragment = document.createDocumentFragment();
-    for (let player of status.playerList) {
+    for (let i = 0; i < status.playerList.length; i++) {
+        let player = status.playerList[i];
         let dt = document.createElement('dt');
         let dd = document.createElement('dd');
         dt.textContent = player.name + (player.connected ? '' : ' (not connected)');
@@ -63,7 +64,7 @@ function renderPlayerList(status) {
             didntPressEittButton.className = 'inputStyle'
             didntPressEittButton.textContent = "Didn't press eitt"
             didntPressEittButton.addEventListener('click', function () {
-                socket.emit('didntPressEitt', player.id)
+                socket.emit('didntPressEitt', i)
             })
             dd.appendChild(didntPressEittButton)
         }
