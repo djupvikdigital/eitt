@@ -64,7 +64,8 @@ function renderPlayerList(status) {
             didntPressEittButton.className = 'inputStyle'
             didntPressEittButton.textContent = "Didn't press eitt"
             didntPressEittButton.addEventListener('click', function () {
-                socket.emit('didntPressEitt', i)
+                let index = i
+                socket.emit('didntPressEitt', index)
             })
             dd.appendChild(didntPressEittButton)
         }
