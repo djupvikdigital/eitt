@@ -59,7 +59,7 @@ function renderPlayerList(status) {
         if (player.pressedEitt) {
             dt.style.color = 'red'
         }
-        else if (player.id !== status.id) {
+        else if (i !== status.index) {
             let didntPressEittButton = document.createElement('button')
             didntPressEittButton.className = 'inputStyle'
             didntPressEittButton.textContent = "Didn't press eitt"

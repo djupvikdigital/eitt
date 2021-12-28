@@ -302,7 +302,6 @@ export function GameControler(room, roomList) {
         for(let i = 0; i < this.players.length; i++){
             let currentPlayer = this.players[i]
             pack.push({
-                id:currentPlayer.id,
                 name:currentPlayer.name,
                 numberOfCards:currentPlayer.cards.length,
                 connected:Boolean(currentPlayer.socket),
@@ -322,6 +321,7 @@ export function GameControler(room, roomList) {
             }
             let gameStatus = {
                 id: currentPlayer.id,
+                index: i,
                 cards: currentPlayer.cards,
                 drawCount: drawCount, 
                 hasTurn: this.hasTurn(currentPlayer),
