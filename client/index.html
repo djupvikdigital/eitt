@@ -112,13 +112,11 @@
         <h2 class="headliner3">Rooms</h2>
         <div id='openRooms'>
         </div>
-    </div>
-
-    <div id="createNewRoomDiv" style="display: none;">
-        <button id="backToLobbyFromCreateRoom" class="inputStyle" style="float: left;">Back</button>
-        <h1 class="headliner2">Room options</h1>
-        <h2 class="headliner3">Room name</h2>
-        <input type="text" id="newRoomNameInput" maxlength="20" class="inputStyle">
+        <h2 class="headliner3">New room</h2>
+        <label>
+            Room name:
+            <input type="text" id="newRoomNameInput" maxlength="20" class="inputStyle">
+        </label>
         <button id="createNewRoomButton" class="inputStyle">Create room!</button>
     </div>
 
@@ -129,7 +127,11 @@
         <h1 class="headliner2" id="roomNameHeadline">Det her er mega fedt!!!!</h1>
         <div id="roundWinner"></div>
         <ul id="player-list"></ul>
-        <div>
+        <div id="game-options">
+            <h1 class="headliner2">Game options</h1>
+            <button class="inputStyle" id="start-game">Start game</button>
+        </div>
+        <div id="game-table">
             <button class="card" id="draw-card">Draw 1</button>
             <span class="card" id="last-played-card"></span>
             <button class="inputStyle" id="pass">Pass</button>

@@ -167,11 +167,6 @@ function setGameStatus(status) {
     renderCards(status.cards);
     renderPlayerList(status);
     document.getElementById('your-turn').style.visibility = status.hasTurn ? 'inherit' : 'hidden'
-    let playersWithTurn = status.playerList.filter(function (player) {
-        return player.hasTurn
-    })
-    let showRoundControls = status.roundFinished && (playersWithTurn.length === 0 || status.hasTurn)
-    document.getElementById('round-controls').style.visibility = showRoundControls ? '' : 'hidden'
     renderPlayerScores(status.playerList)
     renderLastPlayedCard(status.lastPlayedCard)
 }
@@ -203,9 +198,12 @@ socket.on('joinRoom', function(data){
     if (inRoom != 'mainlobby' && inRoom != '' ) {
         document.getElementById("loginDiv").style.display = "none";
         document.getElementById("mainlobby").style.display = "none";
-        document.getElementById("createNewRoomDiv").style.display = "none";
         document.getElementById("room").style.display = "block";
         document.getElementById("roomNameHeadline").textContent = 'Room: ' + data.room
+        if (data.isRoomCreator) {
+            // Room creator gets to set game options
+            document.getElementById('game-options').style.display = 'block'
+        }
     }
     sessionStorage.setItem('playerId', data.playerId)
     sessionStorage.setItem('room', data.room)
@@ -226,15 +224,6 @@ socket.on('roomStatus', function(data){
             divElement.appendChild(element)
         }
     }
-    let element = document.createElement('button');
-    element.className = 'createButton';
-    element.addEventListener('click', function(){
-        document.getElementById("mainlobby").style.display = "none";
-        document.getElementById("createNewRoomDiv").style.display = "block";
-    });
-    element.textContent = 'Create a room';
-    divElement.appendChild(element)
-
 })
 function createClickHandlerJoinRoom(room) {
     return function clickHandler() {
@@ -243,11 +232,9 @@ function createClickHandlerJoinRoom(room) {
 }
 function backToLobby() {
     document.getElementById("mainlobby").style.display = "block";
-    document.getElementById("createNewRoomDiv").style.display = "none";
     document.getElementById("room").style.display = "none";
     document.getElementById('loginDiv').style.display = 'none'
 }
-document.getElementById("backToLobbyFromCreateRoom").addEventListener('click', backToLobby);
 
 socket.on('roundWinner', function(data){
     let divElement = document.getElementById('roundWinner')
@@ -267,13 +254,15 @@ socket.on('roundWinner', function(data){
         }
     }
     if (gameStatus.hasTurn) {
-        document.getElementById('round-controls').style.visibility = ''
+        document.getElementById('round-controls').style.visibility = 'inherit'
     }
 })
 
 socket.on('newRound', function(){
     let divElement = document.getElementById('roundWinner')
     divElement.textContent = ''
+    document.getElementById('game-table').style.display = 'block'
+    document.getElementById('round-controls').style.visibility = ''
     changeButtonDisableState(false)
 })
 
@@ -318,6 +307,11 @@ function logKeyUp(e) {
 document.getElementById('leave-room').addEventListener('click', function () {
     socket.emit('joinRoom', { room: 'mainlobby' })
     backToLobby()
+})
+
+document.getElementById('start-game').addEventListener('click', function () {
+    document.getElementById('game-options').style.display = ''
+    socket.emit('newRound')
 })
 
 document.getElementById('draw-card').addEventListener('click', function () {

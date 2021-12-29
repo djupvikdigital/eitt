@@ -101,6 +101,14 @@ html {
 	word-break: break-all;
 }
 
+#game-options {
+	display: none;
+}
+
+#game-table {
+	display: none;
+}
+
 .cards {
 	margin: 1.5em 0 1.5em 70px;
 	display: flex;
@@ -405,6 +413,10 @@ html {
 	font-size: 1.5em;
 	font-weight: bold;
 	margin: 1em 0;
+}
+
+#round-controls {
+	visibility: hidden;
 }
 
 #player-scores {
