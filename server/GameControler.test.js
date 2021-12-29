@@ -43,6 +43,15 @@ describe('GameControler', () => {
         expect(player.socket.id).toBe(socket.id)
     })
 
+    it('lets player wait when joining after round is started', () => {
+        const controler = setupControlerWithMocks()
+        let socket = { id: Math.random() }
+        controler.dealNewRound()
+        controler.connect(socket)
+        expect(controler.players.length).toBe(2)
+        expect(controler.getPlayingPlayers().length).toBe(1)
+    })
+
     it('deletes the player when leaving a room', () => {
         const controler = setupControlerWithMocks(0)
         let socket = { id: Math.random() }

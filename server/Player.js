@@ -5,6 +5,7 @@ export function Player() {
         name: '',
         scores: [],
         socket: null,
+        isPlaying: false,
         hasDrawn: false,
         pressedEitt: false
     }

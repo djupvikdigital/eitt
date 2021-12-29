@@ -117,6 +117,11 @@ export function GameControler(room, roomList) {
             return player.socket
         })
     }
+    self.getPlayingPlayers = function () {
+        return this.players.filter(function (player) {
+            return player.isPlaying
+        })
+    }
     self.getPlayerByPlayerId = function (playerId) {
         for (let i = 0; i < this.players.length; i++) {
             if (this.players[i].id === playerId) {
@@ -200,6 +205,7 @@ export function GameControler(room, roomList) {
         for (let i = 0; i < this.players.length; i++) {
             let currentPlayer = this.players[i]
             currentPlayer.cards = this.dealCards()
+            currentPlayer.isPlaying = true
         }
         this.plusFourInPlay = false
         this.plusTwoInPlay = 0
