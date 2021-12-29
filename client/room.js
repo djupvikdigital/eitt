@@ -189,6 +189,7 @@ socket.on('gameStatus', setGameStatus);
 
 let inRoom = sessionStorage.getItem('room') || ''
 if (inRoom) {
+    atLoginPage = false
     socket.emit('joinRoom', { playerId: sessionStorage.getItem('playerId'), room: inRoom })
 }
 socket.on('joinRoom', function(data){
