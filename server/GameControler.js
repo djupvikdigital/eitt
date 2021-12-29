@@ -317,6 +317,7 @@ export function GameControler(room, roomList) {
         }
         let length = this.getPlayingPlayers().length
         this.turn = (this.turn + (1 * this.turnRotation * this.turnSkip) + length) % length
+        this.turnSkip = 1;
     }
     self.sendGameStatus = function () {
         let pack = [];
