@@ -244,6 +244,7 @@ function backToLobby() {
     document.getElementById("mainlobby").style.display = "block";
     document.getElementById("createNewRoomDiv").style.display = "none";
     document.getElementById("room").style.display = "none";
+    document.getElementById('loginDiv').style.display = 'none'
 }
 document.getElementById("backToLobbyFromCreateRoom").addEventListener('click', backToLobby);
 
