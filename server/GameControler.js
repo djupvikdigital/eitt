@@ -348,7 +348,8 @@ export function GameControler(room, roomList) {
                 drawCount: drawCount, 
                 hasTurn: this.hasTurn(currentPlayer),
                 playerList: pack,
-                lastPlayedCard: this.lastPlayedCard
+                lastPlayedCard: this.lastPlayedCard,
+                roundFinished: this.roundFinished
             };
             currentPlayer.emit('gameStatus', gameStatus);
         }

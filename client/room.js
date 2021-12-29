@@ -149,6 +149,9 @@ function setGameStatus(status) {
     renderCards(status.cards);
     renderPlayerList(status);
     document.getElementById('your-turn').style.visibility = status.hasTurn ? 'inherit' : 'hidden'
+    if (!status.roundFinished || !status.hasTurn) {
+        document.getElementById('round-controls').style.visibility = 'hidden'
+    }
     renderPlayerScores(status.playerList)
     renderLastPlayedCard(status.lastPlayedCard)
 }
