@@ -117,6 +117,11 @@ export function GameControler(room, roomList) {
             return player.socket
         })
     }
+    self.getPlayingPlayers = function () {
+        return this.players.filter(function (player) {
+            return player.isPlaying
+        })
+    }
     self.getPlayerByPlayerId = function (playerId) {
         for (let i = 0; i < this.players.length; i++) {
             if (this.players[i].id === playerId) {
@@ -135,8 +140,9 @@ export function GameControler(room, roomList) {
         return null
     }
     self.getPlayerWithTurn = function () {
-        let length = this.players.length
-        return length > 0 ? this.players[this.turn % length] : null
+        let playingPlayers = this.getPlayingPlayers()
+        let length = playingPlayers.length
+        return length > 0 ? playingPlayers[this.turn % length] : null
     }
     self.hasTurn = function (player) {
         let playerWithTurn = this.getPlayerWithTurn()
@@ -200,6 +206,7 @@ export function GameControler(room, roomList) {
         for (let i = 0; i < this.players.length; i++) {
             let currentPlayer = this.players[i]
             currentPlayer.cards = this.dealCards()
+            currentPlayer.isPlaying = true
         }
         this.plusFourInPlay = false
         this.plusTwoInPlay = 0
@@ -308,7 +315,7 @@ export function GameControler(room, roomList) {
             }
             return
         }
-        let length = this.players.length
+        let length = this.getPlayingPlayers().length
         this.turn = (this.turn + (1 * this.turnRotation * this.turnSkip) + length) % length
     }
     self.sendGameStatus = function () {
