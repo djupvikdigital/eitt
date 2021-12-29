@@ -66,24 +66,21 @@ function renderPlayerList(status) {
         group.setAttribute('transform', masterGroup.getAttribute('transform'));
         SVGupdateClass(status.playerList[i].style.body, '.avatarBody', SVGavatar);
         SVGupdateClass(status.playerList[i].style.head, '.avatarHead', SVGavatar);
-        let dt = document.createElement('dt');
-        let dd = document.createElement('dd');
-        dt.textContent = player.name + (player.connected ? '' : ' (not connected)');
+        let li = document.createElement('li')
+        let title = document.createElement('div');
+        let avatar = document.createElement('div');
+        title.textContent = player.name + (player.connected ? '' : ' (not connected)');
         if (player.hasTurn) {
-            dt.style.fontWeight = 'bold';
+            title.style.fontWeight = 'bold';
         }
         if (player.pressedEitt) {
-            dt.style.color = 'red'
+            title.style.color = 'red'
         }
         else if (i !== status.index) {
-            let didntPressEittButton = document.createElement('button')
-            didntPressEittButton.className = 'inputStyle'
-            didntPressEittButton.textContent = "Didn't press eitt"
-            didntPressEittButton.addEventListener('click', function () {
+            avatar.addEventListener('click', function () {
                 let index = i
                 socket.emit('didntPressEitt', index)
             })
-            dd.appendChild(didntPressEittButton)
         }
         group.appendChild(SVGavatar);
         if (player.style.headGear > 0) {
@@ -93,19 +90,10 @@ function renderPlayerList(status) {
             group.appendChild(SVGheadGear);
         }
         SVG.appendChild(group);
-        dd.appendChild(SVG);
-        if (!player.connected) {
-            let removePlayerButton = document.createElement('button')
-            removePlayerButton.className = 'inputStyle'
-            removePlayerButton.textContent = 'Remove player'
-            removePlayerButton.addEventListener('click', function () {
-                let index = i
-                socket.emit('removePlayer', index)
-            })
-            dd.appendChild(removePlayerButton)
-        }
-        fragment.appendChild(dt);
-        fragment.appendChild(dd);
+        avatar.appendChild(SVG);
+        li.appendChild(avatar);
+        li.appendChild(title);
+        fragment.appendChild(li);
     }
     playerListELement.appendChild(fragment);
 } 
