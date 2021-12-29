@@ -90,6 +90,20 @@ function renderPlayerList(status) {
             group.appendChild(SVGheadGear);
         }
         SVG.appendChild(group);
+        for(let i = 0; i < player.numberOfCards; i++) {
+            document.getElementById('loginDiv').style.display = 'block'
+            let length = document.getElementById('SVGavatar').getBoundingClientRect().width
+            let cardLength = document.getElementById('SVGcardBackside').getBoundingClientRect().width
+            document.getElementById('loginDiv').style.display = 'none'
+            let cardDist = 5;
+            let cardSVG = document.getElementById('SVGcardBackside').cloneNode(true);
+            cardSVG.removeAttribute('id');
+            cardSVG.style.visibility = '';
+            let cardX = length / 2 + cardDist * i - cardDist * player.numberOfCards / 2 - cardLength / 4;
+            let cardY = 140;
+            cardSVG.setAttribute('transform', 'translate(' + cardX + ', ' + cardY + ') scale(0.1)')
+            SVG.appendChild(cardSVG);
+        }
         avatar.appendChild(SVG);
         li.appendChild(avatar);
         li.appendChild(title);
