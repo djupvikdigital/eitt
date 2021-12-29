@@ -79,6 +79,10 @@ function renderPlayerList(status) {
         title.textContent = player.name + (player.connected ? '' : ' (not connected)');
         if (player.hasTurn) {
             title.style.fontWeight = 'bold';
+            let SVGavatarGlow = document.getElementById('SVGavatarGlow').cloneNode(true);
+            SVGavatarGlow.removeAttribute('id');
+            SVGavatarGlow.style.visibility = '';
+            SVG.appendChild(SVGavatarGlow);
         }
         if (player.pressedEitt) {
             title.style.color = 'red'
@@ -101,7 +105,7 @@ function renderPlayerList(status) {
             document.getElementById('loginDiv').style.display = 'block'
             let length = document.getElementById('SVGavatar').getBoundingClientRect().width
             let cardLength = document.getElementById('SVGcardBackside').getBoundingClientRect().width
-            document.getElementById('loginDiv').style.display = 'none'
+            if (!atLoginPage) document.getElementById('loginDiv').style.display = 'none'
             let cardDist = 5;
             let cardSVG = document.getElementById('SVGcardBackside').cloneNode(true);
             cardSVG.removeAttribute('id');
