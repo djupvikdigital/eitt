@@ -39,8 +39,15 @@ function renderCards(cards) {
 
 function renderLastPlayedCard(card) {
     let lastPlayedCardElement = document.getElementById('last-played-card');
-    lastPlayedCardElement.className = getClassNameForCard(card);
-    lastPlayedCardElement.textContent = card.value;
+    if (card) {
+        lastPlayedCardElement.className = getClassNameForCard(card);
+        lastPlayedCardElement.textContent = card.value;
+    }
+    else {
+        lastPlayedCardElement.className = 'card';
+        lastPlayedCardElement.textContent = '';
+    }
+    return true
 }
 
 function renderPlayerList(status) {
@@ -156,6 +163,9 @@ function setGameStatus(status) {
     renderCards(status.cards);
     renderPlayerList(status);
     document.getElementById('your-turn').style.visibility = status.hasTurn ? 'inherit' : 'hidden'
+    if (!status.roundFinished || !status.hasTurn) {
+        document.getElementById('round-controls').style.visibility = 'hidden'
+    }
     renderPlayerScores(status.playerList)
     renderLastPlayedCard(status.lastPlayedCard)
 }
@@ -249,7 +259,7 @@ socket.on('roundWinner', function(data){
         }
     }
     if (gameStatus.hasTurn) {
-        document.getElementById('round-controls').style.visibility = 'inherit'
+        document.getElementById('round-controls').style.visibility = ''
     }
 })
 
@@ -257,7 +267,7 @@ socket.on('newRound', function(){
     let divElement = document.getElementById('roundWinner')
     divElement.textContent = ''
     changeButtonDisableState(false)
-    document.getElementById('round-controls').style.visibility = ''
+    document.getElementById('round-controls').style.visibility = 'hidden'
 })
 
 function changeButtonDisableState(state) {

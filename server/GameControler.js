@@ -348,7 +348,8 @@ export function GameControler(room, roomList) {
                 drawCount: drawCount, 
                 hasTurn: this.hasTurn(currentPlayer),
                 playerList: pack,
-                lastPlayedCard: this.lastPlayedCard
+                lastPlayedCard: this.lastPlayedCard,
+                roundFinished: this.roundFinished
             };
             currentPlayer.emit('gameStatus', gameStatus);
         }
@@ -366,12 +367,5 @@ export function GameControler(room, roomList) {
             currentPlayer.emit('roomStatus', pack);
         }
     }
-    let card = self.deck.drawCard()
-    while (card.value === '+4') {
-        // can't start with a +4, try again
-        self.deck = CardDeck()
-        card = self.deck.drawCard()
-    }
-    self.playCard(card)
     return self
 }
