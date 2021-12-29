@@ -98,6 +98,7 @@ html {
 	width: max-content;
 	justify-content: space-evenly;
 	max-width: 200px;
+	word-break: break-all;
 }
 
 .cards {
