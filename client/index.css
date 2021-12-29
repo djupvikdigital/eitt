@@ -38,12 +38,12 @@ html {
 .headliner2 {
 	font-family: monospace;
 	text-align: center;
-	font-size: calc(1rem + 7vw);
+	font-size: calc(1rem + 4vw);
 }
 
 .headliner3 {
 	font-family: monospace;
-	font-size: calc(1rem + 3vw);
+	font-size: calc(1rem + 2vw);
 }
 
 .joinButton {
@@ -102,6 +102,8 @@ html {
 
 .cards {
 	margin: 1.5em 0 1.5em 70px;
+	display: flex;
+	flex-direction: row;
 }
 
 .card {
