@@ -15,6 +15,7 @@ function setupControlerWithMocks(numberOfPlayers = 1) {
         players.push(player)
     } 
     controler.players = players
+    controler.dealNewRound()
     controler.plusTwoInPlay = 0
     return controler
 }
@@ -124,6 +125,31 @@ describe('GameControler', () => {
         expect(controler.getPlayerWithTurn().id).toBe(id)
     })
 
+    it('does not give turn to non-playing player', () => {
+        const controler = setupControlerWithMocks(3)
+        const players = controler.players
+        players[2].isPlaying = false
+        controler.turn = 1
+        controler.turnSwitch()
+        expect(controler.getPlayerWithTurn().id).toBe(players[0].id)
+    })
+
+    it('does not give turn to non-playing first player', () => {
+        const controler = setupControlerWithMocks(3)
+        const players = controler.players
+        players[0].isPlaying = false
+        controler.turn = 1
+        controler.turnSwitch()
+        expect(controler.getPlayerWithTurn().id).toBe(players[1].id)
+    })
+
+    it('starts with first playing player after dealer having turn', () => {
+        const controler = setupControlerWithMocks(3)
+        const players = controler.players
+        players[1].isPlaying = false
+        expect(controler.getPlayerWithTurn().id).toBe(players[2].id)
+    })
+
     it('sets plusFourInPlay to true', () => {
         const controler = setupControlerWithMocks()
         expect(controler.plusFourInPlay).toBe(false)
@@ -134,6 +160,7 @@ describe('GameControler', () => {
     it('does not draw 4 two times after plusFourInPlay', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
+        player.cards = []
         controler.playCard({ value: '+4' })
         controler.drawCards(player)
         expect(player.cards.length).toBe(4)
@@ -144,6 +171,7 @@ describe('GameControler', () => {
     it('allows round to continue while +2 is in play', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
+        player.cards = []
         controler.roundFinished = true
         controler.deck.playedCards = []
         controler.playCard({ value: '+2' })
@@ -204,6 +232,7 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks(2)
         const players = controler.players
         players[0].cards = [{ color: 'blue' }]
+        players[1].cards = []
         controler.deck.playedCards = [{ color: 'green' }]
         controler.playCard({ value: '+4' })
         controler.lastPlayerId = players[0].id
@@ -247,6 +276,7 @@ describe('GameControler', () => {
     it('disallows regular drawing unless player has turn', () => {
         const controler = setupControlerWithMocks(2)
         const player = controler.players[0]
+        player.cards = []
         controler.turn = 1
         controler.drawCards(player)
         expect(player.cards.length).toBe(0)
@@ -258,6 +288,7 @@ describe('GameControler', () => {
     it('disallows regular drawing if player already has drawn', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
+        player.cards = []
         player.hasDrawn = true
         controler.drawCards(player)
         expect(player.cards.length).toBe(0)
@@ -266,6 +297,7 @@ describe('GameControler', () => {
     it('allows drawing specified number of cards outside turn', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
+        player.cards = []
         player.hasDrawn = true
         controler.drawCards(player, 2)
         expect(player.cards.length).toBe(2)
@@ -319,6 +351,7 @@ describe('GameControler', () => {
     it('draws 3 cards even when plusFourInPlay is true', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
+        player.cards = []
         controler.plusFourInPlay = true
         controler.drawCards(player, 3)
         expect(player.cards.length).toBe(3)

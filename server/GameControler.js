@@ -140,8 +140,9 @@ export function GameControler(room, roomList) {
         return null
     }
     self.getPlayerWithTurn = function () {
-        let length = this.players.length
-        return length > 0 ? this.players[this.turn % length] : null
+        let playingPlayers = this.getPlayingPlayers()
+        let length = playingPlayers.length
+        return length > 0 ? playingPlayers[this.turn % length] : null
     }
     self.hasTurn = function (player) {
         let playerWithTurn = this.getPlayerWithTurn()
@@ -314,7 +315,7 @@ export function GameControler(room, roomList) {
             }
             return
         }
-        let length = this.players.length
+        let length = this.getPlayingPlayers().length
         this.turn = (this.turn + (1 * this.turnRotation * this.turnSkip) + length) % length
     }
     self.sendGameStatus = function () {
