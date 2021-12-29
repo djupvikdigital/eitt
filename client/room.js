@@ -87,6 +87,12 @@ function renderPlayerList(status) {
             dd.appendChild(didntPressEittButton)
         }
         group.appendChild(SVGavatar);
+        if (player.style.headGear > 0) {
+            let SVGheadGear = document.getElementById('SVGheadGear' + player.style.headGear).cloneNode(true);
+            SVGheadGear.removeAttribute('id');
+            SVGheadGear.style.visibility = '';
+            group.appendChild(SVGheadGear);
+        }
         SVG.appendChild(group);
         dd.appendChild(SVG);
         if (!player.connected) {
