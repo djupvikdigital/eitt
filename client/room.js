@@ -163,9 +163,11 @@ function setGameStatus(status) {
     renderCards(status.cards);
     renderPlayerList(status);
     document.getElementById('your-turn').style.visibility = status.hasTurn ? 'inherit' : 'hidden'
-    if (!status.roundFinished || !status.hasTurn) {
-        document.getElementById('round-controls').style.visibility = 'hidden'
-    }
+    let playersWithTurn = !status.hasTurn && status.playerList.filter(function (player) {
+        return player.hasTurn
+    })
+    let showRoundControls = status.roundFinished && (playersWithTurn.length === 0 || status.hasTurn)
+    document.getElementById('round-controls').style.visibility = showRoundControls ? '' : 'hidden'
     renderPlayerScores(status.playerList)
     renderLastPlayedCard(status.lastPlayedCard)
 }
@@ -267,7 +269,6 @@ socket.on('newRound', function(){
     let divElement = document.getElementById('roundWinner')
     divElement.textContent = ''
     changeButtonDisableState(false)
-    document.getElementById('round-controls').style.visibility = 'hidden'
 })
 
 function changeButtonDisableState(state) {
