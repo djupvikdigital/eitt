@@ -242,7 +242,7 @@ socket.on('roundWinner', function(data){
         }
     }
     if (gameStatus.hasTurn) {
-        document.getElementById('round-controls').style.visibility = 'inherit'
+        document.getElementById('round-controls').style.visibility = ''
     }
 })
 
@@ -250,7 +250,7 @@ socket.on('newRound', function(){
     let divElement = document.getElementById('roundWinner')
     divElement.textContent = ''
     changeButtonDisableState(false)
-    document.getElementById('round-controls').style.visibility = ''
+    document.getElementById('round-controls').style.visibility = 'hidden'
 })
 
 function changeButtonDisableState(state) {
