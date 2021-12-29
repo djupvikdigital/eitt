@@ -404,10 +404,6 @@ html {
 	margin: 1em 0;
 }
 
-#round-controls {
-	visibility: hidden;
-}
-
 #player-scores {
 	text-align: right;
 }

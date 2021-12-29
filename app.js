@@ -80,7 +80,6 @@ io.sockets.on('connection', function(socket){
             room = GameControler(data, ROOM_LIST)
             let player = room.connect(socket)
             ROOM_LIST[data] = room
-            player.cards = room.dealCards()
             player.name = name
             player.style = style;
             console.log(player);
@@ -108,9 +107,6 @@ io.sockets.on('connection', function(socket){
             }
             room = ROOM_LIST[data.room]
             let player = room.connect(socket, data.playerId)
-            if (player.cards.length === 0) {
-                player.cards = room.dealCards()
-            }
             if (!player.name) {
                 player.name = name
             }

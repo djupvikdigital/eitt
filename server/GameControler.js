@@ -366,12 +366,5 @@ export function GameControler(room, roomList) {
             currentPlayer.emit('roomStatus', pack);
         }
     }
-    let card = self.deck.drawCard()
-    while (card.value === '+4') {
-        // can't start with a +4, try again
-        self.deck = CardDeck()
-        card = self.deck.drawCard()
-    }
-    self.playCard(card)
     return self
 }

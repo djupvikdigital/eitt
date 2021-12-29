@@ -39,8 +39,15 @@ function renderCards(cards) {
 
 function renderLastPlayedCard(card) {
     let lastPlayedCardElement = document.getElementById('last-played-card');
-    lastPlayedCardElement.className = getClassNameForCard(card);
-    lastPlayedCardElement.textContent = card.value;
+    if (card) {
+        lastPlayedCardElement.className = getClassNameForCard(card);
+        lastPlayedCardElement.textContent = card.value;
+    }
+    else {
+        lastPlayedCardElement.className = 'card';
+        lastPlayedCardElement.textContent = '';
+    }
+    return true
 }
 
 function renderPlayerList(status) {
