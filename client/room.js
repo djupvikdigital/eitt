@@ -167,7 +167,7 @@ function setGameStatus(status) {
     renderCards(status.cards);
     renderPlayerList(status);
     document.getElementById('your-turn').style.visibility = status.hasTurn ? 'inherit' : 'hidden'
-    let playersWithTurn = !status.hasTurn && status.playerList.filter(function (player) {
+    let playersWithTurn = status.playerList.filter(function (player) {
         return player.hasTurn
     })
     let showRoundControls = status.roundFinished && (playersWithTurn.length === 0 || status.hasTurn)
