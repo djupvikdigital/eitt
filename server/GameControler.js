@@ -10,7 +10,7 @@ export function GameControler(room, roomList) {
         players: [],
         plusTwoInPlay: 0,
         plusFourInPlay: false,
-        roundFinished: false,
+        roundFinished: true,
         roundWinner: '',
         turn: 0,
         turnRotation: 1,
