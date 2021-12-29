@@ -83,12 +83,21 @@ html {
 	overflow: hidden; /* Hide scrollbars */
 }
 
+#player-list {
+	display: flex;
+	flex-direction: row;
+	padding-left: 0;
+	margin-left: 0;
+}
+
 #player-list li {
 	list-style: none;
 	margin-left: 0;
 	text-align: center;
 	vertical-align: middle;
 	width: max-content;
+	justify-content: space-evenly;
+	max-width: 200px;
 }
 
 .cards {

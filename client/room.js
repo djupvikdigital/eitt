@@ -57,8 +57,8 @@ function renderPlayerList(status) {
         let SVG = document.createElementNS(ns, 'svg');
         let masterSVG = document.getElementById('masterSVG');
         SVG.setAttribute('version', masterSVG.getAttribute('version'));
-        SVG.setAttribute('width', masterSVG.getAttribute('width'));
-        SVG.setAttribute('height', masterSVG.getAttribute('height'));
+        SVG.setAttribute('width', '100%');
+        SVG.setAttribute('height', '100%');
         SVG.setAttribute('style', masterSVG.getAttribute('style'));
         SVG.setAttribute('viewBox', masterSVG.getAttribute('viewBox'));
         let group = document.createElementNS(ns, 'g');
