@@ -264,7 +264,13 @@ export function GameControler(room, roomList) {
         this.sendGameStatus()
     }
     self.playCard = function (card) {
-        if (this.plusFourInPlay || (this.plusTwoInPlay > 0 && card.value !== '+2')) {
+        if (this.plusFourInPlay) {
+            return false
+        }
+        if (this.plusTwoInPlay > 0 && card.value !== '+2') {
+            return false
+        }
+        if (this.plusTwoInPlay === 0 && this.roundFinished) {
             return false
         }
         const gotPlayed = this.deck.playCard(card)

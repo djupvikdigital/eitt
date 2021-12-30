@@ -168,16 +168,27 @@ describe('GameControler', () => {
         expect(player.cards.length).toBe(5)
     })
 
+    it('disallows playing cards when round is finished', () => {
+        const controler = setupControlerWithMocks()
+        const player = controler.players[0]
+        player.cards = [{ value: 'W' }]
+        controler.roundFinished = true
+        controler.deck.playedCards = []
+        controler.playCardFromPlayer(player, 0)
+        expect(player.cards.length).toBe(1)
+    })
+
     it('allows round to continue while +2 is in play', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
         player.cards = []
+        controler.plusTwoInPlay = 1
         controler.roundFinished = true
         controler.deck.playedCards = []
         controler.playCard({ value: '+2' })
         expect(controler.roundFinished).toBe(true)
         controler.drawCards(player)
-        expect(player.cards.length).toBe(2)
+        expect(player.cards.length).toBe(4)
         expect(controler.roundFinished).toBe(true)
     })
 
