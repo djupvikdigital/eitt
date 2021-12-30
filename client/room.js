@@ -163,6 +163,11 @@ function setGameStatus(status) {
     console.log('Gamestatus received:')
     console.log(status)
     gameStatus = status;
+    if (status.cards.length > 0) {
+        // Hide game options and show game table when game is started
+        document.getElementById('game-options').style.display = ''
+        document.getElementById('game-table').style.display = 'block'
+    }
     document.getElementById('draw-card').textContent = 'Draw ' + status.drawCount
     renderCards(status.cards);
     renderPlayerList(status);
@@ -200,7 +205,7 @@ socket.on('joinRoom', function(data){
         document.getElementById("mainlobby").style.display = "none";
         document.getElementById("room").style.display = "block";
         document.getElementById("roomNameHeadline").textContent = 'Room: ' + data.room
-        if (data.isRoomCreator) {
+        if (data.isRoomCreator && (!gameStatus.cards || gameStatus.cards.length === 0)) {
             // Room creator gets to set game options
             document.getElementById('game-options').style.display = 'block'
         }
@@ -310,7 +315,6 @@ document.getElementById('leave-room').addEventListener('click', function () {
 })
 
 document.getElementById('start-game').addEventListener('click', function () {
-    document.getElementById('game-options').style.display = ''
     socket.emit('newRound')
 })
 
