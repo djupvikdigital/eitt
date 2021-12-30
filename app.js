@@ -131,17 +131,14 @@ io.sockets.on('connection', function(socket){
     })
 
     socket.on('eitt', function() {
-        let player = room.getPlayerBySocketId(socket.id)
-        if (player.cards.length <= 2) {
-            player.pressedEitt = true
-            room.sendGameStatus()
-        }
+        room.pressEitt(room.getPlayerBySocketId(socket.id))
     })
 
     socket.on('pass',function(){
         let player = room.getPlayerBySocketId(socket.id)
         if (room.hasTurn(player) && player.hasDrawn) {
             player.hasDrawn = false
+            player.pressedEitt = false
             room.turnSwitch();
             room.sendGameStatus();
         }

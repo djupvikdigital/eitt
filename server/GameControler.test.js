@@ -459,4 +459,40 @@ describe('GameControler', () => {
         controler.playCardFromPlayer(player, 0, 'blue')
         expect(player.cards[0].color).toBe('black')
     })
+
+    it('allows pressing eitt before playing second last card', () => {
+        const controler = setupControlerWithMocks()
+        const player = controler.players[0]
+        player.cards = [{ value: 'W' }, { value: 'W' }]
+        controler.pressEitt(player)
+        controler.playCardFromPlayer(player, 0)
+        expect(player.pressedEitt).toBe(true)
+    })
+
+    it('allows pressing eitt after playing second last card', () => {
+        const controler = setupControlerWithMocks()
+        const player = controler.players[0]
+        player.cards = [{ value: 'W' }, { value: 'W' }]
+        controler.playCardFromPlayer(player, 0)
+        controler.pressEitt(player)
+        expect(player.pressedEitt).toBe(true)
+    })
+
+    it('disallows pressing eitt with more than two cards', () => {
+        const controler = setupControlerWithMocks(2)
+        const player = controler.players[0]
+        player.cards = [{ value: 'W' }, { value: 'W' }, { value: 'W' }]
+        controler.playCardFromPlayer(player, 0)
+        controler.pressEitt(player)
+        expect(player.pressedEitt).toBe(false)
+    })
+
+    it('disallows pressing eitt outside of turn', () => {
+        const controler = setupControlerWithMocks(2)
+        const player = controler.players[0]
+        player.cards = [{ value: 'W' }]
+        controler.turn = 1
+        controler.pressEitt(player)
+        expect(player.pressedEitt).toBe(false)
+    })
 })

@@ -311,6 +311,13 @@ export function GameControler(room, roomList) {
         this.sendGameStatus()
         return true
     }
+    self.pressEitt = function (player) {
+        if ((this.hasTurn(player) && player.cards.length === 2) || (this.lastPlayerId === player.id && player.cards.length === 1)) {
+            player.pressedEitt = true
+            this.sendGameStatus()
+        }
+        return player.pressedEitt
+    }
     self.turnSwitch = function () {
         if (this.roundFinished && !this.plusTwoInPlay && !this.plusFourInPlay) {
             self.addScoresForRound()
