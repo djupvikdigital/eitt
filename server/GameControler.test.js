@@ -26,11 +26,20 @@ describe('GameControler', () => {
         let socket = { id: Math.random() }
         let player = controler.connect(socket)
         const playerId = player.id
+        player.isPlaying = true
         controler.disconnect(socket.id)
         socket = { id: Math.random() }
         player = controler.connect(socket, playerId)
         expect(player.id).toBe(playerId)
         expect(player.socket.id).toBe(socket.id)
+    })
+
+    it('removes disconnecting player if player was not playing', () => {
+        const controler = setupControlerWithMocks()
+        let socket = { id: Math.random() }
+        let player = controler.connect(socket)
+        controler.disconnect(socket.id)
+        expect(controler.players.length).toBe(1)
     })
 
     it('disallows connecting as an already connected player', () => {
@@ -66,6 +75,7 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks()
         let socket = { id: Math.random() }
         let player = controler.connect(socket)
+        player.isPlaying = true
         expect(player.socket.id).toBe(socket.id)
         controler.disconnect(socket.id)
         expect(player.socket).toBe(null)

@@ -107,7 +107,16 @@ export function GameControler(room, roomList) {
     self.disconnect = function (socketId) {
         const player = this.getPlayerBySocketId(socketId)
         if (player) {
-            player.socket = null
+            if (player.isPlaying) {
+                player.socket = null
+            }
+            else {
+                for (let i = 0; i < this.players.length; i++) {
+                    if (player.id === this.players[i].id) {
+                        return this.removePlayer(i)
+                    }
+                }
+            }
             return true
         }
         return false
