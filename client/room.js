@@ -74,11 +74,16 @@ function renderPlayerList(status) {
         SVGupdateClass(status.playerList[i].style.body, '.avatarBody', SVGavatar);
         SVGupdateClass(status.playerList[i].style.head, '.avatarHead', SVGavatar);
         let li = document.createElement('li')
+        let details = document.createElement('details')
+        let summary = document.createElement('summary')
         let title = document.createElement('div');
-        let avatar = document.createElement('button');
-        avatar.className = 'avatar-button'
-        avatar.type = 'button'
-        title.textContent = player.name + (player.connected ? '' : ' (not connected)');
+        let avatar = document.createElement('div');
+        let box = document.createElement('div')
+        let button = document.createElement('button')
+        box.className = 'details-body'
+        details.className = 'player'
+        summary.className = 'player-summary'
+        title.textContent = player.name;
         if (player.hasTurn) {
             title.style.fontWeight = 'bold';
             let SVGavatarGlow = document.getElementById('SVGavatarGlow').cloneNode(true);
@@ -87,24 +92,24 @@ function renderPlayerList(status) {
             SVG.appendChild(SVGavatarGlow);
         }
         if (player.pressedEitt) {
-            avatar.disabled = true
+            button.disabled = true
             title.style.color = 'red'
         }
         if (!player.connected) {
-            avatar.setAttribute('aria-label', 'Remove')
-            avatar.addEventListener('click', function () {
+            button.textContent = 'Remove'
+            button.addEventListener('click', function () {
                 socket.emit('removePlayer', i)
             })
         }
         else if (i === status.index) {
-            avatar.setAttribute('aria-label', 'Eitt')
-            avatar.addEventListener('click', function () {
+            button.textContent = 'Eitt'
+            button.addEventListener('click', function () {
                 socket.emit('eitt')
             })
         }
         else {
-            avatar.setAttribute('aria-label', "Didn't press eitt")
-            avatar.addEventListener('click', function () {
+            button.textContent = "Didn't press eitt"
+            button.addEventListener('click', function () {
                 socket.emit('didntPressEitt', i)
             })
         }
@@ -131,8 +136,12 @@ function renderPlayerList(status) {
             SVG.appendChild(cardSVG);
         }
         avatar.appendChild(SVG);
-        li.appendChild(avatar);
-        li.appendChild(title);
+        summary.appendChild(avatar);
+        summary.appendChild(title);
+        details.appendChild(summary);
+        box.appendChild(button);
+        details.appendChild(box);
+        li.appendChild(details);
         fragment.appendChild(li);
     }
     playerListELement.appendChild(fragment);
