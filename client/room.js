@@ -85,10 +85,10 @@ function renderPlayerList(status) {
         summary.className = 'player-summary'
         title.textContent = player.name;
         let dt = document.createElement('dt')
-        dt.textContent = 'Connection status'
+        dt.textContent = 'Status'
         dl.appendChild(dt)
         let dd = document.createElement('dd')
-        dd.textContent = player.connected ? 'Connected' : 'Not connected'
+        dd.textContent = player.connected ? (player.isPlaying ? 'Playing' : 'Waiting') : 'Not connected'
         dl.appendChild(dd)
         box.appendChild(dl);
         if (player.hasTurn) {
