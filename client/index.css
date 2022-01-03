@@ -98,7 +98,6 @@ html {
 	width: max-content;
 	justify-content: space-evenly;
 	max-width: 200px;
-	word-break: break-all;
 }
 
 .player {
@@ -122,9 +121,9 @@ html {
 	background-color: white;
 	border: 1px solid black;
 	border-radius: 4px;
-	color: white;
 	left: 50%;
 	margin-top: 15px;
+	max-width: 100%;
 	padding: 10px;
 	position: absolute;
 	text-align: center;
@@ -145,6 +144,18 @@ html {
 	top: -2px;
 	transform: rotate(45deg) translateX(-50%);
 	width: 8px;
+}
+
+.details-body dl {
+	margin: 0;
+}
+
+.details-body dt {
+	font-weight: bold;
+}
+
+.details-body dd {
+	margin-left: 0;
 }
 
 #game-options {

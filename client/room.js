@@ -79,11 +79,18 @@ function renderPlayerList(status) {
         let title = document.createElement('div');
         let avatar = document.createElement('div');
         let box = document.createElement('div')
-        let button = document.createElement('button')
+        let dl = document.createElement('dl')
         box.className = 'details-body'
         details.className = 'player'
         summary.className = 'player-summary'
         title.textContent = player.name;
+        let dt = document.createElement('dt')
+        dt.textContent = 'Connection status'
+        dl.appendChild(dt)
+        let dd = document.createElement('dd')
+        dd.textContent = player.connected ? 'Connected' : 'Not connected'
+        dl.appendChild(dd)
+        box.appendChild(dl);
         if (player.hasTurn) {
             title.style.fontWeight = 'bold';
             let SVGavatarGlow = document.getElementById('SVGavatarGlow').cloneNode(true);
@@ -92,26 +99,31 @@ function renderPlayerList(status) {
             SVG.appendChild(SVGavatarGlow);
         }
         if (player.pressedEitt) {
-            button.disabled = true
             title.style.color = 'red'
         }
         if (!player.connected) {
+            let button = document.createElement('button')
             button.textContent = 'Remove'
             button.addEventListener('click', function () {
                 socket.emit('removePlayer', i)
             })
+            box.appendChild(button);
         }
-        else if (i === status.index) {
+        else if (i === status.index && status.cards.length <= 2 && status.cards.length > 0) {
+            let button = document.createElement('button')
             button.textContent = 'Eitt'
             button.addEventListener('click', function () {
                 socket.emit('eitt')
             })
+            box.appendChild(button);
         }
-        else {
+        else if (player.numberOfCards === 1 && player.pressedEitt === false) {
+            let button = document.createElement('button')
             button.textContent = "Didn't press eitt"
             button.addEventListener('click', function () {
                 socket.emit('didntPressEitt', i)
             })
+            box.appendChild(button);
         }
         group.appendChild(SVGavatar);
         if (player.style.headGear > 0) {
@@ -139,7 +151,6 @@ function renderPlayerList(status) {
         summary.appendChild(avatar);
         summary.appendChild(title);
         details.appendChild(summary);
-        box.appendChild(button);
         details.appendChild(box);
         li.appendChild(details);
         fragment.appendChild(li);
