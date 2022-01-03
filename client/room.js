@@ -75,7 +75,9 @@ function renderPlayerList(status) {
         SVGupdateClass(status.playerList[i].style.head, '.avatarHead', SVGavatar);
         let li = document.createElement('li')
         let title = document.createElement('div');
-        let avatar = document.createElement('div');
+        let avatar = document.createElement('button');
+        avatar.className = 'avatar-button'
+        avatar.type = 'button'
         title.textContent = player.name + (player.connected ? '' : ' (not connected)');
         if (player.hasTurn) {
             title.style.fontWeight = 'bold';
@@ -85,9 +87,17 @@ function renderPlayerList(status) {
             SVG.appendChild(SVGavatarGlow);
         }
         if (player.pressedEitt) {
+            avatar.disabled = true
             title.style.color = 'red'
         }
-        else if (i !== status.index) {
+        if (i === status.index) {
+            avatar.setAttribute('aria-label', 'Eitt')
+            avatar.addEventListener('click', function () {
+                socket.emit('eitt')
+            })
+        }
+        else {
+            avatar.setAttribute('aria-label', "Didn't press eitt")
             avatar.addEventListener('click', function () {
                 let index = i
                 socket.emit('didntPressEitt', index)

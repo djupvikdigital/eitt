@@ -101,6 +101,47 @@ html {
 	word-break: break-all;
 }
 
+.avatar-button {
+	background-color: white;
+	border: 0;
+	cursor: pointer;
+	overflow: visible;
+	position: relative;
+}
+
+.avatar-button::before {
+	background-color: black;
+	border-radius: 4px;
+	color: white;
+	content: attr(aria-label);
+	display: none;
+	left: 50%;
+	margin-top: 15px;
+	padding: 10px;
+	position: absolute;
+	text-align: center;
+	top: 100%;
+	transform: translateX(-50%);
+	width: max-content;
+}
+
+.avatar-button::after {
+	border: 10px solid black;
+	border-color: transparent transparent black transparent;
+	content: '';
+	display: none;
+	left: 50%;
+	margin-top: -5px;
+	position: absolute;
+	top: 100%;
+	transform: translateX(-50%);
+}
+
+.avatar-button:hover::before,
+.avatar-button:hover::after {
+	display: block;
+}
+
 #game-options {
 	display: none;
 }
