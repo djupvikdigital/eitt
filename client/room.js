@@ -76,7 +76,7 @@ function renderPlayerList(status) {
         let li = document.createElement('li')
         let title = document.createElement('div');
         let avatar = document.createElement('div');
-        title.textContent = player.name + (player.connected ? '' : ' (not connected)') + (player.isPlaying ? '' : ' (watching)');
+        title.textContent = player.name + (player.connected ? '' : ' (not connected)');
         if (player.hasTurn) {
             title.style.fontWeight = 'bold';
             let SVGavatarGlow = document.getElementById('SVGavatarGlow').cloneNode(true);
