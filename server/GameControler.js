@@ -212,10 +212,18 @@ export function GameControler(room, roomList) {
         return cards
     }
     self.dealNewRound = function (deck = CardDeck()) {
-        for (let i = 0; i < this.players.length; i++) {
+        let i = 0
+        while (i < this.players.length) {
             let currentPlayer = this.players[i]
-            currentPlayer.cards = this.dealCards()
-            currentPlayer.isPlaying = true
+            if (currentPlayer.socket) {
+                currentPlayer.cards = this.dealCards()
+                currentPlayer.isPlaying = true
+                i++
+            }
+            else {
+                // Remove disconnected player
+                this.removePlayer(i)
+            }
         }
         this.plusFourInPlay = false
         this.plusTwoInPlay = 0

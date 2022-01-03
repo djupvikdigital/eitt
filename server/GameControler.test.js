@@ -369,6 +369,16 @@ describe('GameControler', () => {
         expect(typeof players[0].scores[1]).toBe('number')
     })
 
+    it('removes disconnected players when dealing new round', () => {
+        const controler = setupControlerWithMocks(3)
+        const players = controler.players.slice(0)
+        players[2].cards = []
+        controler.disconnect(players[1].socket.id)
+        controler.dealNewRound()
+        expect(controler.players.length).toBe(2)
+        expect(players[2].cards.length).toBe(7)
+    })
+
     it('draws 3 cards even when plusFourInPlay is true', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
