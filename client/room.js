@@ -421,4 +421,15 @@ document.getElementById('headGearSelectRight').addEventListener('click', functio
     swithSVGheadGear();
 })
 
+document.addEventListener('click', function (e) {
+    // Close open player details when clicking outside them
+    let playerDetailsElements = document.getElementsByClassName('player')
+    for (let i = 0; i < playerDetailsElements.length; i++) {
+        let element = playerDetailsElements[i]
+        if (!element.contains(e.target)) {
+            element.removeAttribute('open')
+        }
+    }
+})
+
 jscolor.trigger('input change');
