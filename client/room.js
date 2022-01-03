@@ -93,8 +93,7 @@ function renderPlayerList(status) {
         if (!player.connected) {
             avatar.setAttribute('aria-label', 'Remove')
             avatar.addEventListener('click', function () {
-                let index = i
-                socket.emit('removePlayer', index)
+                socket.emit('removePlayer', i)
             })
         }
         else if (i === status.index) {
@@ -106,8 +105,7 @@ function renderPlayerList(status) {
         else {
             avatar.setAttribute('aria-label', "Didn't press eitt")
             avatar.addEventListener('click', function () {
-                let index = i
-                socket.emit('didntPressEitt', index)
+                socket.emit('didntPressEitt', i)
             })
         }
         group.appendChild(SVGavatar);
