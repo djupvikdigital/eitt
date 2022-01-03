@@ -90,7 +90,14 @@ function renderPlayerList(status) {
             avatar.disabled = true
             title.style.color = 'red'
         }
-        if (i === status.index) {
+        if (!player.connected) {
+            avatar.setAttribute('aria-label', 'Remove')
+            avatar.addEventListener('click', function () {
+                let index = i
+                socket.emit('removePlayer', index)
+            })
+        }
+        else if (i === status.index) {
             avatar.setAttribute('aria-label', 'Eitt')
             avatar.addEventListener('click', function () {
                 socket.emit('eitt')
