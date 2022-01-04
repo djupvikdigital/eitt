@@ -368,10 +368,6 @@ document.getElementById('pass').addEventListener('click', function () {
     socket.emit('pass');
 });
 
-document.getElementById('eitt').addEventListener('click', function () {
-    socket.emit('eitt')
-})
-
 document.getElementById('check-plus-four').addEventListener('click', function () {
     socket.emit('checkPlusFour')
 })
