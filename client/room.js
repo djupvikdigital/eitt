@@ -223,6 +223,12 @@ var socket = io();
 socket.on('gameStatus', setGameStatus);
 
 let inRoom = sessionStorage.getItem('room') || ''
+let storedPlayerSettings = sessionStorage.getItem('playerSettings')
+if (storedPlayerSettings) {
+    let playerSettings = JSON.parse(storedPlayerSettings)
+    socket.emit('nameChanged', playerSettings)
+    document.getElementById('change-name-input').value = playerSettings.name
+}
 if (inRoom) {
     atLoginPage = false
     socket.emit('joinRoom', { playerId: sessionStorage.getItem('playerId'), room: inRoom })
@@ -328,6 +334,7 @@ function changeName() {
     pack.head = document.getElementById('avatarHeadSelector').dataset.currentColor;
     pack.headGear = selectedHeadGear;
     socket.emit('nameChanged', pack);
+    sessionStorage.setItem('playerSettings', JSON.stringify(pack));
     document.getElementById("loginDiv").style.display = "none";
     document.getElementById("mainlobby").style.display = "block";
     atLoginPage = false;
