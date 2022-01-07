@@ -320,7 +320,12 @@ export function GameControler(room, roomList) {
         player.hasDrawn = false
         this.lastPlayerId = player.id
         if (player.cards.length === 0) {
-            this.state = card.value === '+2' ? 'ROUND_FINISHING' : 'ROUND_FINISHED'
+            if (card.value === '+2' || card.value === '+4') {
+                this.state = 'ROUND_FINISHING'
+            }
+            else {
+                this.state = 'ROUND_FINISHED'
+            }
             this.roundWinner = player.name
         }
         this.turnSwitch()

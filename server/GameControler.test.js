@@ -207,6 +207,18 @@ describe('GameControler', () => {
         expect(controler.state).toBe('ROUND_FINISHED')
     })
 
+    it('waits with finishing until player has drawn when +4 is in play', () => {
+        const controler = setupControlerWithMocks()
+        const player = controler.players[0]
+        player.cards = [{ value: '+4' }]
+        controler.deck.playedCards = []
+        controler.playCardFromPlayer(player, 0)
+        expect(controler.state).toBe('ROUND_FINISHING')
+        controler.drawCards(player)
+        expect(player.cards.length).toBe(4)
+        expect(controler.state).toBe('ROUND_FINISHED')
+    })
+
     it('disallows playing cards other than +2 while +2 is in play', () => {
         const controler = setupControlerWithMocks()
         const card = { color: 'blue', value: '+2' }
@@ -444,7 +456,7 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
         player.name = 'foo'
-        player.cards = [{ color: 'black', value: '+4' }]
+        player.cards = [{ color: 'black', value: 'W' }]
         controler.playCardFromPlayer(player, 0)
         expect(controler.state).toBe('ROUND_FINISHED')
         expect(controler.roundWinner).toBe('foo')
