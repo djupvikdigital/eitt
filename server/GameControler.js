@@ -10,7 +10,6 @@ export function GameControler(room, roomList) {
         players: [],
         plusTwoInPlay: 0,
         plusFourInPlay: false,
-        roundFinished: true,
         roundWinner: '',
         state: 'NOT_STARTED',
         turn: 0,
@@ -228,7 +227,6 @@ export function GameControler(room, roomList) {
         }
         this.plusFourInPlay = false
         this.plusTwoInPlay = 0
-        this.roundFinished = false
         this.turnRotation = 1
         this.turnSkip = 1
         this.deck = deck
@@ -279,13 +277,16 @@ export function GameControler(room, roomList) {
         this.sendGameStatus()
     }
     self.playCard = function (card) {
+        if (this.state !== 'PLAYING' && this.state !== 'ROUND_FINISHING') {
+            return false
+        }
         if (this.plusFourInPlay) {
             return false
         }
         if (this.plusTwoInPlay > 0 && card.value !== '+2') {
             return false
         }
-        if (this.plusTwoInPlay === 0 && this.roundFinished) {
+        if (this.plusTwoInPlay === 0 && this.state === 'ROUND_FINISHING') {
             return false
         }
         const gotPlayed = this.deck.playCard(card)
@@ -319,7 +320,7 @@ export function GameControler(room, roomList) {
         player.hasDrawn = false
         this.lastPlayerId = player.id
         if (player.cards.length === 0) {
-            this.roundFinished = true
+            this.state = card.value === '+2' ? 'ROUND_FINISHING' : 'ROUND_FINISHED'
             this.roundWinner = player.name
         }
         this.turnSwitch()
@@ -334,7 +335,8 @@ export function GameControler(room, roomList) {
         return player.pressedEitt
     }
     self.turnSwitch = function () {
-        if (this.roundFinished && !this.plusTwoInPlay && !this.plusFourInPlay) {
+        if (this.state === 'ROUND_FINISHED' || (this.state === 'ROUND_FINISHING' && !this.plusTwoInPlay && !this.plusFourInPlay)) {
+            this.state = 'ROUND_FINISHED'
             self.addScoresForRound()
             for (let i = 0; i < this.players.length; i++) {
                 let currentPlayer = this.players[i]

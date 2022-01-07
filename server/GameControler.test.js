@@ -189,7 +189,7 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
         player.cards = [{ value: 'W' }]
-        controler.roundFinished = true
+        controler.state = 'ROUND_FINISHED'
         controler.deck.playedCards = []
         controler.playCardFromPlayer(player, 0)
         expect(player.cards.length).toBe(1)
@@ -198,15 +198,13 @@ describe('GameControler', () => {
     it('allows round to continue while +2 is in play', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
-        player.cards = []
-        controler.plusTwoInPlay = 1
-        controler.roundFinished = true
+        player.cards = [{ value: '+2' }]
         controler.deck.playedCards = []
-        controler.playCard({ value: '+2' })
-        expect(controler.roundFinished).toBe(true)
+        controler.playCardFromPlayer(player, 0)
+        expect(controler.state).toBe('ROUND_FINISHING')
         controler.drawCards(player)
-        expect(player.cards.length).toBe(4)
-        expect(controler.roundFinished).toBe(true)
+        expect(player.cards.length).toBe(2)
+        expect(controler.state).toBe('ROUND_FINISHED')
     })
 
     it('disallows playing cards other than +2 while +2 is in play', () => {
@@ -442,13 +440,13 @@ describe('GameControler', () => {
         expect(controler.lastPlayerId).toBe(player.id)
     })
 
-    it('sets roundFinished when playing last card from player', () => {
+    it('sets state to ROUND_FINISHED when playing last card from player', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]
         player.name = 'foo'
         player.cards = [{ color: 'black', value: '+4' }]
         controler.playCardFromPlayer(player, 0)
-        expect(controler.roundFinished).toBe(true)
+        expect(controler.state).toBe('ROUND_FINISHED')
         expect(controler.roundWinner).toBe('foo')
     })
 
