@@ -83,7 +83,7 @@ io.sockets.on('connection', function(socket){
             player.name = name
             player.style = style;
             console.log(player);
-            socket.emit('joinRoom', { isRoomCreator: true, playerId: player.id, room: data })
+            socket.emit('joinRoom', { playerId: player.id, room: data })
             room.sendGameStatus()
             ROOM_LIST.mainlobby.sendRoomStatus()
             console.log(ROOM_LIST);
@@ -112,7 +112,7 @@ io.sockets.on('connection', function(socket){
             }
             player.style = style;
             room.sendGameStatus()
-            socket.emit('joinRoom', { isRoomCreator: room.players[0].id === player.id, playerId: player.id, room: data.room })
+            socket.emit('joinRoom', { playerId: player.id, room: data.room })
             ROOM_LIST.mainlobby.sendRoomStatus()
             console.log(ROOM_LIST)
         }

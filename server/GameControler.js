@@ -243,10 +243,6 @@ export function GameControler(room, roomList) {
             // let dealer start if starting with reverse card
             this.turnSwitch()
         }
-        for (let i = 0; i < this.players.length; i++) {
-            let currentPlayer = this.players[i]
-            currentPlayer.emit('newRound');
-        }
         this.state = 'PLAYING'
         this.sendGameStatus()
     }
@@ -381,7 +377,8 @@ export function GameControler(room, roomList) {
                 drawCount: drawCount, 
                 hasTurn: this.hasTurn(currentPlayer),
                 playerList: pack,
-                lastPlayedCard: this.lastPlayedCard
+                lastPlayedCard: this.lastPlayedCard,
+                state: this.state,
             };
             currentPlayer.emit('gameStatus', gameStatus);
         }

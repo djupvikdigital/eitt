@@ -198,10 +198,23 @@ function setGameStatus(status) {
     console.log('Gamestatus received:')
     console.log(status)
     gameStatus = status;
-    if (status.cards.length > 0) {
+    if (status.state === 'NOT_STARTED') {
+        if (status.index === 0) {
+            // First player gets to set game options
+            document.getElementById('game-options').style.display = 'block'
+        }
+        else {
+            document.getElementById('game-options').style.display = ''
+        }
+    }
+    else if (status.state === 'PLAYING') {
+        let divElement = document.getElementById('roundWinner')
+        divElement.textContent = ''
+        changeButtonDisableState(false)
         // Hide game options and show game table when game is started
         document.getElementById('game-options').style.display = ''
         document.getElementById('game-table').style.display = 'block'
+        document.getElementById('round-controls').style.visibility = ''
     }
     document.getElementById('draw-card').textContent = 'Draw ' + status.drawCount
     renderCards(status.cards);
@@ -246,10 +259,6 @@ socket.on('joinRoom', function(data){
         document.getElementById("mainlobby").style.display = "none";
         document.getElementById("room").style.display = "block";
         document.getElementById("roomNameHeadline").textContent = 'Room: ' + data.room
-        if (data.isRoomCreator && (!gameStatus.cards || gameStatus.cards.length === 0)) {
-            // Room creator gets to set game options
-            document.getElementById('game-options').style.display = 'block'
-        }
     }
     sessionStorage.setItem('playerId', data.playerId)
     sessionStorage.setItem('room', data.room)
@@ -302,14 +311,6 @@ socket.on('roundWinner', function(data){
     if (gameStatus.hasTurn) {
         document.getElementById('round-controls').style.visibility = 'inherit'
     }
-})
-
-socket.on('newRound', function(){
-    let divElement = document.getElementById('roundWinner')
-    divElement.textContent = ''
-    document.getElementById('game-table').style.display = 'block'
-    document.getElementById('round-controls').style.visibility = ''
-    changeButtonDisableState(false)
 })
 
 function changeButtonDisableState(state) {
