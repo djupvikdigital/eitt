@@ -109,21 +109,24 @@ function renderPlayerList(status) {
             })
             box.appendChild(button);
         }
-        else if (i === status.index && status.cards.length <= 2 && status.cards.length > 0) {
-            let button = document.createElement('button')
-            button.textContent = 'Eitt'
-            button.addEventListener('click', function () {
-                socket.emit('eitt')
-            })
-            box.appendChild(button);
-        }
-        else if (player.numberOfCards === 1 && player.pressedEitt === false) {
-            let button = document.createElement('button')
-            button.textContent = "Didn't press eitt"
-            button.addEventListener('click', function () {
-                socket.emit('didntPressEitt', i)
-            })
-            box.appendChild(button);
+        else if (!player.pressedEitt) {
+            let numberOfCards = player.numberOfCards
+            if (i === status.index && numberOfCards <= 2 && numberOfCards > 0) {
+                let button = document.createElement('button')
+                button.textContent = 'Eitt'
+                button.addEventListener('click', function () {
+                    socket.emit('eitt')
+                })
+                box.appendChild(button);
+            }
+            else if (numberOfCards === 1) {
+                let button = document.createElement('button')
+                button.textContent = "Didn't press eitt"
+                button.addEventListener('click', function () {
+                    socket.emit('didntPressEitt', i)
+                })
+                box.appendChild(button);
+            }
         }
         group.appendChild(SVGavatar);
         if (player.style.headGear > 0) {
