@@ -122,9 +122,10 @@ html {
 	border: 1px solid black;
 	border-radius: 4px;
 	left: 50%;
+	line-height: 1.5;
 	margin-top: 15px;
 	max-width: 100%;
-	padding: 10px;
+	padding: 0.75em;
 	position: absolute;
 	text-align: center;
 	top: 100%;
