@@ -207,14 +207,26 @@ function setGameStatus(status) {
             document.getElementById('game-options').style.display = ''
         }
     }
-    else if (status.state === 'PLAYING') {
+    else if (status.state === 'PLAYING' || status.state === 'ROUND_FINISHING') {
         let divElement = document.getElementById('roundWinner')
         divElement.textContent = ''
         changeButtonDisableState(false)
-        // Hide game options and show game table when game is started
         document.getElementById('game-options').style.display = ''
         document.getElementById('game-table').style.display = 'block'
         document.getElementById('round-controls').style.visibility = ''
+    }
+    else if (status.state === 'ROUND_FINISHED') {
+        let roundWinnerElement = document.getElementById('roundWinner')
+        roundWinnerElement.textContent = 'The round winner is..... ' + status.roundWinner + '!!'
+        changeButtonDisableState(true)    
+        document.getElementById('game-options').style.display = ''
+        document.getElementById('game-table').style.display = 'block'
+        if (status.hasTurn) {
+            document.getElementById('round-controls').style.visibility = 'inherit'
+        }
+        else {
+            document.getElementById('round-controls').style.visibility = ''
+        }
     }
     document.getElementById('draw-card').textContent = 'Draw ' + status.drawCount
     renderCards(status.cards);
@@ -290,28 +302,6 @@ function backToLobby() {
     document.getElementById("room").style.display = "none";
     document.getElementById('loginDiv').style.display = 'none'
 }
-
-socket.on('roundWinner', function(data){
-    let divElement = document.getElementById('roundWinner')
-    let h1 = document.createElement('h2')
-    h1.textContent = 'The round winner is..... ' + data + '!!'
-    divElement.appendChild(h1)
-    changeButtonDisableState(true)
-    let highestScore = 0
-    let playerWithHightestScore = null
-    let playerList = gameStatus.playerList
-    for (let i = 0; i < playerList.length; i++) {
-        let player = playerList[i]
-        let score = player.scores[player.scores.length - 1]
-        if (score >= highestScore) {
-            highestScore = score
-            playerWithHightestScore = player
-        }
-    }
-    if (gameStatus.hasTurn) {
-        document.getElementById('round-controls').style.visibility = 'inherit'
-    }
-})
 
 function changeButtonDisableState(state) {
     let buttonArray = document.getElementsByClassName('card')

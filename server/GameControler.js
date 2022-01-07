@@ -236,12 +236,12 @@ export function GameControler(room, roomList) {
             this.deck = CardDeck()
             card = this.deck.drawCard()
         }
+        this.state = 'PLAYING'
         this.playCard(card)
         if (card.value !== 'R') {
             // let dealer start if starting with reverse card
             this.turnSwitch()
         }
-        this.state = 'PLAYING'
         this.sendGameStatus()
     }
     self.drawCards = function (player, number = 1) {
@@ -338,10 +338,6 @@ export function GameControler(room, roomList) {
         if (this.state === 'ROUND_FINISHED' || (this.state === 'ROUND_FINISHING' && !this.plusTwoInPlay && !this.plusFourInPlay)) {
             this.state = 'ROUND_FINISHED'
             self.addScoresForRound()
-            for (let i = 0; i < this.players.length; i++) {
-                let currentPlayer = this.players[i]
-                currentPlayer.emit('roundWinner', this.roundWinner)
-            }
             return
         }
         let length = this.getPlayingPlayers().length
@@ -380,6 +376,7 @@ export function GameControler(room, roomList) {
                 hasTurn: this.hasTurn(currentPlayer),
                 playerList: pack,
                 lastPlayedCard: this.lastPlayedCard,
+                roundWinner: this.roundWinner,
                 state: this.state,
             };
             currentPlayer.emit('gameStatus', gameStatus);
