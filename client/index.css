@@ -201,6 +201,11 @@ html {
 	margin-left: 0;
 }
 
+#pass,
+#check-plus-four {
+	display: none;
+}
+
 .card-black-W {
 	background-image: url(/client/images/black-W.svg);
 }

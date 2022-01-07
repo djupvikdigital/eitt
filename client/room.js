@@ -213,6 +213,8 @@ function setGameStatus(status) {
         changeButtonDisableState(false)
         document.getElementById('game-options').style.display = ''
         document.getElementById('game-table').style.display = 'block'
+        document.getElementById('pass').style.display = status.hasDrawn ? 'inline-block' : ''
+        document.getElementById('check-plus-four').style.display = status.plusFourInPlay && status.hasTurn ? 'inline-block' : ''
         document.getElementById('round-controls').style.visibility = ''
     }
     else if (status.state === 'ROUND_FINISHED') {
