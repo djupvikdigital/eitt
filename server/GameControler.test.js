@@ -21,6 +21,13 @@ function setupControlerWithMocks(numberOfPlayers = 1) {
 }
 
 describe('GameControler', () => {
+    it('changes state from NOT_STARTED to PLAYING when dealing new round', () => {
+        const controler = GameControler('', { 0: {}})
+        expect(controler.state).toBe('NOT_STARTED')
+        controler.dealNewRound()
+        expect(controler.state).toBe('PLAYING')
+    })
+
     it('allows connecting and reconnecting again', () => {
         const controler = setupControlerWithMocks()
         let socket = { id: Math.random() }

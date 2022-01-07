@@ -12,6 +12,7 @@ export function GameControler(room, roomList) {
         plusFourInPlay: false,
         roundFinished: true,
         roundWinner: '',
+        state: 'NOT_STARTED',
         turn: 0,
         turnRotation: 1,
         turnSkip: 1
@@ -246,6 +247,7 @@ export function GameControler(room, roomList) {
             let currentPlayer = this.players[i]
             currentPlayer.emit('newRound');
         }
+        this.state = 'PLAYING'
         this.sendGameStatus()
     }
     self.drawCards = function (player, number = 1) {
