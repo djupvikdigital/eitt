@@ -1,5 +1,10 @@
 let atLoginPage = true;
 
+const OPEN_WHEN_ROUND_FINISHED = 0;
+const OPEN_ALWAYS = 1;
+const OPEN_NEVER = 2;
+let openPlayerScores = OPEN_WHEN_ROUND_FINISHED;
+
 function createClickHandler(i, card) {
     return function clickHandler(event) {
         currentIndex = i;
@@ -161,10 +166,25 @@ function renderPlayerList(status) {
     playerListELement.appendChild(fragment);
 } 
 
-function renderPlayerScores(playerList) {
+function renderPlayerScores(status) {
+    let playerList = status.playerList
     let playerScoresElement = document.getElementById('player-scores')
     playerScoresElement.textContent = ''
-    let fragment = document.createDocumentFragment()
+    let details = document.createElement('details')
+    let summary = document.createElement('summary')
+    let table = document.createElement('table')
+    if (openPlayerScores === OPEN_ALWAYS || (status.state === 'ROUND_FINISHED' && openPlayerScores === OPEN_WHEN_ROUND_FINISHED)) {
+        details.open = true
+    }
+    details.addEventListener('toggle', function () {
+        if (status.state === 'ROUND_FINISHED') {
+            openPlayerScores = details.open ? OPEN_WHEN_ROUND_FINISHED : OPEN_NEVER
+        }
+        else {
+            openPlayerScores = details.open ? OPEN_ALWAYS : OPEN_WHEN_ROUND_FINISHED
+        }
+    })
+    summary.textContent = 'Player scores'
     let scores = []
     for (let i = 0; i < playerList.length; i++) {
         let player = playerList[i]
@@ -192,9 +212,11 @@ function renderPlayerScores(playerList) {
             cellElement.textContent = cell
             rowElement.appendChild(cellElement)
         }
-        fragment.appendChild(rowElement)
+        table.appendChild(rowElement)
     }
-    playerScoresElement.appendChild(fragment)
+    details.appendChild(summary)
+    details.appendChild(table)
+    playerScoresElement.appendChild(details)
 }
 
 function setGameStatus(status) {
@@ -237,7 +259,7 @@ function setGameStatus(status) {
     renderCards(status.cards);
     renderPlayerList(status);
     document.getElementById('your-turn').style.visibility = status.hasTurn ? 'inherit' : 'hidden'
-    renderPlayerScores(status.playerList)
+    renderPlayerScores(status)
     renderLastPlayedCard(status.lastPlayedCard)
 }
 

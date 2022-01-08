@@ -483,7 +483,11 @@ html {
 	visibility: hidden;
 }
 
-#player-scores {
+#player-scores summary {
+	cursor: pointer;
+}
+
+#player-scores table {
 	text-align: right;
 }
 
