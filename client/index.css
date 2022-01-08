@@ -480,7 +480,7 @@ html {
 }
 
 #round-controls {
-	visibility: hidden;
+	display: none;
 }
 
 #player-scores summary {

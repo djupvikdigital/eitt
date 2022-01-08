@@ -240,7 +240,7 @@ function setGameStatus(status) {
         document.getElementById('game-table').style.display = 'block'
         document.getElementById('pass').style.display = status.hasDrawn ? 'inline-block' : ''
         document.getElementById('check-plus-four').style.display = status.plusFourInPlay && status.hasTurn ? 'inline-block' : ''
-        document.getElementById('round-controls').style.visibility = ''
+        document.getElementById('round-controls').style.display = ''
     }
     else if (status.state === 'ROUND_FINISHED') {
         let roundWinnerElement = document.getElementById('roundWinner')
@@ -249,10 +249,10 @@ function setGameStatus(status) {
         document.getElementById('game-options').style.display = ''
         document.getElementById('game-table').style.display = 'block'
         if (status.hasTurn) {
-            document.getElementById('round-controls').style.visibility = 'inherit'
+            document.getElementById('round-controls').style.display = 'block'
         }
         else {
-            document.getElementById('round-controls').style.visibility = ''
+            document.getElementById('round-controls').style.display = ''
         }
     }
     document.getElementById('draw-card').textContent = 'Draw ' + status.drawCount
