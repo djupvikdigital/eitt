@@ -28,6 +28,23 @@ describe('GameControler', () => {
         expect(controler.state).toBe('PLAYING')
     })
 
+    it('disallows dealing new round while PLAYING', () => {
+        const controler = setupControlerWithMocks()
+        let player = controler.players[0]
+        player.cards = []
+        controler.dealNewRound()
+        expect(player.cards.length).toBe(0)
+    })
+
+    it('disallows dealing new round while ROUND_FINISHING', () => {
+        const controler = setupControlerWithMocks()
+        let player = controler.players[0]
+        player.cards = []
+        controler.state = 'ROUND_FINISHING'
+        controler.dealNewRound()
+        expect(player.cards.length).toBe(0)
+    })
+
     it('allows connecting and reconnecting again', () => {
         const controler = setupControlerWithMocks()
         let socket = { id: Math.random() }
@@ -391,6 +408,7 @@ describe('GameControler', () => {
         const players = controler.players.slice(0)
         players[2].cards = []
         controler.disconnect(players[1].socket.id)
+        controler.state = 'ROUND_FINISHED'
         controler.dealNewRound()
         expect(controler.players.length).toBe(2)
         expect(players[2].cards.length).toBe(7)
@@ -412,6 +430,7 @@ describe('GameControler', () => {
         players[1].cards = []
         const deck = CardDeck()
         deck.availableCards.push({ value: 'R' })
+        controler.state = 'ROUND_FINISHED'
         controler.addScoresForRound()
         controler.dealNewRound(deck)
         expect(controler.hasTurn(players[0])).toBe(true)

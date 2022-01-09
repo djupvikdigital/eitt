@@ -212,6 +212,9 @@ export function GameControler(room, roomList) {
         return cards
     }
     self.dealNewRound = function (deck = CardDeck()) {
+        if (this.state !== 'NOT_STARTED' && this.state !== 'ROUND_FINISHED') {
+            return false
+        }
         let i = 0
         while (i < this.players.length) {
             let currentPlayer = this.players[i]
@@ -243,6 +246,7 @@ export function GameControler(room, roomList) {
             this.turnSwitch()
         }
         this.sendGameStatus()
+        return true
     }
     self.drawCards = function (player, number = 1) {
         let cards = [];
