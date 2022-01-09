@@ -29,6 +29,13 @@ export function CardDeck() {
         }
         return this.availableCards.pop()
     }
+    self.drawCards = function (number) {
+        let drawnCards = []
+        for (let i = 0; i < number; i++) {
+            drawnCards[i] = this.drawCard()
+        }
+        return drawnCards
+    }
     self.playCard = function(card) {
         if (!wildCards.includes(card.value) && this.playedCards.length > 0) {
             const lastPlayedCard = this.playedCards[this.playedCards.length - 1]

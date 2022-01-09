@@ -206,14 +206,6 @@ export function GameControler(room, roomList) {
             return 0;
         })
     }
-    self.dealCards = function () {
-        let cards = [];
-        for (let i = 0; i < 7; i++) {
-            cards.push(this.deck.drawCard());
-        }
-        this.sortCards(cards);
-        return cards
-    }
     self.dealNewRound = function (deck = CardDeck()) {
         if (this.state !== 'NOT_STARTED' && this.state !== 'ROUND_FINISHED') {
             return false
@@ -222,7 +214,9 @@ export function GameControler(room, roomList) {
         while (i < this.players.length) {
             let currentPlayer = this.players[i]
             if (currentPlayer.socket) {
-                currentPlayer.cards = this.dealCards()
+                let cards = deck.drawCards(7)
+                this.sortCards(cards)
+                currentPlayer.cards = cards
                 currentPlayer.isPlaying = true
                 i++
             }
@@ -252,7 +246,6 @@ export function GameControler(room, roomList) {
         return true
     }
     self.drawCards = function (player, number = 1) {
-        let cards = [];
         let turn = false
         if (number === 1) {
             if (!this.hasTurn(player) || player.hasDrawn) {
@@ -272,10 +265,7 @@ export function GameControler(room, roomList) {
                 player.hasDrawn = true
             }
         }
-        for (let i = 0; i < number; i++) {
-            cards.push(this.deck.drawCard());
-        }
-        player.cards = player.cards.concat(cards);
+        player.cards = player.cards.concat(this.deck.drawCards(number));
         this.sortCards(player.cards);
         player.pressedEitt = false
         if (turn) {

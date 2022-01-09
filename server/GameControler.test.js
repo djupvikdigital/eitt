@@ -437,7 +437,7 @@ describe('GameControler', () => {
         players[0].cards = [{ value: '1' }]
         players[1].cards = []
         const deck = CardDeck()
-        deck.availableCards.push({ value: 'R' })
+        deck.availableCards[deck.availableCards.length - 15] = { value: 'R' }
         controler.state = 'ROUND_FINISHED'
         controler.addScoresForRound()
         controler.dealNewRound(deck)
