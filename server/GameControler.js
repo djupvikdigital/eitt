@@ -182,6 +182,9 @@ export function GameControler(room, roomList) {
             this.turn = this.turn - 1
         }
         this.players.splice(index, 1)
+        if (this.getPlayingPlayers().length === 0) {
+            this.state = 'NOT_STARTED'
+        }
         let length = this.players.length
         this.turn = this.turn % length
         this.sendGameStatus()

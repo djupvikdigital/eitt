@@ -159,6 +159,14 @@ describe('GameControler', () => {
         expect(controler.getPlayerWithTurn().id).toBe(id)
     })
 
+    it('reverts to NOT_STARTED state if all playing players are removed', () => {
+        const controler = setupControlerWithMocks()
+        let socket = { id: Math.random(), emit: noop }
+        controler.connect(socket)
+        controler.removePlayer(0)
+        expect(controler.state).toBe('NOT_STARTED')
+    })
+
     it('does not give turn to non-playing player', () => {
         const controler = setupControlerWithMocks(3)
         const players = controler.players

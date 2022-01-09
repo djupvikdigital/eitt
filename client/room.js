@@ -231,6 +231,7 @@ function setGameStatus(status) {
         else {
             document.getElementById('game-options').style.display = ''
         }
+        document.getElementById('game-table').style.display = ''
     }
     else if (status.state === 'PLAYING' || status.state === 'ROUND_FINISHING') {
         let divElement = document.getElementById('roundWinner')
