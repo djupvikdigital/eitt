@@ -446,6 +446,15 @@ describe('GameControler', () => {
         expect(controler.turnRotation).toBe(-1)
     })
 
+    it('does not start with +4', () => {
+        const controler = setupControlerWithMocks()
+        const deck = CardDeck()
+        deck.availableCards[deck.availableCards.length - 8] = { value: '+4' }
+        controler.state = 'ROUND_FINISHED'
+        controler.dealNewRound(deck)
+        expect(controler.lastPlayedCard.value).not.toBe('+4')
+    })
+
     it('removes the card from the player when playing card from player', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]

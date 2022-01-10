@@ -229,13 +229,14 @@ export function GameControler(room, roomList) {
         this.plusTwoInPlay = 0
         this.turnRotation = 1
         this.turnSkip = 1
-        this.deck = deck
-        let card = this.deck.drawCard()
+        let card = deck.drawCard()
         while (card.value === '+4') {
             // can't start with a +4, try again
-            this.deck = CardDeck()
-            card = this.deck.drawCard()
+            deck.availableCards.push(card)
+            deck.shuffleCards(deck.availableCards)
+            card = deck.drawCard()
         }
+        this.deck = deck
         this.state = 'PLAYING'
         this.playCard(card)
         if (card.value !== 'R') {
