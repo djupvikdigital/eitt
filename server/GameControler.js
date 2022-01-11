@@ -5,7 +5,7 @@ export function GameControler(room, roomList) {
     let self = {
         room: room,
         connected: [],
-        deck: CardDeck(),
+        deck: null,
         lastPlayerId: 0,
         players: [],
         plusTwoInPlay: 0,
