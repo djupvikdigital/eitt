@@ -21,6 +21,14 @@ function setupControlerWithMocks(numberOfPlayers = 1) {
 }
 
 describe('GameControler', () => {
+    it('resets player scores when starting new game', () => {
+        const controler = setupControlerWithMocks()
+        let player = controler.players[0]
+        player.scores = [500]
+        controler.startNewGame()
+        expect(player.scores.length).toBe(0)
+    })
+
     it('changes state from NOT_STARTED to PLAYING when dealing new round', () => {
         const controler = GameControler('', { 0: {}})
         expect(controler.state).toBe('NOT_STARTED')

@@ -206,6 +206,13 @@ export function GameControler(room, roomList) {
             return 0;
         })
     }
+    self.startNewGame = function () {
+        this.state = 'NOT_STARTED'
+        for (let i = 0; i < this.players.length; i++) {
+            this.players[i].scores = []
+        }
+        return this.dealNewRound()
+    }
     self.dealNewRound = function (deck = CardDeck()) {
         if (this.state !== 'NOT_STARTED' && this.state !== 'ROUND_FINISHED') {
             return false
