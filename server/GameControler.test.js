@@ -455,6 +455,41 @@ describe('GameControler', () => {
         expect(deck.getLastPlayedCard().value).not.toBe('+4')
     })
 
+    it('does not set plusTwoInPlay when starting neutral', () => {
+        const controler = setupControlerWithMocks()
+        const deck = CardDeck()
+        deck.availableCards[deck.availableCards.length - 8] = { value: '+2' }
+        controler.state = 'ROUND_FINISHED'
+        controler.startNeutral = true
+        controler.dealNewRound(deck)
+        expect(controler.plusTwoInPlay).toBe(0)
+    })
+
+    it('starts normal if first card is reverse and starting neutral', () => {
+        const controler = setupControlerWithMocks(2)
+        const players = controler.players
+        players[0].cards = [{ value: '1' }]
+        players[1].cards = []
+        const deck = CardDeck()
+        deck.availableCards[deck.availableCards.length - 15] = { value: 'R' }
+        controler.state = 'ROUND_FINISHED'
+        controler.startNeutral = true
+        controler.dealNewRound(deck)
+        expect(controler.hasTurn(players[0])).toBe(false)
+        expect(controler.hasTurn(players[1])).toBe(true)
+        expect(controler.turnRotation).toBe(1)
+    })
+
+    it('does not start with W when starting neutral', () => {
+        const controler = setupControlerWithMocks()
+        const deck = CardDeck()
+        deck.availableCards[deck.availableCards.length - 8] = { value: 'W' }
+        controler.state = 'ROUND_FINISHED'
+        controler.startNeutral = true
+        controler.dealNewRound(deck)
+        expect(deck.getLastPlayedCard().value).not.toBe('W')
+    })
+
     it('removes the card from the player when playing card from player', () => {
         const controler = setupControlerWithMocks()
         const player = controler.players[0]

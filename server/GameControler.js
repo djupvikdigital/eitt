@@ -10,6 +10,7 @@ export function GameControler(room, roomList) {
         plusTwoInPlay: 0,
         plusFourInPlay: false,
         roundWinner: '',
+        startNeutral: false,
         state: 'NOT_STARTED',
         turn: 0,
         turnRotation: 1,
@@ -229,18 +230,24 @@ export function GameControler(room, roomList) {
         this.turnRotation = 1
         this.turnSkip = 1
         let card = deck.drawCard()
-        while (card.value === '+4') {
-            // can't start with a +4, try again
+        while (card.value === '+4' || (this.startNeutral && card.value === 'W')) {
+            // can't start with a +4 (or a W when starting neutral), try again
             deck.availableCards.push(card)
             deck.shuffleCards(deck.availableCards)
             card = deck.drawCard()
         }
         this.deck = deck
         this.state = 'PLAYING'
-        this.playCard(card)
-        if (card.value !== 'R') {
-            // let dealer start if starting with reverse card
-            this.turnSwitch()
+        if (this.startNeutral) {
+            // avoid special card having effect
+            this.deck.playCard(card)
+        }
+        else {
+            this.playCard(card)
+            if (card.value !== 'R') {
+                // let dealer start if starting with reverse card
+                this.turnSwitch()
+            }
         }
         this.sendGameStatus()
         return true
