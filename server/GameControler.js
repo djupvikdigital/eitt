@@ -4,7 +4,6 @@ import { Player } from './Player.js'
 export function GameControler(room, roomList) {
     let self = {
         room: room,
-        connected: [],
         deck: null,
         lastPlayerId: 0,
         players: [],
