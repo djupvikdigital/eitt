@@ -244,12 +244,12 @@ export function GameControler(room, roomList) {
         }
         else {
             this.playCard(card)
-            if (card.value !== 'R') {
-                // let dealer start if starting with reverse card
-                this.turnSwitch()
-            }
         }
-        this.sendGameStatus()
+        if (card.value !== 'R' || this.startNeutral) {
+            // let dealer start if starting with reverse card unless starting neutral
+            this.turnSwitch()
+        }
+    this.sendGameStatus()
         return true
     }
     self.drawCards = function (player, number = 1) {

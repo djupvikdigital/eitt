@@ -15,8 +15,8 @@ function setupControlerWithMocks(numberOfPlayers = 1) {
         players.push(player)
     } 
     controler.players = players
+    controler.startNeutral = true
     controler.dealNewRound()
-    controler.plusTwoInPlay = 0
     return controler
 }
 
@@ -440,6 +440,7 @@ describe('GameControler', () => {
         deck.availableCards[deck.availableCards.length - 15] = { value: 'R' }
         controler.state = 'ROUND_FINISHED'
         controler.addScoresForRound()
+        controler.startNeutral = false
         controler.dealNewRound(deck)
         expect(controler.hasTurn(players[0])).toBe(true)
         expect(controler.hasTurn(players[1])).toBe(false)
@@ -473,6 +474,7 @@ describe('GameControler', () => {
         const deck = CardDeck()
         deck.availableCards[deck.availableCards.length - 15] = { value: 'R' }
         controler.state = 'ROUND_FINISHED'
+        controler.addScoresForRound()
         controler.startNeutral = true
         controler.dealNewRound(deck)
         expect(controler.hasTurn(players[0])).toBe(false)
