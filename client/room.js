@@ -8,7 +8,7 @@ let openPlayerScores = OPEN_WHEN_ROUND_FINISHED;
 function createClickHandler(i, card) {
     return function clickHandler(event) {
         currentIndex = i;
-        if (card.color === 'black') {
+        if (card.color === 'black' && gameStatus.cards.length > 1) {
             showColorPicker();
             event.stopPropagation()
         }
