@@ -375,8 +375,12 @@ document.getElementById('leave-room').addEventListener('click', function () {
     backToLobby()
 })
 
-document.getElementById('start-game').addEventListener('click', function () {
-    socket.emit('newRound')
+let gameOptionsForm = document.getElementById('game-options')
+gameOptionsForm.addEventListener('submit', function (e) {
+    let data = new FormData(gameOptionsForm)
+    data.append('playerId', gameStatus.id)
+    socket.emit('startGame', Object.fromEntries(data))
+    e.preventDefault()
 })
 
 document.getElementById('draw-card').addEventListener('click', function () {

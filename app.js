@@ -189,6 +189,13 @@ io.sockets.on('connection', function(socket){
         room.dealNewRound()
     })
 
+    socket.on('startGame', function (data) {
+        if (data.playerId === room.players[0].id) {
+            room.startNeutral = Boolean(data.startNeutral)
+            room.startNewGame()
+        }
+    })
+
     socket.on('removePlayer', function(index) {
         room.removePlayer(index)
     })
