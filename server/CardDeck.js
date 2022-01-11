@@ -36,6 +36,9 @@ export function CardDeck() {
         }
         return drawnCards
     }
+    self.getLastPlayedCard = function () {
+        return this.playedCards[this.playedCards.length - 1]
+    }
     self.playCard = function(card) {
         if (!wildCards.includes(card.value) && this.playedCards.length > 0) {
             const lastPlayedCard = this.playedCards[this.playedCards.length - 1]

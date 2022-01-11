@@ -161,7 +161,8 @@ io.sockets.on('connection', function(socket){
         }
 
         function unlegitPlay(){
-            console.log("Oh now! We've got a cheater over here! He tried to play a " + card.color + " " + card.value + " on top of a " + room.lastPlayedCard.color + " " + room.lastPlayedCard.value);
+            let lastPlayedCard = room.deck && room.deck.getLastPlayedCard()
+            console.log("Oh now! We've got a cheater over here! He tried to play a " + card.color + " " + card.value + " on top of a " + lastPlayedCard.color + " " + lastPlayedCard.value);
         }
 
         let card = player.cards[data.index];

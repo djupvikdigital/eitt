@@ -12,6 +12,12 @@ describe('CardDeck', () => {
             expect(Object.keys(deck.drawCard())).toEqual(['color', 'value'])
         }
     })
+    it('has a getLastPlayedCard method that returns the card that was played', () => {
+        const deck = CardDeck()
+        const card = { color: 'blue', value: '0' }
+        deck.playCard(card)
+        expect(deck.getLastPlayedCard()).toEqual(card)
+    })
     it('reshuffles played cards when no available cards are left', () => {
         const deck = CardDeck()
         const drawnCard = deck.drawCard()

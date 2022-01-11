@@ -291,7 +291,6 @@ export function GameControler(room, roomList) {
         if (!gotPlayed) {
             return false
         }
-        this.lastPlayedCard = card
         if (card.value == '+4') this.plusFourInPlay = true
         else if (card.value == '+2') this.plusTwoInPlay = this.plusTwoInPlay + 1
         else if (card.value == 'R') this.turnRotation = (this.turnRotation * -1)
@@ -380,7 +379,7 @@ export function GameControler(room, roomList) {
                 hasTurn: this.hasTurn(currentPlayer),
                 playerList: pack,
                 plusFourInPlay: this.plusFourInPlay,
-                lastPlayedCard: this.lastPlayedCard,
+                lastPlayedCard: this.deck && this.deck.getLastPlayedCard(),
                 roundWinner: this.roundWinner,
                 state: this.state,
             };

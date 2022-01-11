@@ -452,7 +452,7 @@ describe('GameControler', () => {
         deck.availableCards[deck.availableCards.length - 8] = { value: '+4' }
         controler.state = 'ROUND_FINISHED'
         controler.dealNewRound(deck)
-        expect(controler.lastPlayedCard.value).not.toBe('+4')
+        expect(deck.getLastPlayedCard().value).not.toBe('+4')
     })
 
     it('removes the card from the player when playing card from player', () => {
