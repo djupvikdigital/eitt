@@ -162,9 +162,9 @@ io.sockets.on('connection', function(socket){
 
         function unlegitPlay(){
             let lastPlayedCard = room.deck && room.deck.getLastPlayedCard()
-            if (!lastPlayedCard) {
-                console.log('Error: no last played card')
-                console.log(room.deck.playedCards)
+            if (!room.deck) {
+                console.log('Room with name ' + room.room + 'and status' + room.status + ' has no deck')
+                console.log(room)
                 return
             }
             console.log("Oh now! We've got a cheater over here! He tried to play a " + card.color + " " + card.value + " on top of a " + lastPlayedCard.color + " " + lastPlayedCard.value);
