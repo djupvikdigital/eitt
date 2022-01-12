@@ -419,6 +419,15 @@ describe('GameControler', () => {
         expect(typeof players[0].scores[1]).toBe('number')
     })
 
+    it('does not add scores to non-playing players', () => {
+        const controler = setupControlerWithMocks(2)
+        const players = controler.players
+        players[1].isPlaying = false
+        controler.addScoresForRound()
+        expect(typeof players[0].scores[0]).toBe('number')
+        expect(typeof players[1].scores[0]).toBe('undefined')
+    })
+
     it('pads scores array for player joining later in game', () => {
         const controler = setupControlerWithMocks(2)
         controler.addScoresForRound()

@@ -28,7 +28,8 @@ export function GameControler(room, roomList) {
         let scores = this.calculateScores()
         let idWithHighestScore = 0
         let highestScore = 0
-        let roundNumber = this.players[0].scores.length
+        let players = this.getPlayingPlayers()
+        let roundNumber = players[0].scores.length
         for (let id in scores) {
             let score = scores[id]
             if (score >= highestScore) {
@@ -36,8 +37,8 @@ export function GameControler(room, roomList) {
                 idWithHighestScore = id
             }
         }
-        for (let i = 0; i < this.players.length; i++) {
-            let currentPlayer = this.players[i]
+        for (let i = 0; i < players.length; i++) {
+            let currentPlayer = players[i]
             let id = currentPlayer.id
             let score = scores[id]
             currentPlayer.scores[roundNumber] = score
@@ -49,10 +50,11 @@ export function GameControler(room, roomList) {
         this.sendGameStatus()
     }
     self.calculateScores = function () {
+        let players = this.getPlayingPlayers()
         let scores = {}
-        for (let i = 0; i < this.players.length; i++) {
+        for (let i = 0; i < players.length; i++) {
             let score = 0
-            let currentPlayer = this.players[i]
+            let currentPlayer = players[i]
             for (let j = 0; j < currentPlayer.cards.length; j++) {
                 let card = currentPlayer.cards[j]
                 if (isNaN(Number(card.value.slice(0, 1)))) {
