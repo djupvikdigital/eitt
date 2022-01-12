@@ -165,7 +165,7 @@ io.sockets.on('connection', function(socket){
             if (!room.deck) {
                 console.log('Room with name ' + room.room + 'and status' + room.status + ' has no deck')
                 console.error(room)
-                throw new Error('Missing deck in room\n' + JSON.stringify(room))
+                return
             }
             console.log("Oh now! We've got a cheater over here! He tried to play a " + card.color + " " + card.value + " on top of a " + lastPlayedCard.color + " " + lastPlayedCard.value);
         }
