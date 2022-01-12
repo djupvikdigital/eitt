@@ -9,6 +9,7 @@ const START_SCORE_AVERAGE = 0
 const START_SCORE_MEDIAN = 1
 const START_SCORE_MIN = 2
 const START_SCORE_MAX = 3
+const START_SCORE_ZERO = 4
 
 export function GameControler(room, roomList) {
     let self = {
@@ -466,3 +467,4 @@ GameControler.START_SCORE_AVERAGE = START_SCORE_AVERAGE
 GameControler.START_SCORE_MEDIAN = START_SCORE_MEDIAN
 GameControler.START_SCORE_MIN = START_SCORE_MIN
 GameControler.START_SCORE_MAX = START_SCORE_MAX
+GameControler.START_SCORE_ZERO = START_SCORE_ZERO

@@ -495,6 +495,20 @@ describe('GameControler', () => {
         expect(player.scores[1]).toBe(36)
     })
 
+    it('supports letting player joining later start with 0 points', () => {
+        const controler = setupControlerWithMocks(4)
+        const players = controler.players
+        let socket = { id: Math.random(), emit: noop }
+        for (let i = 0; i < players.length; i++) {
+            players[i].scores = [Math.pow(i + 1, 2), Math.pow(i + 1, 3)]
+        }
+        controler.startScore = GameControler.START_SCORE_ZERO
+        let player = controler.connect(socket)
+        controler.state = 'ROUND_FINISHED'
+        controler.dealNewRound()
+        expect(player.scores[1]).toBe(0)
+    })
+
     it('removes disconnected players when dealing new round', () => {
         const controler = setupControlerWithMocks(3)
         const players = controler.players.slice(0)
