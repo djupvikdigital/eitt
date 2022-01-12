@@ -1,6 +1,13 @@
 import { CardDeck } from './CardDeck.js'
 import { Player } from './Player.js'
 
+function add(a, b) {
+    return a + b
+}
+
+const START_SCORE_AVERAGE = 0
+const START_SCORE_MEDIAN = 1
+
 export function GameControler(room, roomList) {
     let self = {
         room: room,
@@ -11,6 +18,7 @@ export function GameControler(room, roomList) {
         plusFourInPlay: false,
         roundWinner: '',
         startNeutral: false,
+        startScore: START_SCORE_AVERAGE,
         state: 'NOT_STARTED',
         turn: 0,
         turnRotation: 1,
@@ -218,6 +226,13 @@ export function GameControler(room, roomList) {
         if (this.state !== 'NOT_STARTED' && this.state !== 'ROUND_FINISHED') {
             return false
         }
+        let players = this.getPlayingPlayers()
+        let playerScores = []
+        let numberOfPlayers = players.length
+        for (let i = 0; i < numberOfPlayers; i++) {
+            playerScores[i] = players[i].scores.reduce(add, 0)
+        }
+        let sumOfScores = playerScores.reduce(add, 0)
         let i = 0
         while (i < this.players.length) {
             let currentPlayer = this.players[i]
@@ -231,6 +246,27 @@ export function GameControler(room, roomList) {
             else {
                 // Remove disconnected player
                 this.removePlayer(i)
+            }
+        }
+        for (let i = 0; i < this.players.length; i++) {
+            let currentPlayer = this.players[i]
+            if (typeof currentPlayer.scores[currentPlayer.scores.length -1] === 'undefined') {
+                let score = 0
+                if (this.startScore === START_SCORE_AVERAGE) {
+                    score = Math.round(sumOfScores / numberOfPlayers)
+                }
+                else if (this.startScore === START_SCORE_MEDIAN) {
+                    let middleIndex = Math.floor(playerScores.length / 2)
+                    if (playerScores.length % 2 === 1) {
+                        // length is odd
+                        score = playerScores[middleIndex]
+                    }
+                    else {
+                        // length is even
+                        score = Math.round((playerScores[middleIndex - 1] + playerScores[middleIndex]) / 2)
+                    }
+                }
+                currentPlayer.scores[this.players[0].scores.length - 1] = score
             }
         }
         this.plusFourInPlay = false
@@ -415,3 +451,6 @@ export function GameControler(room, roomList) {
     }
     return self
 }
+
+GameControler.START_SCORE_AVERAGE = START_SCORE_AVERAGE
+GameControler.START_SCORE_MEDIAN = START_SCORE_MEDIAN

@@ -430,6 +430,34 @@ describe('GameControler', () => {
         expect(player.scores.length).toBe(2)
     })
 
+    it('supports giving player joining later an average of player scores', () => {
+        const controler = setupControlerWithMocks(4)
+        const players = controler.players
+        let socket = { id: Math.random(), emit: noop }
+        for (let i = 0; i < players.length; i++) {
+            players[i].scores = [Math.pow(i, 2), Math.pow(i, 3)]
+        }
+        controler.startScore = GameControler.START_SCORE_AVERAGE
+        let player = controler.connect(socket)
+        controler.state = 'ROUND_FINISHED'
+        controler.dealNewRound()
+        expect(player.scores[1]).toBe(13)
+    })
+
+    it('supports giving player joining later the median of player scores', () => {
+        const controler = setupControlerWithMocks(4)
+        const players = controler.players
+        let socket = { id: Math.random(), emit: noop }
+        for (let i = 0; i < players.length; i++) {
+            players[i].scores = [Math.pow(i, 2), Math.pow(i, 3)]
+        }
+        controler.startScore = GameControler.START_SCORE_MEDIAN
+        let player = controler.connect(socket)
+        controler.state = 'ROUND_FINISHED'
+        controler.dealNewRound()
+        expect(player.scores[1]).toBe(7)
+    })
+
     it('removes disconnected players when dealing new round', () => {
         const controler = setupControlerWithMocks(3)
         const players = controler.players.slice(0)
