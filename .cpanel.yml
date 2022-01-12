@@ -1,4 +1,5 @@
 ---
 deployment:
   tasks:
+    - export DEPLOYPATH=/home/ruraxvej/eitt/
     - /bin/cp -r * $DEPLOYPATH
