@@ -20,6 +20,7 @@ export function GameControler(room, roomList) {
         let scores = this.calculateScores()
         let idWithHighestScore = 0
         let highestScore = 0
+        let roundNumber = this.players[0].scores.length
         for (let id in scores) {
             let score = scores[id]
             if (score >= highestScore) {
@@ -31,7 +32,7 @@ export function GameControler(room, roomList) {
             let currentPlayer = this.players[i]
             let id = currentPlayer.id
             let score = scores[id]
-            currentPlayer.scores.push(score)
+            currentPlayer.scores[roundNumber] = score
             if (id === idWithHighestScore) {
                 this.turn = i
             }

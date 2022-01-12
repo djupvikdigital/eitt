@@ -419,6 +419,17 @@ describe('GameControler', () => {
         expect(typeof players[0].scores[1]).toBe('number')
     })
 
+    it('pads scores array for player joining later in game', () => {
+        const controler = setupControlerWithMocks(2)
+        controler.addScoresForRound()
+        let socket = { id: Math.random(), emit: noop }
+        let player = controler.connect(socket)
+        controler.state = 'ROUND_FINISHED'
+        controler.dealNewRound()
+        controler.addScoresForRound()
+        expect(player.scores.length).toBe(2)
+    })
+
     it('removes disconnected players when dealing new round', () => {
         const controler = setupControlerWithMocks(3)
         const players = controler.players.slice(0)
