@@ -2,9 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/ruraxvej/eitt/
-    - /bin/cp -R client $DEPLOYPATH
-    - /bin/cp -R server $DEPLOYPATH
-    - /bin/cp app.cjs $DEPLOYPATH
-    - /bin/cp app.js $DEPLOYPATH
-    - /bin/cp package.json $DEPLOYPATH
-    - /bin/cp package-lock.json $DEPLOYPATH
+    - /bin/cp -r * $DEPLOYPATH
