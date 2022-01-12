@@ -150,6 +150,10 @@ io.sockets.on('connection', function(socket){
     })
 
     socket.on('playCard',function(data){
+        if (room.room === 'mainlobby') {
+            console.log("Can't play card in mainlobby")
+            return
+        }
         let player = room.getPlayerBySocketId(socket.id)
         if (!player) {
             console.log('Player with socket id ' + socket.id + ' not found in room ' + room.room)
