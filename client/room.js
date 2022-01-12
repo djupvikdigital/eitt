@@ -284,8 +284,13 @@ if (storedPlayerSettings) {
 }
 if (inRoom) {
     atLoginPage = false
-    socket.emit('joinRoom', { playerId: sessionStorage.getItem('playerId'), room: inRoom })
 }
+socket.on('connect', function () {
+    let storedRoom = sessionStorage.getItem('room')
+    if (storedRoom) {
+        socket.emit('joinRoom', { playerId: sessionStorage.getItem('playerId'), room: storedRoom })
+    }
+})
 socket.on('joinRoom', function(data){
     inRoom = data.room
     /*
@@ -299,8 +304,8 @@ socket.on('joinRoom', function(data){
         document.getElementById("mainlobby").style.display = "none";
         document.getElementById("room").style.display = "block";
         document.getElementById("roomNameHeadline").textContent = 'Room: ' + data.room
+        sessionStorage.setItem('playerId', data.playerId)
     }
-    sessionStorage.setItem('playerId', data.playerId)
     sessionStorage.setItem('room', data.room)
 })
 socket.on('roomExists', function(){
