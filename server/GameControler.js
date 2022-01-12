@@ -7,6 +7,8 @@ function add(a, b) {
 
 const START_SCORE_AVERAGE = 0
 const START_SCORE_MEDIAN = 1
+const START_SCORE_MIN = 2
+const START_SCORE_MAX = 3
 
 export function GameControler(room, roomList) {
     let self = {
@@ -268,6 +270,12 @@ export function GameControler(room, roomList) {
                         score = Math.round((playerScores[middleIndex - 1] + playerScores[middleIndex]) / 2)
                     }
                 }
+                else if (this.startScore === START_SCORE_MIN) {
+                    score = Math.min(...playerScores)
+                }
+                else if (this.startScore === START_SCORE_MAX) {
+                    score = Math.max(...playerScores)
+                }
                 currentPlayer.scores[this.players[0].scores.length - 1] = score
             }
         }
@@ -456,3 +464,5 @@ export function GameControler(room, roomList) {
 
 GameControler.START_SCORE_AVERAGE = START_SCORE_AVERAGE
 GameControler.START_SCORE_MEDIAN = START_SCORE_MEDIAN
+GameControler.START_SCORE_MIN = START_SCORE_MIN
+GameControler.START_SCORE_MAX = START_SCORE_MAX

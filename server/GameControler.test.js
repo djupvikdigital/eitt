@@ -467,6 +467,34 @@ describe('GameControler', () => {
         expect(player.scores[1]).toBe(7)
     })
 
+    it('supports giving player joining later the lowest player score', () => {
+        const controler = setupControlerWithMocks(4)
+        const players = controler.players
+        let socket = { id: Math.random(), emit: noop }
+        for (let i = 0; i < players.length; i++) {
+            players[i].scores = [Math.pow(i + 1, 2), Math.pow(i + 1, 3)]
+        }
+        controler.startScore = GameControler.START_SCORE_MIN
+        let player = controler.connect(socket)
+        controler.state = 'ROUND_FINISHED'
+        controler.dealNewRound()
+        expect(player.scores[1]).toBe(2)
+    })
+
+    it('supports giving player joining later the highest player score', () => {
+        const controler = setupControlerWithMocks(4)
+        const players = controler.players
+        let socket = { id: Math.random(), emit: noop }
+        for (let i = 0; i < players.length; i++) {
+            players[i].scores = [Math.pow(i, 2), Math.pow(i, 3)]
+        }
+        controler.startScore = GameControler.START_SCORE_MAX
+        let player = controler.connect(socket)
+        controler.state = 'ROUND_FINISHED'
+        controler.dealNewRound()
+        expect(player.scores[1]).toBe(36)
+    })
+
     it('removes disconnected players when dealing new round', () => {
         const controler = setupControlerWithMocks(3)
         const players = controler.players.slice(0)
