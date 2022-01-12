@@ -205,7 +205,11 @@ io.sockets.on('connection', function(socket){
 
     socket.on('startGame', function (data) {
         if (data.playerId === room.players[0].id) {
+            let startScore = Number(data.startScore)
             room.startNeutral = Boolean(data.startNeutral)
+            if (!isNaN(startScore) && startScore >= 0 && startScore <= 4) {
+                room.startScore = startScore
+            }
             room.startNewGame()
         }
     })
