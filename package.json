@@ -29,9 +29,9 @@
   "homepage": "https://github.com/thirdhand/eitt#readme",
   "dependencies": {
     "express": "^4.17.2",
-    "socket.io": "^4.4.0"
+    "socket.io": "^4.4.1"
   },
   "devDependencies": {
-    "jest": "^27.4.5"
+    "jest": "^27.4.7"
   }
 }
