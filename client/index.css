@@ -115,6 +115,7 @@ html {
 .player-summary {
 	cursor: pointer;
 	list-style: none;
+	word-break: break-all;
 }
 
 .details-body {
