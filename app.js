@@ -10,6 +10,8 @@ import { GameControler } from './server/GameControler.js'
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Hej reidar, er livet fedt?
+
 let app = express();
 let serv = http.Server(app);
 
