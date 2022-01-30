@@ -142,33 +142,30 @@
                 game starts with +2, the starting player doesn't have to draw
                 two cards.
             </p>
-            <fieldset>
-                <legend>Default scores for players joining game later</legend>
-                <label>
-                    <input type="radio" name="startScore" value="0" checked>
-                    Start with average of player scores
-                </label>
-                <br>
-                <label>
-                    <input type="radio" name="startScore" value="1">
-                    Start with median of player scores
-                </label>
-                <br>
-                <label>
-                    <input type="radio" name="startScore" value="2">
-                    Start with lowest current score
-                </label>
-                <br>
-                <label>
-                    <input type="radio" name="startScore" value="3">
-                    Start with highest current score
-                </label>
-                <br>
-                <label>
-                    <input type="radio" name="startScore" value="4">
-                    Start with zero points
-                </label>
-            </fieldset>
+            <label>
+                Players joining game later start with
+                <select name="startScore" aria-describedby="start-score-desc">
+                    <option value="0" selected>
+                        average of player scores
+                    </option>
+                    <option value="1">
+                        median of player scores
+                    </option>
+                    <option value="2">
+                        lowest current score
+                    </option>
+                    <option value="3">
+                        highest current score
+                    </option>
+                    <option value="4">
+                        zero points
+                    </option>
+                </select>
+            </label>
+            <p id="start-score-desc">
+                If a player joins a game in a later round, this is how the
+                score of the player is set.
+            </p>
             <button type="submit" class="inputStyle">Start game</button>
         </form>
         <div id="game-table">
