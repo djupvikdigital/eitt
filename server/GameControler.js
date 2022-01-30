@@ -239,7 +239,6 @@ export function GameControler(room, roomList) {
         }
         let sumOfScores = playerScores.reduce(add, 0)
         let numberOfDecks = Math.ceil(this.players.length * 7 / 100)
-        console.log(numberOfDecks)
         if (!deck) {
             deck = CardDeck(numberOfDecks)
         }
