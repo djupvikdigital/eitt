@@ -1,20 +1,22 @@
-export function CardDeck() {
+export function CardDeck(numberOfDecks = 1) {
     let colors = ['blue', 'red', 'green', 'yellow'];
     let oneInEachColor = ['0']
     let twoInEachColor = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '+2', 'R', 'S'];
     let wildCards = ['+4', 'W']
     let cards = []
-    for (let color of colors) {
-        cards.push({ color: color, value: oneInEachColor[0]})
-        for (let i = 0; i < 2; i++) {
-            for (let value of twoInEachColor) {
-                cards.push({ color: color, value: value })
+    for (let i = 0; i < numberOfDecks; i++) {
+        for (let color of colors) {
+            cards.push({ color: color, value: oneInEachColor[0]})
+            for (let j = 0; j < 2; j++) {
+                for (let value of twoInEachColor) {
+                    cards.push({ color: color, value: value })
+                }
             }
         }
-    }
-    for (let i = 0; i < 4; i++) {
-        for (let value of wildCards) {
-            cards.push({ color: 'black', value: value })
+        for (let j = 0; j < 4; j++) {
+            for (let value of wildCards) {
+                cards.push({ color: 'black', value: value })
+            }
         }
     }
     let self = {

@@ -227,7 +227,7 @@ export function GameControler(room, roomList) {
         }
         return this.dealNewRound()
     }
-    self.dealNewRound = function (deck = CardDeck()) {
+    self.dealNewRound = function (deck) {
         if (this.state !== 'NOT_STARTED' && this.state !== 'ROUND_FINISHED') {
             return false
         }
@@ -238,6 +238,11 @@ export function GameControler(room, roomList) {
             playerScores[i] = players[i].scores.reduce(add, 0)
         }
         let sumOfScores = playerScores.reduce(add, 0)
+        let numberOfDecks = Math.ceil(this.players.length * 7 / 100)
+        console.log(numberOfDecks)
+        if (!deck) {
+            deck = CardDeck(numberOfDecks)
+        }
         let i = 0
         while (i < this.players.length) {
             let currentPlayer = this.players[i]

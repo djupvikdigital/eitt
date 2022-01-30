@@ -31,6 +31,7 @@ describe('GameControler', () => {
 
     it('changes state from NOT_STARTED to PLAYING when dealing new round', () => {
         const controler = GameControler('', { 0: {}})
+        controler.players = [Player()]
         expect(controler.state).toBe('NOT_STARTED')
         controler.dealNewRound()
         expect(controler.state).toBe('PLAYING')
@@ -95,12 +96,12 @@ describe('GameControler', () => {
     })
 
     it('deletes the player when leaving a room', () => {
-        const controler = setupControlerWithMocks(0)
+        const controler = setupControlerWithMocks()
         let socket = { id: Math.random() }
         controler.connect(socket)
-        expect(controler.players.length).toBe(1)
+        expect(controler.players.length).toBe(2)
         controler.leave(socket.id)
-        expect(controler.players.length).toBe(0)
+        expect(controler.players.length).toBe(1)
     })
 
     it('sets and removes socket property on player', () => {
@@ -702,5 +703,14 @@ describe('GameControler', () => {
         controler.turn = 1
         controler.pressEitt(player)
         expect(player.pressedEitt).toBe(false)
+    })
+
+    it('doubles the amount of cards in deck if many players join', () => {
+        const controler = setupControlerWithMocks(36)
+        const players = controler.players
+        const numberOfDealedCards = players.reduce(function (previousValue, currentPlayer) {
+            return previousValue + currentPlayer.cards.length
+        }, 0)
+        expect(numberOfDealedCards).toBeGreaterThan(108)
     })
 })
