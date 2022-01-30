@@ -10,8 +10,6 @@ import { GameControler } from './server/GameControler.js'
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Hej reidar, er livet fedt?
-
 let app = express();
 let serv = http.Server(app);
 
@@ -22,6 +20,8 @@ app.use('/client',express.static(__dirname + '/client'));
 
 serv.listen(process.env.PORT || 2000);
 console.log('Server started.');
+
+const MAX_PLAYERS = 99
 
 let SOCKET_LIST = {}
 
@@ -101,6 +101,10 @@ io.sockets.on('connection', function(socket){
             }
         }
         if (roomExist) {
+            if (data.room !== 'mainlobby' && ROOM_LIST[data.room].players.length >= MAX_PLAYERS) {
+                socket.emit('userMessage', "I've got " + MAX_PLAYERS + " players, but you ain't one")
+                return
+            }
             for (let i in ROOM_LIST) {
                 ROOM_LIST[i].leave(socket.id)
                 if (ROOM_LIST[i].getConnectedPlayers().length === 0 && i !== 'mainlobby') {

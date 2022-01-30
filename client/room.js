@@ -325,6 +325,10 @@ socket.on('roomStatus', function(data){
         }
     }
 })
+socket.on('userMessage', function(message) {
+    document.getElementById('user-message-text').textContent = message
+    document.getElementById('user-message').style.visibility = 'visible'
+})
 function createClickHandlerJoinRoom(room) {
     return function clickHandler() {
         socket.emit('joinRoom', { room: room })
@@ -450,6 +454,10 @@ document.getElementById('headGearSelectRight').addEventListener('click', functio
     selectedHeadGear++;
     if (selectedHeadGear > SVGheadGear.length) selectedHeadGear = 0;
     swithSVGheadGear();
+})
+
+document.getElementById('user-message-close').addEventListener('click', function() {
+    document.getElementById('user-message').style.visibility = ''
 })
 
 document.addEventListener('click', function (e) {
