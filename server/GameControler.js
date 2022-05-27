@@ -21,6 +21,7 @@ export function GameControler(room, roomList) {
         plusFourInPlay: false,
         roundWinner: '',
         startNeutral: false,
+        playMultiple: false,
         startScore: START_SCORE_AVERAGE,
         state: 'NOT_STARTED',
         turn: 0,
