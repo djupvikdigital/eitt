@@ -393,7 +393,7 @@ export function GameControler(room, roomList) {
             }
             this.roundWinner = player.name
         }
-        if (!this.playMultiple || this.deck.wildCards.includes(card.value)) {
+        if (!this.playMultiple || this.deck.wildCards.includes(card.value) || this.state == 'ROUND_FINISHED') {
             this.turnSwitch()
         }
         this.sendGameStatus()
