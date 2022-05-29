@@ -546,6 +546,21 @@ describe('GameControler', () => {
         expect(controler.turnRotation).toBe(-1)
     })
 
+    it('does not have playMulVal set if first card is reverse', () => {
+        const controler = setupControlerWithMocks(2)
+        const players = controler.players
+        players[0].cards = [{ value: '1' }]
+        players[1].cards = []
+        const deck = CardDeck()
+        deck.availableCards[deck.availableCards.length - 15] = { value: 'R' }
+        controler.state = 'ROUND_FINISHED'
+        controler.addScoresForRound()
+        controler.playMultiple = true
+        controler.startNeutral = false
+        controler.dealNewRound(deck)
+        expect(controler.playMulVal).toBe(null)
+    })
+
     it('does not start with +4', () => {
         const controler = setupControlerWithMocks()
         const deck = CardDeck()

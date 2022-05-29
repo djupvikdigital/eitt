@@ -359,9 +359,6 @@ export function GameControler(room, roomList) {
         if (!gotPlayed) {
             return false
         }
-        if (this.playMultiple) {
-            this.playMulVal = card.value
-        }
         if (card.value == '+4') this.plusFourInPlay = true
         else if (card.value == '+2') this.plusTwoInPlay = this.plusTwoInPlay + 1
         else if (card.value == 'R') this.turnRotation = (this.turnRotation * -1)
@@ -382,6 +379,9 @@ export function GameControler(room, roomList) {
         const gotPlayed = this.playCard(card)
         if (!gotPlayed) {
             return false
+        }
+        if (this.playMultiple) {
+            this.playMulVal = card.value
         }
         // remove played card from player cards
         player.cards.splice(index, 1)
