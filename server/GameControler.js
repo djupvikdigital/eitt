@@ -316,7 +316,7 @@ export function GameControler(room, roomList) {
     self.drawCards = function (player, number = 1) {
         let turn = false
         if (number === 1) {
-            if (!this.hasTurn(player) || player.hasDrawn) {
+            if (!this.hasTurn(player) || player.hasDrawn || this.playMulVal) {
                 return
             }
             if (this.plusFourInPlay) {
@@ -393,7 +393,7 @@ export function GameControler(room, roomList) {
             }
             this.roundWinner = player.name
         }
-        if (!this.playMultiple || this.deck.wildCards.includes(card.value)) {
+        if (!this.playMultiple || this.deck.wildCards.includes(card.value) || this.state == 'ROUND_FINISHED') {
             this.turnSwitch()
         }
         this.sendGameStatus()
