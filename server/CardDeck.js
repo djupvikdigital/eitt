@@ -47,9 +47,9 @@ export function CardDeck(numberOfDecks = 1) {
             if (lastPlayedCard.color !== 'black' && card.color !== lastPlayedCard.color && card.value !== lastPlayedCard.value) {
                 return false
             }
-            if (playMulVal && card.value != playMulVal) {
-                return false
-            }
+        }
+        if (playMulVal && card.value != playMulVal) {
+            return false
         }
         this.playedCards.push(card)
         return true
