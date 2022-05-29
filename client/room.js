@@ -227,6 +227,7 @@ function setGameStatus(status) {
         if (status.index === 0) {
             // First player gets to set game options
             document.getElementById('game-options').style.display = 'block'
+            document.getElementById('podium').style.display = ''
         }
         else {
             document.getElementById('game-options').style.display = ''
@@ -255,6 +256,10 @@ function setGameStatus(status) {
         else {
             document.getElementById('round-controls').style.display = ''
         }
+    }
+    else if (status.state == 'FINISHED') {
+        document.getElementById('room').style.display = 'none'
+        document.getElementById('podium').style.display = 'block'
     }
     document.getElementById('draw-card').textContent = 'Draw ' + status.drawCount
     renderCards(status.cards);
@@ -338,6 +343,7 @@ function backToLobby() {
     document.getElementById("mainlobby").style.display = "block";
     document.getElementById("room").style.display = "none";
     document.getElementById('loginDiv').style.display = 'none'
+    document.getElementById('podium').style.display = 'none'
 }
 
 function changeButtonDisableState(state) {
@@ -383,6 +389,12 @@ document.getElementById('leave-room').addEventListener('click', function () {
     socket.emit('joinRoom', { room: 'mainlobby' })
     backToLobby()
 })
+
+document.getElementById('leave-room-2').addEventListener('click', function () {
+    socket.emit('joinRoom', { room: 'mainlobby' })
+    backToLobby()
+})
+
 
 let gameOptionsForm = document.getElementById('game-options')
 gameOptionsForm.addEventListener('submit', function (e) {

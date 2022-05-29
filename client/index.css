@@ -103,6 +103,15 @@ html {
 	overflow: hidden; /* Hide scrollbars */
 }
 
+#podium {
+	display: none;
+	line-height: 100vh;
+}
+
+.podiumImg {
+	vertical-align: middle;
+}
+
 #player-list {
 	display: flex;
 	flex-direction: row;

@@ -52,6 +52,7 @@ export function GameControler(room, roomList) {
             }
             currentPlayer.pressedEitt = false
         }
+        if (highestScore >= 500) this.state = 'FINISHED'
         this.sendGameStatus()
     }
     self.calculateScores = function () {
