@@ -442,13 +442,14 @@ export function GameControler(room, roomList) {
             else if (this.plusTwoInPlay) {
                 drawCount = this.plusTwoInPlay * 2
             }
+            let hasTurn = this.hasTurn(currentPlayer)
             let gameStatus = {
                 id: currentPlayer.id,
                 index: i,
-                canPass: this.playMulVal || currentPlayer.hasDrawn,
+                canPass: (this.playMulVal && hasTurn) || currentPlayer.hasDrawn,
                 cards: currentPlayer.cards,
                 drawCount: drawCount,
-                hasTurn: this.hasTurn(currentPlayer),
+                hasTurn: hasTurn,
                 playerList: pack,
                 plusFourInPlay: this.plusFourInPlay,
                 lastPlayedCard: this.deck && this.deck.getLastPlayedCard(),
