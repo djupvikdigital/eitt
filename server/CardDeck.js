@@ -41,10 +41,13 @@ export function CardDeck(numberOfDecks = 1) {
     self.getLastPlayedCard = function () {
         return this.playedCards[this.playedCards.length - 1]
     }
-    self.playCard = function(card) {
+    self.playCard = function(card, playMulVal) {
         if (!wildCards.includes(card.value) && this.playedCards.length > 0) {
             const lastPlayedCard = this.playedCards[this.playedCards.length - 1]
             if (lastPlayedCard.color !== 'black' && card.color !== lastPlayedCard.color && card.value !== lastPlayedCard.value) {
+                return false
+            }
+            if (playMulVal && card.value != playMulVal) {
                 return false
             }
         }

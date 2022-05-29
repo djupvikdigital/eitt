@@ -26,7 +26,8 @@ export function GameControler(room, roomList) {
         state: 'NOT_STARTED',
         turn: 0,
         turnRotation: 1,
-        turnSkip: 1
+        turnSkip: 1,
+        playMulVal: null
     }
     self.addScoresForRound = function () {
         let scores = this.calculateScores()
@@ -353,10 +354,11 @@ export function GameControler(room, roomList) {
         if (this.plusTwoInPlay === 0 && this.state === 'ROUND_FINISHING') {
             return false
         }
-        const gotPlayed = this.deck.playCard(card)
+        const gotPlayed = this.deck.playCard(card, this.playMulVal)
         if (!gotPlayed) {
             return false
         }
+        this.playMulVal = card.value
         if (card.value == '+4') this.plusFourInPlay = true
         else if (card.value == '+2') this.plusTwoInPlay = this.plusTwoInPlay + 1
         else if (card.value == 'R') this.turnRotation = (this.turnRotation * -1)
@@ -413,6 +415,7 @@ export function GameControler(room, roomList) {
         let length = this.getPlayingPlayers().length
         this.turn = (this.turn + (1 * this.turnRotation * this.turnSkip) + length) % length
         this.turnSkip = 1;
+        this.playMulVal = null
     }
     self.sendGameStatus = function () {
         let pack = [];
