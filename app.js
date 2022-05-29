@@ -142,7 +142,7 @@ io.sockets.on('connection', function(socket){
 
     socket.on('pass',function(){
         let player = room.getPlayerBySocketId(socket.id)
-        if (room.hasTurn(player) && player.hasDrawn) {
+        if (room.hasTurn(player) && (room.playMulVal || player.hasDrawn)) {
             player.hasDrawn = false
             player.pressedEitt = false
             room.turnSwitch();

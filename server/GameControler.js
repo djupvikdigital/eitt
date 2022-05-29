@@ -444,9 +444,9 @@ export function GameControler(room, roomList) {
             let gameStatus = {
                 id: currentPlayer.id,
                 index: i,
+                canPass: this.playMulVal || currentPlayer.hasDrawn,
                 cards: currentPlayer.cards,
                 drawCount: drawCount,
-                hasDrawn: currentPlayer.hasDrawn,
                 hasTurn: this.hasTurn(currentPlayer),
                 playerList: pack,
                 plusFourInPlay: this.plusFourInPlay,
