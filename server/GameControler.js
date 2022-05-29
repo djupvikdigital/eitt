@@ -391,7 +391,9 @@ export function GameControler(room, roomList) {
             }
             this.roundWinner = player.name
         }
-        this.turnSwitch()
+        if (!this.playMultiple) {
+            this.turnSwitch()
+        }
         this.sendGameStatus()
         return true
     }
