@@ -287,6 +287,7 @@ export function GameControler(room, roomList) {
                 currentPlayer.scores[this.players[0].scores.length - 1] = score
             }
         }
+        this.playMulVal = null
         this.plusFourInPlay = false
         this.plusTwoInPlay = 0
         this.turnRotation = 1
