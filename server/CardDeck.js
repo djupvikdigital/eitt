@@ -21,7 +21,8 @@ export function CardDeck(numberOfDecks = 1) {
     }
     let self = {
         colors: colors,
-        playedCards: []
+        playedCards: [],
+        wildCards: wildCards
     }
     self.drawCard = function() {
         if (this.availableCards.length === 0) {
