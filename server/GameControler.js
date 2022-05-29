@@ -359,7 +359,9 @@ export function GameControler(room, roomList) {
         if (!gotPlayed) {
             return false
         }
-        this.playMulVal = card.value
+        if (this.playMultiple) {
+            this.playMulVal = card.value
+        }
         if (card.value == '+4') this.plusFourInPlay = true
         else if (card.value == '+2') this.plusTwoInPlay = this.plusTwoInPlay + 1
         else if (card.value == 'R') this.turnRotation = (this.turnRotation * -1)
