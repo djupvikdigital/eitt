@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 //express setup
 import express from 'express';
 import * as http from 'http';
