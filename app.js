@@ -187,6 +187,8 @@ io.sockets.on('connection', function(socket){
         }
 
         let card = player.cards[data.index];
+        console.log(data)
+        console.log(card)
         if (room.playCardFromPlayer(player, data.index, data.color)) legitPlay();
         else unlegitPlay();
     });
