@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="166.46mm" height="120mm" version="1.1" viewBox="0 0 166.46 120" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
- <metadata>
-  <rdf:RDF>
-   <cc:Work rdf:about="">
-    <dc:format>image/svg+xml</dc:format>
-    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:title/>
-   </cc:Work>
-  </rdf:RDF>
- </metadata>
- <g transform="translate(-30 -20)">
-  <rect x="99.762" y="39.762" width="26.935" height="80.476" style="fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:39.524;stroke:#ffd700"/>
-  <rect x="47.583" y="67.583" width="31.293" height="54.834" style="fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:35.166;stroke:#c0c0c0"/>
-  <rect x="144.48" y="94.481" width="37.497" height="31.039" style="fill:#b87333;stroke-linecap:round;stroke-linejoin:round;stroke-width:28.961;stroke:#b87333"/>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="72.33mm" height="70mm" version="1.1" viewBox="0 0 72.33 70" xmlns="http://www.w3.org/2000/svg">
+ <g transform="translate(-7.2951 -61.414)">
+  <rect x="28.628" y="61.663" width="29.503" height="69.503" ry="4.2331" style="fill:#c4c51b;stroke-width:.49719;stroke:#000"/>
+  <rect x="49.836" y="81.305" width="29.58" height="49.58" ry="3.0197" style="fill:#afb5ad;stroke-width:.42047;stroke:#000"/>
+  <rect x="7.458" y="101.48" width="29.674" height="29.674" ry="1.8073" style="fill:#b69a64;stroke-width:.32581;stroke:#000"/>
  </g>
 </svg>
