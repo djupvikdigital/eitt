@@ -286,6 +286,24 @@ function setGameStatus(status) {
     else if (status.state == 'FINISHED') {
         document.getElementById('room').style.display = 'none'
         document.getElementById('podium').style.display = 'block'
+        let winnerList = []
+        for (let i = 0; i < status.playerList.length; i++) {
+            let player = status.playerList[i]
+            let winner = {}
+            winner.name = player.name
+            winner.style = player.style
+            winner.score = 0
+            for (let j = 0; j < player.scores.length; j++) {
+                winner.score += player.scores[j]
+            }
+            winnerList.push(winner)
+        }
+        winnerList = winnerList.sort(function(a,b){return a.score - b.score})
+        for (let i = 0; i < 3; i++) {
+            if (i < winnerList.length) {
+                document.getElementById('textx' + i).innerHTML = winnerList[i].name + ' - ' + winnerList[i].score
+            }
+        }
     }
     document.getElementById('draw-card').textContent = 'Draw ' + status.drawCount
     if (status.lastPlayerIndex === status.index) {
