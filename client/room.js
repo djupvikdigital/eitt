@@ -276,6 +276,15 @@ function setGameStatus(status) {
         for (let i = 0; i < 3; i++) {
             if (i < winnerList.length) {
                 document.getElementById('textx' + i).innerHTML = winnerList[i].name + ' - ' + winnerList[i].score
+                SVGupdateClassPod(winnerList[i].style.body, '.avatarBodyx' + i)
+                SVGupdateClassPod(winnerList[i].style.head, '.avatarHeadx' + i)
+                document.getElementById('SVGavatarHGx' + i).innerHTML = ''
+                if (winnerList[i].style.headGear > 0) {
+                    let SVGheadGear = document.getElementById('SVGheadGear' + winnerList[i].style.headGear).cloneNode(true);
+                    SVGheadGear.removeAttribute('id');
+                    SVGheadGear.style.visibility = '';
+                    document.getElementById('SVGavatarHGx' + i).appendChild(SVGheadGear);
+                }
             }
         }
     }
@@ -285,6 +294,13 @@ function setGameStatus(status) {
     document.getElementById('your-turn').style.visibility = status.hasTurn ? 'inherit' : 'hidden'
     renderPlayerScores(status)
     renderLastPlayedCard(status.lastPlayedCard)
+}
+
+function SVGupdateClassPod(color, selector) {
+    let inClass = document.querySelectorAll(selector);
+    for (let i = 0; i < inClass.length; i++) {
+        inClass[i].style.fill = color;
+    }
 }
 
 function showColorPicker() {
@@ -339,7 +355,7 @@ socket.on('roomStatus', function(data){
     divElement.textContent = ''
     for (let i = 0; i < data.length; i++) {
         let room = data[i]
-        if (room.room != 'mainlobby') {
+        if (room.room != 'mainlobby' && room.state != 'FINISHED') {
             let element = document.createElement('button');
             element.className = 'joinButton';
             element.addEventListener('click', createClickHandlerJoinRoom(room.room));
