@@ -477,7 +477,8 @@ export function GameControler(room, roomList) {
         for(let i in roomList){
             let currentRoom = roomList[i]
             pack.push({
-                room:currentRoom.room
+                room:currentRoom.room,
+                state:currentRoom.state
             });
         }
         for(let i = 0; i < this.players.length; i++){
