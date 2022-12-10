@@ -29,6 +29,7 @@ function playCard(index, color) {
 function createTransitionEndHandler(i) {
     return function transitionEndHandler() {
         renderCards(gameStatus.cards);
+        renderLastPlayedCard(gameStatus.lastPlayedCard)
     }
 }
 
@@ -55,7 +56,6 @@ function hideColorPicker() {
 }
 
 function renderCards(cards) {
-    console.log('renderCards')
     let cardsElement = document.getElementById('cards');
     cardsElement.textContent = '';
     let fragment = document.createDocumentFragment();
@@ -323,13 +323,12 @@ function setGameStatus(status) {
         animatePlayCard(status.lastPlayedIndex)
     }
     else {
-        console.log('render 2')
         renderCards(status.cards);
+        renderLastPlayedCard(status.lastPlayedCard)
     }
     renderPlayerList(status);
     document.getElementById('your-turn').style.visibility = status.hasTurn ? 'inherit' : 'hidden'
     renderPlayerScores(status)
-    renderLastPlayedCard(status.lastPlayedCard)
 }
 
 function SVGupdateClassPod(color, selector) {
