@@ -5,6 +5,31 @@ const OPEN_ALWAYS = 1;
 const OPEN_NEVER = 2;
 let openPlayerScores = OPEN_WHEN_ROUND_FINISHED;
 
+function animatePlayCard(index) {
+    let cardsElement = document.getElementById('cards');
+    let cardElement = cardsElement.children[index];
+    let lastPlayedElement = document.getElementById('last-played-card');
+    let cardElementRect = cardElement.getBoundingClientRect();
+    let lastPlayedElementRect = lastPlayedElement.getBoundingClientRect();
+    let offsetLeft = cardElementRect.left - lastPlayedElementRect.left;
+    let offsetTop = cardElementRect.top - lastPlayedElementRect.top;
+    cardElement.style.transform = 'translateX(-' + offsetLeft + 'px) translateY(-' + offsetTop + 'px)';
+}
+
+function playCard(index, color) {
+    let data = { index: index };
+    if (color) {
+        data.color = color;
+    }
+    socket.emit('playCard', data);
+}
+
+function createTransitionEndHandler(i) {
+    return function transitionEndHandler() {
+        renderCards(gameStatus.cards);
+    }
+}
+
 function createClickHandler(i, card) {
     return function clickHandler(event) {
         currentIndex = i;
@@ -13,7 +38,7 @@ function createClickHandler(i, card) {
             event.stopPropagation()
         }
         else {
-            socket.emit('playCard', { index: i });
+            playCard(i)
             console.log('playCard emitted, index = ' + i)
         }
     }
@@ -35,6 +60,7 @@ function renderCards(cards) {
         let card = cards[i];
         let element = document.createElement('button');
         element.addEventListener('click', createClickHandler(i, card));
+        element.addEventListener('transitionend', createTransitionEndHandler(i))
         element.className = getClassNameForCard(card);
         element.textContent = card.value;
         fragment.appendChild(element);
@@ -289,7 +315,13 @@ function setGameStatus(status) {
         }
     }
     document.getElementById('draw-card').textContent = 'Draw ' + status.drawCount
-    renderCards(status.cards);
+    if (status.lastPlayerIndex === status.index) {
+        console.log('animate')
+        animatePlayCard(currentIndex)
+    }
+    else {
+        renderCards(status.cards);
+    }
     renderPlayerList(status);
     document.getElementById('your-turn').style.visibility = status.hasTurn ? 'inherit' : 'hidden'
     renderPlayerScores(status)
@@ -451,19 +483,19 @@ document.getElementById('check-plus-four').addEventListener('click', function ()
 })
 
 document.getElementById('pick-blue').addEventListener('click', function () {
-    socket.emit('playCard', { color: 'blue', index: currentIndex });
+    playCard(currentIndex, 'blue');
 });
 
 document.getElementById('pick-green').addEventListener('click', function () {
-    socket.emit('playCard', { color: 'green', index: currentIndex });
+    playCard(currentIndex, 'green');
 });
 
 document.getElementById('pick-red').addEventListener('click', function () {
-    socket.emit('playCard', { color: 'red', index: currentIndex });
+    playCard(currentIndex, 'red');
 });
 
 document.getElementById('pick-yellow').addEventListener('click', function () {
-    socket.emit('playCard', { color: 'yellow', index: currentIndex });
+    playCard(currentIndex, 'yellow');
 });
 
 document.getElementById('new-round').addEventListener('click', function () {
