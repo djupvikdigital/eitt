@@ -168,7 +168,7 @@ io.sockets.on('connection', function(socket){
             return
         }
         function legitPlay(){
-            console.log("Yay! " + player.name + " played a " + card.color + " " + card.value + " in " + room.room);
+            //console.log("Yay! " + player.name + " played a " + card.color + " " + card.value + " in " + room.room);
         }
 
         function unlegitPlay(){
@@ -183,13 +183,9 @@ io.sockets.on('connection', function(socket){
                 console.log(deck)
                 return
             }
-            console.log("Oh now! We've got a cheater over here! He tried to play a " + card.color + " " + card.value + " on top of a " + lastPlayedCard.color + " " + lastPlayedCard.value);
         }
 
         let card = player.cards[data.index];
-        console.log(data)
-        console.log(player.cards)
-        console.log(card)
         if (room.playCardFromPlayer(player, data.index, data.color)) legitPlay();
         else unlegitPlay();
     });
