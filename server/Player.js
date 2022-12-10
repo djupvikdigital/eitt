@@ -3,6 +3,7 @@ export function Player() {
         id: '' + Math.random(),
         cards: [],
         name: '',
+        playCount: 0,
         scores: [],
         socket: null,
         isPlaying: false,

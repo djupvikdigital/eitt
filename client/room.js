@@ -4,6 +4,7 @@ const OPEN_WHEN_ROUND_FINISHED = 0;
 const OPEN_ALWAYS = 1;
 const OPEN_NEVER = 2;
 let openPlayerScores = OPEN_WHEN_ROUND_FINISHED;
+let playCount = 0;
 
 function animatePlayCard(index) {
     let cardsElement = document.getElementById('cards');
@@ -11,9 +12,10 @@ function animatePlayCard(index) {
     let lastPlayedElement = document.getElementById('last-played-card');
     let cardElementRect = cardElement.getBoundingClientRect();
     let lastPlayedElementRect = lastPlayedElement.getBoundingClientRect();
-    let offsetLeft = cardElementRect.left - lastPlayedElementRect.left;
-    let offsetTop = cardElementRect.top - lastPlayedElementRect.top;
-    cardElement.style.transform = 'translateX(-' + offsetLeft + 'px) translateY(-' + offsetTop + 'px)';
+    let offsetLeft = (cardElementRect.left - lastPlayedElementRect.left) * -1;
+    let offsetTop = (cardElementRect.top - lastPlayedElementRect.top) * -1;
+    let transform = 'translateX(' + offsetLeft + 'px) translateY(' + offsetTop + 'px)';
+    cardElement.style.transform = transform;
 }
 
 function playCard(index, color) {
@@ -53,6 +55,7 @@ function hideColorPicker() {
 }
 
 function renderCards(cards) {
+    console.log('renderCards')
     let cardsElement = document.getElementById('cards');
     cardsElement.textContent = '';
     let fragment = document.createDocumentFragment();
@@ -306,11 +309,12 @@ function setGameStatus(status) {
         }
     }
     document.getElementById('draw-card').textContent = 'Draw ' + status.drawCount
-    if (status.lastPlayerIndex === status.index) {
-        console.log('animate')
-        animatePlayCard(currentIndex)
+    if (playCount !== status.playCount) {
+        playCount = status.playCount
+        animatePlayCard(status.lastPlayedIndex)
     }
     else {
+        console.log('render 2')
         renderCards(status.cards);
     }
     renderPlayerList(status);

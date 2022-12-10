@@ -15,6 +15,7 @@ export function GameControler(room, roomList) {
     let self = {
         room: room,
         deck: null,
+        lastPlayedIndex: -1,
         lastPlayerId: 0,
         players: [],
         plusTwoInPlay: 0,
@@ -381,6 +382,8 @@ export function GameControler(room, roomList) {
         if (!gotPlayed) {
             return false
         }
+        this.lastPlayedIndex = index
+        player.playCount++
         if (this.playMultiple) {
             this.playMulVal = card.value
         }
@@ -457,9 +460,11 @@ export function GameControler(room, roomList) {
                 cards: currentPlayer.cards,
                 drawCount: drawCount,
                 hasTurn: hasTurn,
+                playCount: currentPlayer.playCount,
                 playerList: pack,
                 plusFourInPlay: this.plusFourInPlay,
                 lastPlayedCard: this.deck && this.deck.getLastPlayedCard(),
+                lastPlayedIndex: this.lastPlayedIndex,
                 lastPlayerIndex: lastPlayerIndex,
                 roundWinner: this.roundWinner,
                 state: this.state,
