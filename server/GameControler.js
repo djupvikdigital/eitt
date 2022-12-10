@@ -423,8 +423,12 @@ export function GameControler(room, roomList) {
     }
     self.sendGameStatus = function () {
         let pack = [];
+        let lastPlayerIndex = -1;
         for(let i = 0; i < this.players.length; i++){
             let currentPlayer = this.players[i]
+            if (currentPlayer.id === this.lastPlayerId) {
+                lastPlayerIndex = i;
+            }
             pack.push({
                 name:currentPlayer.name,
                 numberOfCards:currentPlayer.cards.length,
@@ -456,6 +460,7 @@ export function GameControler(room, roomList) {
                 playerList: pack,
                 plusFourInPlay: this.plusFourInPlay,
                 lastPlayedCard: this.deck && this.deck.getLastPlayedCard(),
+                lastPlayerIndex: lastPlayerIndex,
                 roundWinner: this.roundWinner,
                 state: this.state,
             };
