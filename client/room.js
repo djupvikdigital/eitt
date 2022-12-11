@@ -314,6 +314,8 @@ function setGameStatus(status) {
                     SVGheadGear.style.visibility = '';
                     document.getElementById('SVGavatarHGx' + i).appendChild(SVGheadGear);
                 }
+            } else {
+                document.getElementById('SVGavatarx' + i).innerHTML = ''
             }
         }
     }
