@@ -6,6 +6,28 @@ const OPEN_NEVER = 2;
 let openPlayerScores = OPEN_WHEN_ROUND_FINISHED;
 let playCount = 0;
 
+function animateLastPlayedCardFrom(index) {
+    let lastPlayedCard = gameStatus.lastPlayedCard;
+    let playerElement = document.getElementsByClassName('player')[index];
+    let animatedElement = document.createElement('div');
+    document.body.appendChild(animatedElement);
+    let lastPlayedElement = document.getElementById('last-played-card');
+    let lastPlayedElementRect = lastPlayedElement.getBoundingClientRect();
+    let playerElementRect = playerElement.getBoundingClientRect();
+    let offsetLeft = (lastPlayedElementRect.left - playerElementRect.left);
+    let offsetTop = (lastPlayedElementRect.top - playerElementRect.top);
+    let transform = 'translateX(' + offsetLeft + 'px) translateY(' + offsetTop + 'px)';
+    animatedElement.className = getClassNameForCard(lastPlayedCard);
+    animatedElement.style.position = 'fixed';
+    animatedElement.style.left = playerElementRect.left + 70 + 'px';
+    animatedElement.style.top = playerElementRect.top + 'px';
+    animatedElement.addEventListener('transitionend', function() {
+        document.body.removeChild(animatedElement);
+        renderLastPlayedCard(lastPlayedCard);
+    })
+    animatedElement.style.transform = transform;
+}
+
 function animatePlayCard(index) {
     let cardsElement = document.getElementById('cards');
     let cardElement = cardsElement.children[index];
@@ -251,6 +273,10 @@ function renderPlayerScores(status) {
 function setGameStatus(status) {
     console.log('Gamestatus received:')
     console.log(status)
+    let animatePlayFrom = -1
+    if (gameStatus.lastPlayerIndex !== status.lastPlayerIndex) {
+        animatePlayFrom = status.lastPlayerIndex
+    }
     gameStatus = status;
     if (status.state === 'NOT_STARTED') {
         if (status.index === 0) {
@@ -321,6 +347,11 @@ function setGameStatus(status) {
     if (playCount !== status.playCount) {
         playCount = status.playCount
         animatePlayCard(status.lastPlayedIndex)
+    }
+    else if (animatePlayFrom !== -1) {
+        renderCards(status.cards)
+        console.log('animatePlayFrom = ', animatePlayFrom)
+        animateLastPlayedCardFrom(animatePlayFrom)
     }
     else {
         renderCards(status.cards);
