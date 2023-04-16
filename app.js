@@ -18,7 +18,7 @@ let serv = http.Server(app);
 app.get('/',function(req, res){
     res.sendFile(__dirname + '/client/index.html');
 });
-app.get('/restart', function(){
+app.get('/restart', function(req, res){
     const { exec } = require('child_process');
     exec('git pull', (err, stdout, stderr) => {
     if (err) {
