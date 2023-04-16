@@ -20,7 +20,9 @@ app.get('/',function(req, res){
     res.sendFile(__dirname + '/client/index.html');
 });
 app.get('/restart', function(req, res){
+    console.log('did we get this far?')
     exec('git pull', (err, stdout, stderr) => {
+        console.log('and this far?')
     if (err) {
         //some err occurred
         console.error(err)
@@ -29,6 +31,7 @@ app.get('/restart', function(req, res){
     console.log(`stdout: ${stdout}`);
     console.log(`stderr: ${stderr}`);
     }
+    console.log('Even this far??')
     res.send('Success!')
     });
 })
@@ -73,7 +76,7 @@ io.sockets.on('connection', function(socket){
     let player = room.connect(socket)
     player.style = style;
     socket.emit('joinRoom', { room: 'mainlobby' })
-    console.log(ROOM_LIST);
+    //console.log(ROOM_LIST);
 
     room.sendRoomStatus()
 
@@ -100,11 +103,11 @@ io.sockets.on('connection', function(socket){
             ROOM_LIST[data] = room
             player.name = name
             player.style = style;
-            console.log(player);
+            //console.log(player);
             socket.emit('joinRoom', { playerId: player.id, room: data })
             room.sendGameStatus()
             ROOM_LIST.mainlobby.sendRoomStatus()
-            console.log(ROOM_LIST);
+            //console.log(ROOM_LIST);
         }
     })
 
@@ -136,7 +139,7 @@ io.sockets.on('connection', function(socket){
             room.sendGameStatus()
             socket.emit('joinRoom', { playerId: player.id, room: data.room })
             ROOM_LIST.mainlobby.sendRoomStatus()
-            console.log(ROOM_LIST)
+            //console.log(ROOM_LIST)
         }
     })
 
@@ -250,7 +253,7 @@ io.sockets.on('connection', function(socket){
             room.sendGameStatus();
         }
         console.log('socket disconnected');
-        console.log(ROOM_LIST);
+        //console.log(ROOM_LIST);
     });
 });
 
