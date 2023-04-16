@@ -18,6 +18,19 @@ let serv = http.Server(app);
 app.get('/',function(req, res){
     res.sendFile(__dirname + '/client/index.html');
 });
+app.get('/restart', function(){
+    const { exec } = require('child_process');
+    exec('git pull', (err, stdout, stderr) => {
+    if (err) {
+        //some err occurred
+        console.error(err)
+    } else {
+    // the *entire* stdout and stderr (buffered)
+    console.log(`stdout: ${stdout}`);
+    console.log(`stderr: ${stderr}`);
+    }
+    });
+})
 app.use('/client',express.static(__dirname + '/client'));
 
 serv.listen(process.env.PORT || 2000);
