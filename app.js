@@ -4,6 +4,7 @@
 import express from 'express';
 import * as http from 'http';
 import { dirname } from 'path';
+import { exec } from 'child_process';
 import { Server } from 'socket.io';
 import { fileURLToPath } from 'url';
 
@@ -19,7 +20,6 @@ app.get('/',function(req, res){
     res.sendFile(__dirname + '/client/index.html');
 });
 app.get('/restart', function(req, res){
-    const { exec } = require('child_process');
     exec('git pull', (err, stdout, stderr) => {
     if (err) {
         //some err occurred
