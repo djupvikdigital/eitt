@@ -52,8 +52,8 @@ export function GameControler(room, roomList) {
                 this.turn = i
             }
             currentPlayer.pressedEitt = false
+            if (this.calculateTotal(currentPlayer.scores)) this.state = 'FINISHED'
         }
-        if (highestScore >= 500) this.state = 'FINISHED'
         this.sendGameStatus()
     }
     self.calculateScores = function () {
@@ -79,6 +79,13 @@ export function GameControler(room, roomList) {
             scores[currentPlayer.id] = score
         }
         return scores
+    }
+    self.calculateTotal = function (scores) {
+        let thisScore = 0
+        for (let i = 0; i < scores.length; i++) {
+            thisScore+=scores[i]
+        }
+        return thisScore >= 500
     }
     self.checkPlusFour = function (player) {
         if (this.plusFourInPlay) {
