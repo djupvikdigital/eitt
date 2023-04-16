@@ -38,7 +38,7 @@ app.post('/restart', function(req, res){
 app.use('/client',express.static(__dirname + '/client'));
 
 serv.listen(process.env.PORT || 2000);
-console.log('Server started. v.13');
+console.log('Server started!');
 
 const MAX_PLAYERS = 99
 
