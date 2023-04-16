@@ -364,7 +364,7 @@ export function GameControler(room, roomList) {
         if (card.value == '+4') this.plusFourInPlay = true
         else if (card.value == '+2') this.plusTwoInPlay = this.plusTwoInPlay + 1
         else if (card.value == 'R') this.turnRotation = (this.turnRotation * -1)
-        else if (card.value == 'S') this.turnSkip = 2
+        else if (card.value == 'S') this.turnSkip = this.turnSkip + 1
         return true
     }
     self.playCardFromPlayer = function (player, index, color = '') {
