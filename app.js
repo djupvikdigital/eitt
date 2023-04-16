@@ -29,6 +29,7 @@ app.get('/restart', function(){
     console.log(`stdout: ${stdout}`);
     console.log(`stderr: ${stderr}`);
     }
+    res.send('Success!')
     });
 })
 app.use('/client',express.static(__dirname + '/client'));
