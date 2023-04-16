@@ -1,0 +1,7 @@
+name: deploy
+on: [push]
+jobs:
+  deploy-to-server:
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl -X POST https://e.sol.fo/restart
