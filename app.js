@@ -11,6 +11,7 @@ import { fileURLToPath } from 'url';
 import { GameControler } from './server/GameControler.js'
 import { pickTemporalName } from './server/Naming.js'
 import { applyStandardStyling } from './server/Player.js'
+import { House } from './server/House.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -47,8 +48,7 @@ const MAX_PLAYERS = 99
 
 let SOCKET_LIST = {}
 
-let ROOM_LIST = {}
-ROOM_LIST['mainlobby'] = GameControler('mainlobby', ROOM_LIST)
+House.rooms.mainlobby = GameControler('mainlobby')
 
 let io = new Server(serv,{});
 io.sockets.on('connection', function(socket){
@@ -62,74 +62,52 @@ io.sockets.on('connection', function(socket){
     SOCKET_LIST[socket.id] = socket
     console.log('socket connection');
 
-    let room = ROOM_LIST.mainlobby
+    let room = House.rooms.mainlobby
     let player = room.connect(socket)
     player.style = style;
     socket.emit('joinRoom', { room: 'mainlobby' })
 
-    room.sendRoomStatus()
+    House.refreshLobby()
+    console.log(House.rooms)
 
-    socket.on('createNewRoom', function(data){
-        let roomExist = false;
-        if (data == '') return false;
-        for (let i in ROOM_LIST) {
-            let currentRoom = ROOM_LIST[i].room
-            if (currentRoom == data) {
-                roomExist = true;
-                socket.emit('roomExists','')
-            }
+    socket.on('createNewRoom', function(roomName){
+        if (House.getRoomBySocketId(socket.id) != 'mainlobby') return
+        if (roomName == '') return
+        if (House.checkIfRoomExists(roomName)) {
+            socket.emit('roomExists','')
+            return
         }
 
-        if (roomExist == false) {
-            for (let i in ROOM_LIST) {
-                ROOM_LIST[i].leave(socket.id)
-                if (ROOM_LIST[i].getConnectedPlayers().length === 0 && i !== 'mainlobby') {
-                    delete ROOM_LIST[i]
-                }
-            }
-            room = GameControler(data, ROOM_LIST)
-            let player = room.connect(socket)
-            ROOM_LIST[data] = room
-            player.name = name
-            player.style = style;
-            //console.log(player);
-            socket.emit('joinRoom', { playerId: player.id, room: data })
-            room.sendGameStatus()
-            ROOM_LIST.mainlobby.sendRoomStatus()
-            //console.log(ROOM_LIST);
-        }
+        House.rooms[roomName] = GameControler(roomName)
+        room = House.rooms[roomName]
+        let player = room.connect(socket)
+        player.name = name
+        player.style = style;
+        socket.emit('joinRoom', { playerId: player.id, room: roomName })
+        House.rooms[roomName].sendGameStatus()
+        House.refreshLobby()
     })
 
     socket.on('joinRoom', function(data) {
-        let roomExist = false;
-        for (let i in ROOM_LIST) {
-            let currentRoom = ROOM_LIST[i].room
-            if (currentRoom == data.room) {
-                roomExist = true;
-            }
+        if (!House.checkIfRoomExists(data.room)) return
+
+        if (data.room !== 'mainlobby' && House.rooms[data.room].players.length >= MAX_PLAYERS) {
+            socket.emit('userMessage', "I've got " + MAX_PLAYERS + " players, but you ain't one")
+            return
         }
-        if (roomExist) {
-            if (data.room !== 'mainlobby' && ROOM_LIST[data.room].players.length >= MAX_PLAYERS) {
-                socket.emit('userMessage', "I've got " + MAX_PLAYERS + " players, but you ain't one")
-                return
-            }
-            for (let i in ROOM_LIST) {
-                ROOM_LIST[i].leave(socket.id)
-                if (ROOM_LIST[i].getConnectedPlayers().length === 0 && i !== 'mainlobby') {
-                    delete ROOM_LIST[i]
-                }
-            }
-            room = ROOM_LIST[data.room]
-            let player = room.connect(socket, data.playerId)
-            if (!player.name) {
-                player.name = name
-            }
-            player.style = style;
-            room.sendGameStatus()
-            socket.emit('joinRoom', { playerId: player.id, room: data.room })
-            ROOM_LIST.mainlobby.sendRoomStatus()
-            //console.log(ROOM_LIST)
+        for (let i in House.rooms) {
+            House.rooms[i].leave(socket.id)
+            if (House.isRoomEmpty(i)) delete House.rooms[i]
         }
+        room = House.rooms[data.room]
+        let player = room.connect(socket, data.playerId)
+        if (!player.name) {
+            player.name = name
+        }
+        player.style = style;
+        room.sendGameStatus()
+        socket.emit('joinRoom', { playerId: player.id, room: data.room })
+        House.refreshLobby()
     })
 
     socket.on('drawCards',function(){
@@ -179,13 +157,13 @@ io.sockets.on('connection', function(socket){
     })
 
     socket.on('playCard',function(data){
-        if (room.room === 'mainlobby') {
+        if (room.name === 'mainlobby') {
             console.log("Can't play card in mainlobby")
             return
         }
         let player = room.getPlayerBySocketId(socket.id)
         if (!player) {
-            console.log('Player with socket id ' + socket.id + ' not found in room ' + room.room)
+            console.log('Player with socket id ' + socket.id + ' not found in room ' + room.name)
             console.log(JSON.stringify(room.players))
             return
         }
@@ -195,7 +173,7 @@ io.sockets.on('connection', function(socket){
 
         function unlegitPlay(){
             if (!room.deck) {
-                console.log('Room with name ' + room.room + 'and status' + room.status + ' has no deck')
+                console.log('Room with name ' + room.name + 'and status' + room.status + ' has no deck')
                 console.error(room)
                 return
             }
@@ -247,18 +225,11 @@ io.sockets.on('connection', function(socket){
     })
 
     socket.on('disconnect',function(){
-        let player = room.getPlayerBySocketId(socket.id)
         let goodbyeID = socket.id
         delete SOCKET_LIST[socket.id];
         room.disconnect(goodbyeID)
-        if (room.getConnectedPlayers().length === 0 && room.room !== 'mainlobby') {
-            delete ROOM_LIST[room.room]
-        }
-        else {
-            room.sendGameStatus();
-        }
+        if (House.isRoomEmpty(room.name)) delete House.rooms[room.name]; else room.sendGameStatus();
         console.log('socket disconnected');
-        //console.log(ROOM_LIST);
     });
 });
 
