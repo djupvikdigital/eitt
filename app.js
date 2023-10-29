@@ -175,7 +175,7 @@ io.sockets.on('connection', function(socket){
 
     socket.on('addCardToPlay', function (data) {
         let player = room.getPlayerBySocketId(socket.id)
-        if (!this.hasTurn(player) || index < 0 || index >= player.cards.length) {
+        if (!room.hasTurn(player) || index < 0 || index >= player.cards.length) {
             return
         }
         room.turn.addCardToPlay(player.cards[data.index])
@@ -183,7 +183,7 @@ io.sockets.on('connection', function(socket){
 
     socket.on('removeCardFromPlay', function (data) {
         let player = room.getPlayerBySocketId(socket.id)
-        if (!this.hasTurn(player) || index < 0 || index >= player.cards.length) {
+        if (!room.hasTurn(player) || index < 0 || index >= player.cards.length) {
             return
         }
         room.turn.removeCardFromPlay(data.index)
