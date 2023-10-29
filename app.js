@@ -9,6 +9,8 @@ import { Server } from 'socket.io';
 import { fileURLToPath } from 'url';
 
 import { GameControler } from './server/GameControler.js'
+import { pickTemporalName } from './server/Naming.js'
+import { applyStandardStyling } from './server/Player.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -19,6 +21,7 @@ let serv = http.Server(app);
 app.get('/',function(req, res){
     res.sendFile(__dirname + '/client/index.html');
 });
+
 app.post('/restart', function(req, res){
     console.log('did we get this far?')
     exec('git pull', (err, stdout, stderr) => {
@@ -47,27 +50,14 @@ let SOCKET_LIST = {}
 let ROOM_LIST = {}
 ROOM_LIST['mainlobby'] = GameControler('mainlobby', ROOM_LIST)
 
-let playerFName = ['attractive', 'bald', 'beautiful', 'chubby', 'clean', 'dazzling', 'drab', 'elegant', 'fancy', 'fit', 'flabby', 'glamorous', 'gorgeous', 'handsome', 'long', 'magnificent', 'muscular', 'plain', 'plump', 'quaint', 'scruffy', 'shapely', 'short', 'skinny', 'stocky', 'ugly', 'unkempt', 'unsightly']
-let playerBName = ["people","history","way","art","world","information","map","family","government","health","system","computer","meat","year","thanks","music","person","reading","method","data","food","understanding","theory","law","bird","literature","problem","software","control","knowledge","power","ability","economics","love","internet","television","science","library","nature","fact","product","idea","temperature","investment","area","society","activity","story","industry","media","thing","oven","community","definition","safety","quality","development","language","management","player","variety","video","week","security","country","exam","movie","organization","equipment","physics","analysis","policy","series","thought","basis","boyfriend","direction","strategy","technology","army","camera","freedom","paper","environment","child","instance","month","truth","marketing","university","writing","article","department","difference","goal","news","audience","fishing","growth","income","marriage","user","combination","failure","meaning","medicine","philosophy","teacher","communication","night","chemistry","disease","disk","energy","nation","road","role","soup","advertising","location","success","addition","apartment","education","math","moment","painting","politics","attention","decision","event","property","shopping","student","wood","competition","distribution","entertainment","office","population","president"]
-
-function pickRand(array) {
-    let rand = array[(Math.random() * array.length) | 0]
-    return rand
-}
-
 let io = new Server(serv,{});
 io.sockets.on('connection', function(socket){
     
     socket.id = Math.random();
 
-    let bName = pickRand(playerBName)
-    bName = bName.charAt(0).toUpperCase() + bName.slice(1)
-    let name = pickRand(playerFName) + bName
+    let name = pickTemporalName();
 
-    let style = {};
-    style.body = '#47535a';
-    style.head = '#f6d7d2';
-    style.headGear = 0;
+    let style = applyStandardStyling();
 
     SOCKET_LIST[socket.id] = socket
     console.log('socket connection');
@@ -76,7 +66,6 @@ io.sockets.on('connection', function(socket){
     let player = room.connect(socket)
     player.style = style;
     socket.emit('joinRoom', { room: 'mainlobby' })
-    //console.log(ROOM_LIST);
 
     room.sendRoomStatus()
 

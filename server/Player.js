@@ -17,3 +17,12 @@ export function Player() {
     }
     return self
 }
+
+export function applyStandardStyling() {
+    let self = {
+        body: '#47535a',
+        head: '#f6d7d2',
+        headGear: 0
+    }
+    return self;
+}
