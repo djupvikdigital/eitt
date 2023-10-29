@@ -381,7 +381,7 @@ export function GameControler(room, roomList) {
         }
         let card = player.cards[index]
         if (card.color === 'black' && color) {
-            if (!this.deck.colors.includes(color)) {
+            if (!this.deck.isLegitColor(color)) {
                 return false
             }
             card = Object.assign({}, card, { color: color })
