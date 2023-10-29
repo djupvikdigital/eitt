@@ -19,7 +19,7 @@ let serv = http.Server(app);
 app.get('/',function(req, res){
     res.sendFile(__dirname + '/client/index.html');
 });
-app.get('/restart', function(req, res){
+app.post('/restart', function(req, res){
     console.log('did we get this far?')
     exec('git pull', (err, stdout, stderr) => {
         console.log('and this far?')
@@ -38,7 +38,7 @@ app.get('/restart', function(req, res){
 app.use('/client',express.static(__dirname + '/client'));
 
 serv.listen(process.env.PORT || 2000);
-console.log('Server started. v.9');
+console.log('Server started!');
 
 const MAX_PLAYERS = 99
 
