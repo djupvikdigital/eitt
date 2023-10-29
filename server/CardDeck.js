@@ -52,10 +52,9 @@ export function CardDeck(numberOfDecks = 1) {
         return this.colors.includes(color)
     }
     self.playCard = function(card, playMulVal) {
-        if (!card) throw new Error(JSON.stringify(arguments))
-        // if (!this.isLegitCard(card)) {
-        //     return false
-        // }
+        if (!this.isLegitCard(card)) {
+            return false
+        }
         if (!wildCards.includes(card.value) && this.playedCards.length > 0) {
             const lastPlayedCard = this.playedCards[this.playedCards.length - 1]
             if (lastPlayedCard.color !== 'black' && card.color !== lastPlayedCard.color && card.value !== lastPlayedCard.value) {
