@@ -55,6 +55,15 @@ export function CardDeck(numberOfDecks = 1) {
         this.playedCards.push(card)
         return true
     }
+    self.playCards = function (cards) {
+        for (let i = 0; i <= cards.length; i++) {
+            let gotPlayed = this.playCard(cards[i])
+            if (!gotPlayed) {
+                return false
+            }
+        }
+        return true
+    }
     self.shuffleCards = function(array) {
         let currentIndex = array.length
         let randomIndex = 0

@@ -173,6 +173,22 @@ io.sockets.on('connection', function(socket){
         room.checkPlusFour(player)
     })
 
+    socket.on('addCardToPlay', function (data) {
+        let player = room.getPlayerBySocketId(socket.id)
+        if (!this.hasTurn(player) || index < 0 || index >= player.cards.length) {
+            return
+        }
+        room.turn.addCardToPlay(player.cards[data.index])
+    })
+
+    socket.on('removeCardFromPlay', function (data) {
+        let player = room.getPlayerBySocketId(socket.id)
+        if (!this.hasTurn(player) || index < 0 || index >= player.cards.length) {
+            return
+        }
+        room.turn.removeCardFromPlay(data.index)
+    })
+
     socket.on('playCard',function(data){
         if (room.room === 'mainlobby') {
             console.log("Can't play card in mainlobby")

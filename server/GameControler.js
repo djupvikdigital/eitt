@@ -1,5 +1,6 @@
 import { CardDeck } from './CardDeck.js'
 import { Player } from './Player.js'
+import { Turn } from './Turn.js'
 
 function add(a, b) {
     return a + b
@@ -25,7 +26,7 @@ export function GameControler(room, roomList) {
         playMultiple: false,
         startScore: START_SCORE_AVERAGE,
         state: 'NOT_STARTED',
-        turn: 0,
+        turn: Turn(0),
         turnRotation: 1,
         turnSkip: 1,
         playMulVal: null
@@ -49,7 +50,7 @@ export function GameControler(room, roomList) {
             let score = scores[id]
             currentPlayer.scores[roundNumber] = score
             if (id === idWithHighestScore) {
-                this.turn = i
+                this.turn = Turn(i)
             }
             currentPlayer.pressedEitt = false
         }
@@ -169,7 +170,7 @@ export function GameControler(room, roomList) {
     self.getPlayerWithTurn = function () {
         let playingPlayers = this.getPlayingPlayers()
         let length = playingPlayers.length
-        return length > 0 ? playingPlayers[this.turn % length] : null
+        return length > 0 ? playingPlayers[this.turn.playerIndex % length] : null
     }
     self.hasTurn = function (player) {
         let playerWithTurn = this.getPlayerWithTurn()
@@ -191,20 +192,20 @@ export function GameControler(room, roomList) {
         if (index < 0 || index >= this.players.length) {
             return false
         }
-        if (this.turn === index && this.turnRotation === -1) {
+        if (this.turn.playerIndex === index && this.turnRotation === -1) {
             // switch turn if leaving player has turn
             this.turnSwitch()
         }
-        else if (this.turn > index) {
+        else if (this.turn.playerIndex > index) {
             // make sure later player doesn't lose turn
-            this.turn = this.turn - 1
+            this.turn.playerIndex = this.turn.playerIndex - 1
         }
         this.players.splice(index, 1)
         if (this.getPlayingPlayers().length === 0) {
             this.state = 'NOT_STARTED'
         }
         let length = this.players.length
-        this.turn = this.turn % length
+        this.turn.playerIndex = this.turn.playerIndex % length
         this.sendGameStatus()
         return true
 }
@@ -420,7 +421,7 @@ export function GameControler(room, roomList) {
             return
         }
         let length = this.getPlayingPlayers().length
-        this.turn = (this.turn + (1 * this.turnRotation * this.turnSkip) + length) % length
+        this.turn = Turn((this.turn.playerIndex + (1 * this.turnRotation * this.turnSkip) + length) % length)
         this.turnSkip = 1;
         this.playMulVal = null
     }

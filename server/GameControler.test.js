@@ -117,7 +117,7 @@ describe('GameControler', () => {
     it('returns the player with the turn', () => {
         const controler = setupControlerWithMocks(2)
         const players = controler.players
-        controler.turn = 1
+        controler.turn.playerIndex = 1
         expect(controler.getPlayerWithTurn().id).toBe(players[1].id)
     })
 
@@ -125,7 +125,7 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks(2)
         const players = controler.players
         let socket = { id: Math.random() }
-        controler.turn = 1
+        controler.turn.playerIndex = 1
         controler.disconnect(players[1].socket.id)
         controler.connect(socket, players[1].id)
         expect(controler.getPlayerWithTurn().id).toBe(players[1].id)
@@ -135,7 +135,7 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks(2)
         const players = controler.players
         let socket = { id: Math.random() }
-        controler.turn = 1
+        controler.turn.playerIndex = 1
         controler.leave(players[1].socket.id)
         controler.connect(socket)
         expect(controler.getPlayerWithTurn().id).toBe(players[0].id)
@@ -145,7 +145,7 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks(3)
         const players = controler.players
         let id = players[2].id
-        controler.turn = 1
+        controler.turn.playerIndex = 1
         controler.leave(players[1].socket.id)
         expect(controler.getPlayerWithTurn().id).toBe(id)
     })
@@ -153,7 +153,7 @@ describe('GameControler', () => {
     it('switches turn to previous player when leaving and direction is reverse', () => {
         const controler = setupControlerWithMocks(3)
         const players = controler.players
-        controler.turn = 1
+        controler.turn.playerIndex = 1
         controler.turnRotation = -1
         controler.leave(players[1].socket.id)
         expect(controler.getPlayerWithTurn().id).toBe(players[0].id)
@@ -163,7 +163,7 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks(3)
         const players = controler.players
         let id = players[2].id
-        controler.turn = 2
+        controler.turn.playerIndex = 2
         controler.leave(players[1].socket.id)
         expect(controler.getPlayerWithTurn().id).toBe(id)
     })
@@ -180,7 +180,7 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks(3)
         const players = controler.players
         players[2].isPlaying = false
-        controler.turn = 1
+        controler.turn.playerIndex = 1
         controler.turnSwitch()
         expect(controler.getPlayerWithTurn().id).toBe(players[0].id)
     })
@@ -189,7 +189,7 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks(3)
         const players = controler.players
         players[0].isPlaying = false
-        controler.turn = 1
+        controler.turn.playerIndex = 1
         controler.turnSwitch()
         expect(controler.getPlayerWithTurn().id).toBe(players[1].id)
     })
@@ -349,10 +349,10 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks(2)
         const player = controler.players[0]
         player.cards = []
-        controler.turn = 1
+        controler.turn.playerIndex = 1
         controler.drawCards(player)
         expect(player.cards.length).toBe(0)
-        controler.turn = 0
+        controler.turn.playerIndex = 0
         controler.drawCards(player)
         expect(player.cards.length).toBe(1)
     })
@@ -652,7 +652,7 @@ describe('GameControler', () => {
     it('disallows playing unless player has turn when playing card from player', () => {
         const controler = setupControlerWithMocks(2)
         const player = controler.players[0]
-        controler.turn = 1
+        controler.turn.playerIndex = 1
         player.cards = [{ color: 'black', value: 'W' }]
         controler.playCardFromPlayer(player, 0)
         expect(player.cards.length).toBe(1)
@@ -715,7 +715,7 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks(2)
         const player = controler.players[0]
         player.cards = [{ value: 'W' }]
-        controler.turn = 1
+        controler.turn.playerIndex = 1
         controler.pressEitt(player)
         expect(player.pressedEitt).toBe(false)
     })
