@@ -52,13 +52,14 @@ export function CardDeck(numberOfDecks = 1) {
         return this.colors.includes(color)
     }
     self.playCard = function(card, playMulVal) {
-        if (!this.isLegitCard(card)) {
-            return false
-        }
+        if (!card) throw new Error(JSON.stringify(arguments))
+        // if (!this.isLegitCard(card)) {
+        //     return false
+        // }
         if (!wildCards.includes(card.value) && this.playedCards.length > 0) {
             const lastPlayedCard = this.playedCards[this.playedCards.length - 1]
             if (lastPlayedCard.color !== 'black' && card.color !== lastPlayedCard.color && card.value !== lastPlayedCard.value) {
-                return false
+               return false
             }
         }
         if (playMulVal && card.value != playMulVal) {
@@ -68,7 +69,7 @@ export function CardDeck(numberOfDecks = 1) {
         return true
     }
     self.playCards = function (cards) {
-        for (let i = 0; i <= cards.length; i++) {
+        for (let i = 0; i < cards.length; i++) {
             let gotPlayed = this.playCard(cards[i])
             if (!gotPlayed) {
                 return false
