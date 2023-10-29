@@ -42,10 +42,19 @@ export function CardDeck(numberOfDecks = 1) {
     self.getLastPlayedCard = function () {
         return this.playedCards[this.playedCards.length - 1]
     }
+    self.isLegitCard = function (card) {
+        if (typeof card !== 'object' || !Object.hasOwn(card, 'value')) {
+            return false
+        }
+        return true
+    }
     self.isLegitColor = function (color) {
-        return this.deck.includes(color)
+        return this.colors.includes(color)
     }
     self.playCard = function(card, playMulVal) {
+        if (!this.isLegitCard(card)) {
+            return false
+        }
         if (!wildCards.includes(card.value) && this.playedCards.length > 0) {
             const lastPlayedCard = this.playedCards[this.playedCards.length - 1]
             if (lastPlayedCard.color !== 'black' && card.color !== lastPlayedCard.color && card.value !== lastPlayedCard.value) {
