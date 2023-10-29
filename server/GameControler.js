@@ -12,9 +12,9 @@ const START_SCORE_MIN = 2
 const START_SCORE_MAX = 3
 const START_SCORE_ZERO = 4
 
-export function GameControler(room, roomList) {
+export function GameControler(name, roomList) {
     let self = {
-        room: room,
+        name: name,
         deck: null,
         lastPlayedIndex: -1,
         lastPlayerId: 0,
