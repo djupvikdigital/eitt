@@ -43,7 +43,7 @@ export function CardDeck(numberOfDecks = 1) {
         return this.playedCards[this.playedCards.length - 1]
     }
     self.isLegitColor = function (color) {
-        return this.deck.includes(color)
+        return this.colors.includes(color)
     }
     self.playCard = function(card, playMulVal) {
         if (!wildCards.includes(card.value) && this.playedCards.length > 0) {
