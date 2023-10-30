@@ -12,7 +12,7 @@ describe('Round', () => {
         expect(playedCard).toEqual(card)
     })
 
-    it('playing +4 makes playing another card impossible', () => {
+    it('disallows playing a card while +4 is in play', () => {
         let card = { color: 'black', value: '+4' }
         let round = Round()
         round.turn.addCardToPlay(card)
