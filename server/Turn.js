@@ -2,7 +2,8 @@ export function Turn(playerIndex, playMultiple = false) {
     let self = {
         cardsToPlay: [],
         playerIndex: playerIndex,
-        playMultiple: playMultiple
+        playMultiple: playMultiple,
+        skip: 1
     }
     self.addCardToPlay = function (card) {
         if (!playMultiple && this.cardsToPlay.length) {

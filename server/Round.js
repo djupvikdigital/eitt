@@ -11,6 +11,7 @@ export function Round() {
     }
     self.playTurn = function () {
         let turn = this.turn
+        let nextTurn = Turn()
         if (this.plusFourInPlay) {
             return false
         }
@@ -28,6 +29,9 @@ export function Round() {
             case 'R':
                 this.turnRotation = this.turnRotation * -1
                 break;
+            case 'S':
+                nextTurn.skip = nextTurn.skip + turn.cardsToPlay.length
+                break;
             default:
                 break;
         }
@@ -35,7 +39,7 @@ export function Round() {
         if (!gotPlayed) {
             return false
         }
-        this.turn = Turn()
+        this.turn = nextTurn
         return gotPlayed
     }
     return self
