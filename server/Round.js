@@ -6,7 +6,8 @@ export function Round() {
         deck: CardDeck(),
         plusFourInPlay: false,
         plusTwoInPlay: 0,
-        turn: Turn()
+        turn: Turn(),
+        turnRotation: 1
     }
     self.playTurn = function () {
         let turn = this.turn
@@ -23,6 +24,9 @@ export function Round() {
                 break;
             case '+2':
                 this.plusTwoInPlay = this.plusTwoInPlay + 1
+                break;
+            case 'R':
+                this.turnRotation = this.turnRotation * -1
                 break;
             default:
                 break;

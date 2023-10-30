@@ -33,4 +33,12 @@ describe('Round', () => {
         round.playTurn()
         expect(round.deck.playedCards.pop()).toEqual(card)
     })
+
+    it('changes turnRotation when reverse card is played', () => {
+        const card = { color: 'blue', value: 'R' }
+        const round = Round()
+        round.turn.addCardToPlay(card)
+        round.playTurn()
+        expect(round.turnRotation).toBe(-1)
+    })
 })
