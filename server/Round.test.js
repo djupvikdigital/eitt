@@ -23,4 +23,14 @@ describe('Round', () => {
         played = round.playTurn()
         expect(played).toBe(false)
     })
+
+    it('disallows playing cards other than +2 while +2 is in play', () => {
+        const card = { color: 'blue', value: '+2' }
+        const round = Round()
+        round.turn.addCardToPlay(card)
+        round.playTurn()
+        round.turn.addCardToPlay({ color: 'blue', value: '0' })
+        round.playTurn()
+        expect(round.deck.playedCards.pop()).toEqual(card)
+    })
 })
