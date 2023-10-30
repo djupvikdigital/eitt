@@ -12,20 +12,17 @@ export function Round() {
         if (this.plusFourInPlay) {
             return false
         }
-        let gotPlayed = false
-        for (let i= 0; i < turn.cardsToPlay.length; i++) {
-            let card = turn.cardsToPlay[i]
-            switch(card.value) {
-                case '+4':
-                    this.plusFourInPlay = true
-                    break;
-                default:
-                    break;
-            }
-            gotPlayed = this.deck.playCard(card)
-            if (!gotPlayed) {
-                return false
-            }
+        let card = turn.cardsToPlay[0]
+        switch(card.value) {
+            case '+4':
+                this.plusFourInPlay = true
+                break;
+            default:
+                break;
+        }
+        let gotPlayed = this.deck.playCards(turn.cardsToPlay)
+        if (!gotPlayed) {
+            return false
         }
         this.turn = Turn()
         return gotPlayed
