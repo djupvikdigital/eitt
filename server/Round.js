@@ -23,6 +23,7 @@ export function Round() {
                 break;
             case '+2':
                 this.plusTwoInPlay = this.plusTwoInPlay + 1
+                break;
             default:
                 break;
         }
