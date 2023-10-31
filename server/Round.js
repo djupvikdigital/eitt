@@ -4,6 +4,7 @@ import { Turn } from './Turn'
 export function Round() {
     let self = {
         deck: CardDeck(),
+        players: [],
         turn: Turn(0),
         turnRotation: 1
     }
@@ -17,7 +18,8 @@ export function Round() {
         if (card.value === 'S') {
             turnIncrement = turnIncrement + turn.cardsToPlay.length
         }
-        let nextTurn = Turn(turn.playerIndex + turnIncrement * this.turnRotation)
+        let length = this.players.length
+        let nextTurn = Turn((turn.playerIndex + turnIncrement * this.turnRotation + length) % length)
         switch(card.value) {
             case '+4':
                 nextTurn.plusFourInPlay = true
