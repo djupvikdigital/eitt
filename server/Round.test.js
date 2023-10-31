@@ -42,11 +42,12 @@ describe('Round', () => {
         expect(round.turnRotation).toBe(-1)
     })
 
-    it('adds to turnSkip when skip card is played', () => {
+    it('skips a player when skip card is played', () => {
         const card = { color: 'blue', value: 'S' }
         const round = Round()
+        round.players = [{}, {}, {}]
         round.turn.addCardToPlay(card)
         round.playTurn()
-        expect(round.turn.skip).toBe(2)
+        expect(round.turn.playerIndex).toBe(2)
     })
 })
