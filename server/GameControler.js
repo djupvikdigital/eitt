@@ -12,7 +12,7 @@ const START_SCORE_MIN = 2
 const START_SCORE_MAX = 3
 const START_SCORE_ZERO = 4
 
-export function GameControler(name, roomList) {
+export function GameControler(name) {
     let self = {
         name: name,
         deck: null,
@@ -193,7 +193,7 @@ export function GameControler(name, roomList) {
                 return this.removePlayer(i)
             }
         }
-        return false
+        return null
     }
     self.removePlayer = function (index) {
         if (index < 0 || index >= this.players.length) {
@@ -207,14 +207,14 @@ export function GameControler(name, roomList) {
             // make sure later player doesn't lose turn
             this.turn.playerIndex = this.turn.playerIndex - 1
         }
-        this.players.splice(index, 1)
+        let player = this.players.splice(index, 1)
         if (this.getPlayingPlayers().length === 0) {
             this.state = 'NOT_STARTED'
         }
         let length = this.players.length
         this.turn.playerIndex = this.turn.playerIndex % length
         this.sendGameStatus()
-        return true
+        return player[0]
 }
     self.sortCards = function (cards) {
         cards.sort(function(a, b){
