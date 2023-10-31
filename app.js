@@ -8,7 +8,6 @@ import { exec } from 'child_process';
 import { Server } from 'socket.io';
 import { fileURLToPath } from 'url';
 
-import { GameControler } from './server/GameControler.js'
 import { House } from './server/House.js'
 
 const __filename = fileURLToPath(import.meta.url);
@@ -44,7 +43,7 @@ console.log('Server started!');
 
 let SOCKET_LIST = {}
 
-House.rooms.mainlobby = GameControler('mainlobby')
+House.newRoom('mainlobby')
 
 let io = new Server(serv,{});
 io.sockets.on('connection', function(socket){
@@ -58,14 +57,13 @@ io.sockets.on('connection', function(socket){
     House.refreshLobby()
 
     socket.on('createNewRoom', function(roomName){
-        if (House.getRoomBySocketId(socket.id).name != 'mainlobby') return
-        if (roomName == '') return
+        if (House.getRoomBySocketId(socket.id).name != 'mainlobby' || roomName == '') return
         if (House.checkIfRoomExists(roomName)) {
             socket.emit('roomExists','')
             return
         }
 
-        House.rooms[roomName] = GameControler(roomName)
+        House.newRoom(roomName)
         let playerId = House.moveSocketTo(socket, roomName)
         socket.emit('joinRoom', { playerId: playerId, room: roomName })
         House.refreshLobby()

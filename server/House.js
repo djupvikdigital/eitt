@@ -1,9 +1,13 @@
+import { GameControler } from './GameControler.js'
 import { pickTemporalName } from './Naming.js'
 import { applyStandardStyling } from './Player.js'
 
 export let House = {
     rooms: {},
     MAX_PLAYERS: 99,
+    newRoom(roomName) {
+        this.rooms[roomName] = GameControler(roomName)
+    },
     getRoomBySocketId: function(socketId) {
         for (let i in this.rooms) {
             let room = this.rooms[i]
