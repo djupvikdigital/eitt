@@ -4,8 +4,7 @@ export function Turn(playerIndex, playMultiple = false) {
         playerIndex: playerIndex,
         playMultiple: playMultiple,
         plusFourInPlay: false,
-        plusTwoInPlay: 0,
-        skip: 1
+        plusTwoInPlay: 0
     }
     self.addCardToPlay = function (card) {
         if (!playMultiple && this.cardsToPlay.length) {
