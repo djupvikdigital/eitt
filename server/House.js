@@ -1,4 +1,5 @@
 import { GameControler } from './GameControler.js'
+import { Room } from './Room.js'
 import { pickTemporalName } from './Naming.js'
 import { applyStandardStyling } from './Player.js'
 
@@ -6,6 +7,9 @@ export let House = {
     rooms: {},
     MAX_PLAYERS: 99,
     newRoom(roomName) {
+        this.rooms[roomName] = Room(roomName)
+    },
+    newGameRoom(roomName) {
         this.rooms[roomName] = GameControler(roomName)
     },
     getRoomBySocketId: function(socketId) {
@@ -36,7 +40,7 @@ export let House = {
             joiningPlayer.name = pickTemporalName()
             joiningPlayer.style = applyStandardStyling()
         }
-        joiningRoom.sendGameStatus()
+        if ("sendGameStatus" in joiningRoom) joiningRoom.sendGameStatus()
         return joiningPlayer.id
     },
     checkIfRoomExists: function(roomName) {

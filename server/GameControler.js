@@ -1,6 +1,6 @@
 import { CardDeck } from './CardDeck.js'
-import { Player } from './Player.js'
 import { Turn } from './Turn.js'
+import { Room } from './Room.js'
 
 function add(a, b) {
     return a + b
@@ -13,24 +13,22 @@ const START_SCORE_MAX = 3
 const START_SCORE_ZERO = 4
 
 export function GameControler(name) {
-    let self = {
-        name: name,
-        deck: null,
-        lastPlayedIndex: -1,
-        lastPlayerId: 0,
-        players: [],
-        plusTwoInPlay: 0,
-        plusFourInPlay: false,
-        roundWinner: '',
-        startNeutral: false,
-        playMultiple: false,
-        startScore: START_SCORE_AVERAGE,
-        state: 'NOT_STARTED',
-        turn: Turn(0),
-        turnRotation: 1,
-        turnSkip: 1,
-        playMulVal: null
-    }
+    let self = Room(name)
+    self.type = 'gameRoom'
+    self.deck = null,
+    self.lastPlayedIndex = -1,
+    self.lastPlayerId = 0,
+    self.plusTwoInPlay = 0,
+    self.plusFourInPlay = false,
+    self.roundWinner = '',
+    self.startNeutral = false,
+    self.playMultiple = false,
+    self.startScore = START_SCORE_AVERAGE,
+    self.state = 'NOT_STARTED',
+    self.turn = Turn(0),
+    self.turnRotation = 1,
+    self.turnSkip = 1,
+    self.playMulVal = null
     self.addScoresForRound = function () {
         let scores = this.calculateScores()
         let idWithHighestScore = 0
@@ -84,7 +82,7 @@ export function GameControler(name) {
     self.calculateTotal = function (scores) {
         let thisScore = 0
         for (let i = 0; i < scores.length; i++) {
-            thisScore+=scores[i]
+            thisScore += scores[i]
         }
         return thisScore >= 500
     }
@@ -95,7 +93,7 @@ export function GameControler(name) {
             const prevColor = index >= 0 && playedCards[index] ? playedCards[index].color : ''
             const checkedPlayer = this.getPlayerByPlayerId(this.lastPlayerId)
             if (checkedPlayer) {
-                const cardsWithPrevColor = checkedPlayer.cards.filter(function(card){
+                const cardsWithPrevColor = checkedPlayer.cards.filter(function (card) {
                     return card.color === prevColor
                 })
                 if (cardsWithPrevColor.length > 0) {
@@ -114,22 +112,6 @@ export function GameControler(name) {
             }
         }
     }
-    self.connect = function (socket, playerId) {
-        let player = null
-        if (playerId) {
-            player = this.getPlayerByPlayerId(playerId)
-            if (player && player.socket) {
-                // this player is already connected
-                player = null
-            }
-        }
-        if (!player) {
-            player = Player()
-            this.players.push(player)
-        }
-        player.socket = socket
-        return player
-    }
     self.disconnect = function (socketId) {
         const player = this.getPlayerBySocketId(socketId)
         if (player) {
@@ -147,32 +129,10 @@ export function GameControler(name) {
         }
         return false
     }
-    self.getConnectedPlayers = function () {
-        return this.players.filter(function (player) {
-            return player.socket
-        })
-    }
     self.getPlayingPlayers = function () {
         return this.players.filter(function (player) {
             return player.isPlaying
         })
-    }
-    self.getPlayerByPlayerId = function (playerId) {
-        for (let i = 0; i < this.players.length; i++) {
-            if (this.players[i].id === playerId) {
-                return this.players[i]
-            }
-        }
-        return null
-    }
-    self.getPlayerBySocketId = function (socketId) {
-        for (let i = 0; i < this.players.length; i++) {
-            let socket = this.players[i].socket
-            if (socket && socket.id === socketId) {
-                return this.players[i]
-            }
-        }
-        return null
     }
     self.getPlayerWithTurn = function () {
         let playingPlayers = this.getPlayingPlayers()
@@ -215,9 +175,9 @@ export function GameControler(name) {
         this.turn.playerIndex = this.turn.playerIndex % length
         this.sendGameStatus()
         return player[0]
-}
+    }
     self.sortCards = function (cards) {
-        cards.sort(function(a, b){
+        cards.sort(function (a, b) {
             let stringA = '' + a.color + a.value;
             let stringB = '' + b.color + b.value;
 
@@ -271,7 +231,7 @@ export function GameControler(name) {
         }
         for (let i = 0; i < this.players.length; i++) {
             let currentPlayer = this.players[i]
-            if (typeof currentPlayer.scores[currentPlayer.scores.length -1] === 'undefined') {
+            if (typeof currentPlayer.scores[currentPlayer.scores.length - 1] === 'undefined') {
                 let score = 0
                 if (this.startScore === START_SCORE_AVERAGE) {
                     score = Math.round(sumOfScores / numberOfPlayers)
@@ -321,7 +281,7 @@ export function GameControler(name) {
             // let dealer start if starting with reverse card unless starting neutral
             this.turnSwitch()
         }
-    this.sendGameStatus()
+        this.sendGameStatus()
         return true
     }
     self.drawCards = function (player, number = 1) {
@@ -435,23 +395,23 @@ export function GameControler(name) {
     self.sendGameStatus = function () {
         let pack = [];
         let lastPlayerIndex = -1;
-        for(let i = 0; i < this.players.length; i++){
+        for (let i = 0; i < this.players.length; i++) {
             let currentPlayer = this.players[i]
             if (currentPlayer.id === this.lastPlayerId) {
                 lastPlayerIndex = i;
             }
             pack.push({
-                name:currentPlayer.name,
-                numberOfCards:currentPlayer.cards.length,
-                connected:Boolean(currentPlayer.socket),
-                hasTurn:this.hasTurn(currentPlayer),
-                isPlaying:currentPlayer.isPlaying,
-                pressedEitt:currentPlayer.pressedEitt,
-                scores:currentPlayer.scores,
-                style:currentPlayer.style
+                name: currentPlayer.name,
+                numberOfCards: currentPlayer.cards.length,
+                connected: Boolean(currentPlayer.socket),
+                hasTurn: this.hasTurn(currentPlayer),
+                isPlaying: currentPlayer.isPlaying,
+                pressedEitt: currentPlayer.pressedEitt,
+                scores: currentPlayer.scores,
+                style: currentPlayer.style
             });
         }
-        for(let i = 0; i < this.players.length; i++){
+        for (let i = 0; i < this.players.length; i++) {
             let currentPlayer = this.players[i]
             let drawCount = 1
             if (this.plusFourInPlay) {
@@ -478,20 +438,6 @@ export function GameControler(name) {
                 state: this.state,
             };
             currentPlayer.emit('gameStatus', gameStatus);
-        }
-    }
-    self.sendRoomStatus = function () {
-        let pack = [];
-        for(let i in roomList){
-            let currentRoom = roomList[i]
-            pack.push({
-                room:currentRoom.room,
-                state:currentRoom.state
-            });
-        }
-        for(let i = 0; i < this.players.length; i++){
-            let currentPlayer = this.players[i]
-            currentPlayer.emit('roomStatus', pack);
         }
     }
     return self
