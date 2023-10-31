@@ -9,8 +9,6 @@ import { Server } from 'socket.io';
 import { fileURLToPath } from 'url';
 
 import { GameControler } from './server/GameControler.js'
-import { pickTemporalName } from './server/Naming.js'
-import { applyStandardStyling } from './server/Player.js'
 import { House } from './server/House.js'
 
 const __filename = fileURLToPath(import.meta.url);
@@ -44,34 +42,23 @@ app.use('/client',express.static(__dirname + '/client'));
 serv.listen(process.env.PORT || 2000);
 console.log('Server started!');
 
-const MAX_PLAYERS = 99
-
 let SOCKET_LIST = {}
 
 House.rooms.mainlobby = GameControler('mainlobby')
 
 let io = new Server(serv,{});
 io.sockets.on('connection', function(socket){
-    
-    socket.id = Math.random();
-
-    let name = pickTemporalName();
-
-    let style = applyStandardStyling();
 
     SOCKET_LIST[socket.id] = socket
     console.log('socket connection');
 
-    let room = House.rooms.mainlobby
-    let player = room.connect(socket)
-    player.style = style;
+    House.moveSocketTo(socket, 'mainlobby')
     socket.emit('joinRoom', { room: 'mainlobby' })
 
     House.refreshLobby()
-    console.log(House.rooms)
 
     socket.on('createNewRoom', function(roomName){
-        if (House.getRoomBySocketId(socket.id) != 'mainlobby') return
+        if (House.getRoomBySocketId(socket.id).name != 'mainlobby') return
         if (roomName == '') return
         if (House.checkIfRoomExists(roomName)) {
             socket.emit('roomExists','')
@@ -79,43 +66,29 @@ io.sockets.on('connection', function(socket){
         }
 
         House.rooms[roomName] = GameControler(roomName)
-        room = House.rooms[roomName]
-        let player = room.connect(socket)
-        player.name = name
-        player.style = style;
-        socket.emit('joinRoom', { playerId: player.id, room: roomName })
-        House.rooms[roomName].sendGameStatus()
+        let playerId = House.moveSocketTo(socket, roomName)
+        socket.emit('joinRoom', { playerId: playerId, room: roomName })
         House.refreshLobby()
     })
 
     socket.on('joinRoom', function(data) {
         if (!House.checkIfRoomExists(data.room)) return
-
-        if (data.room !== 'mainlobby' && House.rooms[data.room].players.length >= MAX_PLAYERS) {
-            socket.emit('userMessage', "I've got " + MAX_PLAYERS + " players, but you ain't one")
+        if (House.isRoomFull(data.room)) {
+            socket.emit('userMessage', "I've got " + House.MAX_PLAYERS + " players, but you ain't one")
             return
         }
-        for (let i in House.rooms) {
-            House.rooms[i].leave(socket.id)
-            if (House.isRoomEmpty(i)) delete House.rooms[i]
-        }
-        room = House.rooms[data.room]
-        let player = room.connect(socket, data.playerId)
-        if (!player.name) {
-            player.name = name
-        }
-        player.style = style;
-        room.sendGameStatus()
-        socket.emit('joinRoom', { playerId: player.id, room: data.room })
+        House.moveSocketTo(socket, data.room, data.playerId)
+        socket.emit('joinRoom', { playerId: data.playerId, room: data.room })
         House.refreshLobby()
     })
 
     socket.on('drawCards',function(){
-        let player = room.getPlayerBySocketId(socket.id)
+        let [room, player] = House.getRoomAndPlayerBySocketId(socket.id)
         room.drawCards(player);
     });
 
     socket.on('didntPressEitt', function(index) {
+        let room = House.getRoomBySocketId(socket.id)
         let accusedPlayer = room.players[index]
         if (room.lastPlayerId === accusedPlayer.id && accusedPlayer.cards.length === 1 && accusedPlayer.pressedEitt == false) {
             room.drawCards(accusedPlayer, 3)
@@ -123,11 +96,12 @@ io.sockets.on('connection', function(socket){
     })
 
     socket.on('eitt', function() {
-        room.pressEitt(room.getPlayerBySocketId(socket.id))
+        let [room, player] = House.getRoomAndPlayerBySocketId(socket.id)
+        room.pressEitt(player)
     })
 
     socket.on('pass',function(){
-        let player = room.getPlayerBySocketId(socket.id)
+        let [room, player] = House.getRoomAndPlayerBySocketId(socket.id)
         if (room.hasTurn(player) && (room.playMulVal || player.hasDrawn)) {
             player.hasDrawn = false
             room.turnSwitch();
@@ -136,12 +110,12 @@ io.sockets.on('connection', function(socket){
     });
 
     socket.on('checkPlusFour', function(){
-        let player = room.getPlayerBySocketId(socket.id)
+        let [room, player] = House.getRoomAndPlayerBySocketId(socket.id)
         room.checkPlusFour(player)
     })
 
     socket.on('addCardToPlay', function (data) {
-        let player = room.getPlayerBySocketId(socket.id)
+        let [room, player] = House.getRoomAndPlayerBySocketId(socket.id)
         if (!room.hasTurn(player) || index < 0 || index >= player.cards.length) {
             return
         }
@@ -149,7 +123,7 @@ io.sockets.on('connection', function(socket){
     })
 
     socket.on('removeCardFromPlay', function (data) {
-        let player = room.getPlayerBySocketId(socket.id)
+        let [room, player] = House.getRoomAndPlayerBySocketId(socket.id)
         if (!room.hasTurn(player) || index < 0 || index >= player.cards.length) {
             return
         }
@@ -157,11 +131,11 @@ io.sockets.on('connection', function(socket){
     })
 
     socket.on('playCard',function(data){
+        let [room, player] = House.getRoomAndPlayerBySocketId(socket.id)
         if (room.name === 'mainlobby') {
             console.log("Can't play card in mainlobby")
             return
         }
-        let player = room.getPlayerBySocketId(socket.id)
         if (!player) {
             console.log('Player with socket id ' + socket.id + ' not found in room ' + room.name)
             console.log(JSON.stringify(room.players))
@@ -190,25 +164,27 @@ io.sockets.on('connection', function(socket){
     });
 
     socket.on('nameChanged',function(data){
+        let [room, player] = House.getRoomAndPlayerBySocketId(socket.id)
         if (data.name != '') {
             if (data.name.length > 20) {
                 data.name = data.name.slice(0, 20);
             }
             console.log('Socket id: ' + socket.id + " changed name to " + data.name);
-            name = data.name;
+            player.name = data.name;
             room.sendGameStatus();
         }
-        style.body = data.body;
-        style.head = data.head;
-        style.headGear = data.headGear
-        console.log(style);
+        player.style.body = data.body;
+        player.style.head = data.head;
+        player.style.headGear = data.headGear
     });
 
     socket.on('newRound',function(){
+        let room = House.getRoomBySocketId(socket.id)
         room.dealNewRound()
     })
 
     socket.on('startGame', function (data) {
+        let room = House.getRoomBySocketId(socket.id)
         if (data.playerId === room.players[0].id) {
             let startScore = Number(data.startScore)
             room.startNeutral = Boolean(data.startNeutral)
@@ -221,11 +197,13 @@ io.sockets.on('connection', function(socket){
     })
 
     socket.on('removePlayer', function(index) {
+        let room = House.getRoomBySocketId(socket.id)
         room.removePlayer(index)
     })
 
     socket.on('disconnect',function(){
         let goodbyeID = socket.id
+        let room = House.getRoomBySocketId(socket.id)
         delete SOCKET_LIST[socket.id];
         room.disconnect(goodbyeID)
         if (House.isRoomEmpty(room.name)) delete House.rooms[room.name]; else room.sendGameStatus();
