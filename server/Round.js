@@ -4,30 +4,37 @@ import { Turn } from './Turn'
 export function Round() {
     let self = {
         deck: CardDeck(),
-        plusFourInPlay: false,
-        turn: Turn()
+        turn: Turn(),
+        turnRotation: 1
     }
     self.playTurn = function () {
         let turn = this.turn
-        if (this.plusFourInPlay) {
+        let nextTurn = Turn()
+        if (!turn.cardsToPlay.length) {
             return false
         }
-        let gotPlayed = false
-        for (let i= 0; i < turn.cardsToPlay.length; i++) {
-            let card = turn.cardsToPlay[i]
-            switch(card.value) {
-                case '+4':
-                    this.plusFourInPlay = true
-                    break;
-                default:
-                    break;
-            }
-            gotPlayed = this.deck.playCard(card)
-            if (!gotPlayed) {
-                return false
-            }
+        let card = turn.cardsToPlay[0]
+        switch(card.value) {
+            case '+4':
+                nextTurn.plusFourInPlay = true
+                break;
+            case '+2':
+                nextTurn.plusTwoInPlay = turn.plusTwoInPlay + turn.cardsToPlay.length
+                break;
+            case 'R':
+                this.turnRotation = this.turnRotation * -1
+                break;
+            case 'S':
+                nextTurn.skip = nextTurn.skip + turn.cardsToPlay.length
+                break;
+            default:
+                break;
         }
-        this.turn = Turn()
+        let gotPlayed = this.deck.playCards(turn.cardsToPlay)
+        if (!gotPlayed) {
+            return false
+        }
+        this.turn = nextTurn
         return gotPlayed
     }
     return self

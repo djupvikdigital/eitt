@@ -2,7 +2,10 @@ export function Turn(playerIndex, playMultiple = false) {
     let self = {
         cardsToPlay: [],
         playerIndex: playerIndex,
-        playMultiple: playMultiple
+        playMultiple: playMultiple,
+        plusFourInPlay: false,
+        plusTwoInPlay: 0,
+        skip: 1
     }
     self.addCardToPlay = function (card) {
         if (!playMultiple && this.cardsToPlay.length) {
@@ -10,6 +13,12 @@ export function Turn(playerIndex, playMultiple = false) {
         }
         // disallow adding another card with different value
         if (this.cardsToPlay.length && card.value !== this.cardsToPlay[0].value) {
+            return false
+        }
+        if (this.plusFourInPlay) {
+            return false
+        }
+        if (this.plusTwoInPlay && card.value !== '+2') {
             return false
         }
         this.cardsToPlay.push(card)
