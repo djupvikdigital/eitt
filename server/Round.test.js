@@ -34,12 +34,14 @@ describe('Round', () => {
         expect(round.deck.playedCards.pop()).toEqual(card)
     })
 
-    it('changes turnRotation when reverse card is played', () => {
+    it('changes turn rotation when reverse card is played', () => {
         const card = { color: 'blue', value: 'R' }
         const round = Round()
+        round.players = [{}, {}, {}]
+        round.turn.playerIndex = 1
         round.turn.addCardToPlay(card)
         round.playTurn()
-        expect(round.turnRotation).toBe(-1)
+        expect(round.turn.playerIndex).toBe(0)
     })
 
     it('skips a player when skip card is played', () => {

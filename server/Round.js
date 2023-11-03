@@ -14,21 +14,26 @@ export function Round() {
             return false
         }
         let card = turn.cardsToPlay[0]
+        let plusFourInPlay = false
+        let plusTwoInPlay = 0
         let turnIncrement = 1
-        if (card.value === 'S') {
-            turnIncrement = turnIncrement + turn.cardsToPlay.length
-        }
         let length = this.players.length
-        let nextTurn = Turn((turn.playerIndex + turnIncrement * this.turnRotation + length) % length)
         switch(card.value) {
             case '+4':
-                nextTurn.plusFourInPlay = true
+                plusFourInPlay = true
                 break;
             case '+2':
-                nextTurn.plusTwoInPlay = turn.plusTwoInPlay + turn.cardsToPlay.length
+                plusTwoInPlay = turn.plusTwoInPlay + turn.cardsToPlay.length
                 break;
             case 'R':
-                this.turnRotation = this.turnRotation * -1
+                let turnRotation = this.turnRotation
+                for (let i = 0; i < turn.cardsToPlay.length; i++) {
+                    turnRotation = turnRotation * -1
+                }
+                this.turnRotation = turnRotation
+                break;
+            case 'S':
+                turnIncrement = turnIncrement + turn.cardsToPlay.length
                 break;
             default:
                 break;
@@ -37,6 +42,9 @@ export function Round() {
         if (!gotPlayed) {
             return false
         }
+        let nextTurn = Turn((turn.playerIndex + turnIncrement * this.turnRotation + length) % length)
+        nextTurn.plusFourInPlay = plusFourInPlay
+        nextTurn.plusTwoInPlay = plusTwoInPlay
         this.turn = nextTurn
         return gotPlayed
     }
