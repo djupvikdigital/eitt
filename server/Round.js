@@ -5,8 +5,10 @@ export function Round() {
     let self = {
         deck: CardDeck(),
         players: [],
+        state: 'PLAYING',
         turn: Turn(0),
-        turnRotation: 1
+        turnRotation: 1,
+        winner: ''
     }
     self.playTurn = function () {
         let turn = this.turn
@@ -40,12 +42,23 @@ export function Round() {
                 break;
         }
         let cards = []
+        // retrieve cards from hand
         for (let i = 0; i < turn.cardsToPlay.length; i++) {
             cards.push(player.cards[turn.cardsToPlay[i]])
         }
         let gotPlayed = this.deck.playCards(cards)
         if (!gotPlayed) {
             return false
+        }
+        // remove cards from hand
+        for (let i = 0; i < turn.cardsToPlay.length; i++) {
+            player.cards[turn.cardsToPlay[i]] = null
+        }
+        // remove null cards
+        player.cards = player.cards.filter(Boolean)
+        if (player.cards.length === 0) {
+            this.state = 'FINISHED'
+            this.winner = player.name
         }
         let nextTurn = Turn((turn.playerIndex + turnIncrement * this.turnRotation + length) % length)
         nextTurn.plusFourInPlay = plusFourInPlay

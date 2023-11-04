@@ -61,4 +61,14 @@ describe('Round', () => {
         round.playTurn()
         expect(round.turn.playerIndex).toBe(2)
     })
+
+    it('sets state to finished when playing last card', () => {
+        let card = { color: 'blue', value: 1 }
+        let round = Round()
+        let player = { cards: [card] }
+        round.players = [player]
+        round.turn.addCardToPlay(player, 0)
+        round.playTurn()
+        expect(round.state).toEqual('FINISHED')
+    })
 })
