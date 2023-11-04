@@ -13,7 +13,8 @@ export function Round() {
         if (!turn.cardsToPlay.length) {
             return false
         }
-        let card = turn.cardsToPlay[0]
+        let player = this.players[this.turn.playerIndex]
+        let card = player.cards[turn.cardsToPlay[0]]
         let plusFourInPlay = false
         let plusTwoInPlay = 0
         let turnIncrement = 1
@@ -38,7 +39,11 @@ export function Round() {
             default:
                 break;
         }
-        let gotPlayed = this.deck.playCards(turn.cardsToPlay)
+        let cards = []
+        for (let i = 0; i < turn.cardsToPlay.length; i++) {
+            cards.push(player.cards[turn.cardsToPlay[i]])
+        }
+        let gotPlayed = this.deck.playCards(cards)
         if (!gotPlayed) {
             return false
         }

@@ -6,7 +6,9 @@ describe('Round', () => {
     it('can play a turn', () => {
         let card = { color: 'blue', value: 1 }
         let round = Round()
-        round.turn.addCardToPlay(card)
+        let player = { cards: [card] }
+        round.players = [player]
+        round.turn.addCardToPlay(player, 0)
         round.playTurn()
         let playedCard = round.deck.playedCards[round.deck.playedCards.length - 1]
         expect(playedCard).toEqual(card)
@@ -15,11 +17,15 @@ describe('Round', () => {
     it('disallows playing a card while +4 is in play', () => {
         let card = { color: 'black', value: '+4' }
         let round = Round()
-        round.turn.addCardToPlay(card)
+        let player = { cards: [card] }
+        round.players = [player]
+        round.turn.addCardToPlay(player, 0)
         let played = round.playTurn()
         expect(played).toBe(true)
         card = { color: 'green', value: 1 }
-        round.turn.addCardToPlay(card)
+        player = { cards: [card] }
+        round.players = [player]
+        round.turn.addCardToPlay(player, 0)
         played = round.playTurn()
         expect(played).toBe(false)
     })
@@ -27,9 +33,10 @@ describe('Round', () => {
     it('disallows playing cards other than +2 while +2 is in play', () => {
         const card = { color: 'blue', value: '+2' }
         const round = Round()
-        round.turn.addCardToPlay(card)
+        round.players = [{ cards: [card] }, { cards: [{ color: 'blue', value: '0' }] }]
+        round.turn.addCardToPlay(round.players[0], 0)
         round.playTurn()
-        round.turn.addCardToPlay({ color: 'blue', value: '0' })
+        round.turn.addCardToPlay(round.players[1], 0)
         round.playTurn()
         expect(round.deck.playedCards.pop()).toEqual(card)
     })
@@ -37,9 +44,10 @@ describe('Round', () => {
     it('changes turn rotation when reverse card is played', () => {
         const card = { color: 'blue', value: 'R' }
         const round = Round()
-        round.players = [{}, {}, {}]
+        let player = { cards: [card] }
+        round.players = [player, player, player]
         round.turn.playerIndex = 1
-        round.turn.addCardToPlay(card)
+        round.turn.addCardToPlay(player, 0)
         round.playTurn()
         expect(round.turn.playerIndex).toBe(0)
     })
@@ -47,8 +55,9 @@ describe('Round', () => {
     it('skips a player when skip card is played', () => {
         const card = { color: 'blue', value: 'S' }
         const round = Round()
-        round.players = [{}, {}, {}]
-        round.turn.addCardToPlay(card)
+        let player = { cards: [card] }
+        round.players = [player, player, player]
+        round.turn.addCardToPlay(player, 0)
         round.playTurn()
         expect(round.turn.playerIndex).toBe(2)
     })
