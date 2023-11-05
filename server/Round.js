@@ -10,6 +10,17 @@ export function Round() {
         turnRotation: 1,
         winner: ''
     }
+    self.drawCards = function (player, number = 1) {
+        if (number === 1) {
+            // allow only one regular draw per turn
+            if (this.turn.hasDrawn) {
+                return false
+            }
+            this.turn.hasDrawn = true
+        }
+        player.cards = player.cards.concat(this.deck.drawCards(number))
+        return true
+    }
     self.playTurn = function () {
         let turn = this.turn
         if (!turn.cardsToPlay.length) {

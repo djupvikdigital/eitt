@@ -71,4 +71,12 @@ describe('Round', () => {
         round.playTurn()
         expect(round.state).toEqual('FINISHED')
     })
+
+    it('can draw a regular draw only once', () => {
+        let round = Round()
+        let player = { cards: [] }
+        round.drawCards(player)
+        round.drawCards(player)
+        expect(player.cards.length).toBe(1)
+    })
 })
