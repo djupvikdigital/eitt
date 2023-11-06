@@ -94,5 +94,23 @@ describe('Round', () => {
         round.turn.plusTwoInPlay = 3
         round.drawCards(player)
         expect(player.cards.length).toBe(6)
-   })
+    })
+
+    it('switches turn after draw if +4 is in play', () => {
+        let round = Round()
+        let player = { cards: [] }
+        round.players = [player, player]
+        round.turn.plusFourInPlay = true
+        round.drawCards(player)
+        expect(round.turn.playerIndex).toBe(1)
+    })
+
+    it('switches turn after draw if +2 is in play', () => {
+        let round = Round()
+        let player = { cards: [] }
+        round.players = [player, player]
+        round.turn.plusTwoInPlay = 1
+        round.drawCards(player)
+        expect(round.turn.playerIndex).toBe(1)
+    })
 })

@@ -11,6 +11,7 @@ export function Round() {
         winner: ''
     }
     self.drawCards = function (player, number = 1) {
+        let switchTurn = false
         if (number === 1) {
             // allow only one regular draw per turn
             if (this.turn.hasDrawn) {
@@ -18,13 +19,19 @@ export function Round() {
             }
             if (this.turn.plusFourInPlay) {
                 number = 4
+                switchTurn = true
             }
             else if (this.turn.plusTwoInPlay) {
                 number = this.turn.plusTwoInPlay * 2
+                switchTurn = true
             }
             this.turn.hasDrawn = true
         }
         player.cards = player.cards.concat(this.deck.drawCards(number))
+        if (switchTurn) {
+            let length = this.players.length
+            this.turn = Turn((this.turn.playerIndex + 1 * this.turnRotation + length) % length)
+        }
         return true
     }
     self.playTurn = function () {
