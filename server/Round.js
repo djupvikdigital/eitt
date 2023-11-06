@@ -1,9 +1,9 @@
 import { CardDeck } from './CardDeck'
 import { Turn } from './Turn'
 
-export function Round() {
+export function Round(deck = CardDeck()) {
     let self = {
-        deck: CardDeck(),
+        deck: deck,
         players: [],
         state: 'PLAYING',
         turn: Turn(0),
