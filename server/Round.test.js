@@ -79,4 +79,12 @@ describe('Round', () => {
         round.drawCards(player)
         expect(player.cards.length).toBe(1)
     })
+
+    it('draws four cards if +4 is in play', () => {
+        let round = Round()
+        let player = { cards: [] }
+        round.turn.plusFourInPlay = true
+        round.drawCards(player)
+        expect(player.cards.length).toBe(4)
+    })
 })

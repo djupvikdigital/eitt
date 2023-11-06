@@ -16,6 +16,9 @@ export function Round() {
             if (this.turn.hasDrawn) {
                 return false
             }
+            if (this.turn.plusFourInPlay) {
+                number = 4
+            }
             this.turn.hasDrawn = true
         }
         player.cards = player.cards.concat(this.deck.drawCards(number))
