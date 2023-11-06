@@ -113,4 +113,13 @@ describe('Round', () => {
         round.drawCards(player)
         expect(round.turn.playerIndex).toBe(1)
     })
+
+    it('changes the card color when playing wildcard from player', () => {
+        let round = Round()
+        let player = { cards: [{ color: 'black', value: 'W' }] }
+        round.players = [player]
+        round.turn.addCardToPlay(player, 0)
+        round.playTurn('blue')
+        expect(round.deck.playedCards.pop().color).toBe('blue')
+    })
 })

@@ -34,7 +34,7 @@ export function Round(deck = CardDeck()) {
         }
         return true
     }
-    self.playTurn = function () {
+    self.playTurn = function (color = '') {
         let turn = this.turn
         if (!turn.cardsToPlay.length) {
             return false
@@ -69,6 +69,14 @@ export function Round(deck = CardDeck()) {
         // retrieve cards from hand
         for (let i = 0; i < turn.cardsToPlay.length; i++) {
             cards.push(player.cards[turn.cardsToPlay[i]])
+        }
+        if (card.color === 'black' && color) {
+            if (!this.deck.isLegitColor(color)) {
+                return false
+            }
+            for (let i = 0; i < cards.length; i++) {
+                cards[i] = Object.assign({}, cards[i], { color: color })
+            }
         }
         let gotPlayed = this.deck.playCards(cards)
         if (!gotPlayed) {
