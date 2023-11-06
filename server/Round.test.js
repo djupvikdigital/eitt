@@ -87,4 +87,12 @@ describe('Round', () => {
         round.drawCards(player)
         expect(player.cards.length).toBe(4)
     })
+
+    it('draws double number of +2 cards in play', () => {
+        let round = Round()
+        let player = { cards: [] }
+        round.turn.plusTwoInPlay = 3
+        round.drawCards(player)
+        expect(player.cards.length).toBe(6)
+   })
 })
