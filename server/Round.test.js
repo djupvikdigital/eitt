@@ -44,7 +44,7 @@ describe('Round', () => {
     it('changes turn rotation when reverse card is played', () => {
         const card = { color: 'blue', value: 'R' }
         const round = Round()
-        let player = { cards: [card] }
+        let player = { cards: [card, { color: 'blue', value: '0' }] }
         round.players = [player, player, player]
         round.turn.playerIndex = 1
         round.turn.addCardToPlay(player, 0)
@@ -55,7 +55,7 @@ describe('Round', () => {
     it('skips a player when skip card is played', () => {
         const card = { color: 'blue', value: 'S' }
         const round = Round()
-        let player = { cards: [card] }
+        let player = { cards: [card, { color: 'blue', value: '0' }] }
         round.players = [player, player, player]
         round.turn.addCardToPlay(player, 0)
         round.playTurn()
@@ -168,5 +168,42 @@ describe('Round', () => {
         round.turn.addCardToPlay(players[1], 0)
         round.playTurn()
         expect(round.deck.playedCards.pop()).toEqual(card)
+    })
+
+    it('disallows playing cards when round is finished', () => {
+        let round = Round()
+        let player = { cards: [{ value: 'W' }] }
+        round.players = [player]
+        round.state = 'FINISHED'
+        round.deck.playedCards = []
+        round.turn.addCardToPlay(player, 0)
+        round.playTurn()
+        expect(player.cards.length).toBe(1)
+    })
+
+    it('allows round to continue while +2 is in play', () => {
+        let round = Round()
+        let players = [{ cards: [{ value: '+2' }] }, { cards: [{ color: 'blue', value: '0' }] }]
+        round.players = players
+        round.deck.playedCards = []
+        round.turn.addCardToPlay(players[0], 0)
+        round.playTurn()
+        expect(round.state).toBe('FINISHING')
+        round.drawCards(players[1])
+        expect(players[1].cards.length).toBe(3)
+        expect(round.state).toBe('FINISHED')
+    })
+
+    it('waits with finishing until player has drawn when +4 is in play', () => {
+        let round = Round()
+        let players = [{ cards: [{ value: '+4' }] }, { cards: [{ color: 'blue', value: '0' }] }]
+        round.players = players
+        round.deck.playedCards = []
+        round.turn.addCardToPlay(players[0], 0)
+        round.playTurn()
+        expect(round.state).toBe('FINISHING')
+        round.drawCards(players[1])
+        expect(players[1].cards.length).toBe(5)
+        expect(round.state).toBe('FINISHED')
     })
 })

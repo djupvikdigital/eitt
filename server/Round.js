@@ -59,13 +59,14 @@ export function Round(deck = CardDeck()) {
         }
         player.cards = player.cards.concat(this.deck.drawCards(number))
         if (switchTurn) {
-            let length = this.players.length
-            this.previousTurn = this.turn
-            this.turn = Turn((this.turn.playerIndex + 1 * this.turnRotation + length) % length)
+            this.switchTurn()
         }
         return true
     }
     self.playTurn = function (color = '') {
+        if (this.state !== 'PLAYING' && this.state !== 'FINISHING') {
+            return false
+        }
         let turn = this.turn
         if (!turn.cardsToPlay.length) {
             return false
@@ -75,7 +76,6 @@ export function Round(deck = CardDeck()) {
         let plusFourInPlay = false
         let plusTwoInPlay = 0
         let turnIncrement = 1
-        let length = this.players.length
         switch(card.value) {
             case '+4':
                 plusFourInPlay = true
@@ -120,15 +120,31 @@ export function Round(deck = CardDeck()) {
         // remove null cards
         player.cards = player.cards.filter(Boolean)
         if (player.cards.length === 0) {
-            this.state = 'FINISHED'
+            console.log('soon...')
+            console.log('+4 = ', plusFourInPlay)
+            console.log('+2 = ', plusTwoInPlay)
+            if (plusFourInPlay || plusTwoInPlay) {
+                this.state = 'FINISHING'
+            }
+            else {
+                this.state = 'FINISHED'
+            }
             this.winner = player.name
         }
-        let nextTurn = Turn((turn.playerIndex + turnIncrement * this.turnRotation + length) % length)
-        nextTurn.plusFourInPlay = plusFourInPlay
-        nextTurn.plusTwoInPlay = plusTwoInPlay
-        this.previousTurn = turn
-        this.turn = nextTurn
+        this.switchTurn(turnIncrement, plusFourInPlay, plusTwoInPlay)
         return gotPlayed
+    }
+    self.switchTurn = function (increment = 1, plusFourInPlay = false, plusTwoInPlay = 0) {
+        if (this.state === 'FINISHED' || (this.state === 'FINISHING' && !plusFourInPlay && !plusTwoInPlay)) {
+            this.state = 'FINISHED'
+            // self.addScoresForRound()
+            return
+        }
+        let length = this.players.length
+        this.previousTurn = this.turn
+        this.turn = Turn((this.turn.playerIndex + increment * this.turnRotation + length) % length)
+        this.turn.plusFourInPlay = plusFourInPlay
+        this.turn.plusTwoInPlay = plusTwoInPlay
     }
     return self
 }
