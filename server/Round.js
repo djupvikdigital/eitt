@@ -59,6 +59,7 @@ export function Round(deck = CardDeck()) {
             this.turn.hasDrawn = true
         }
         player.cards = player.cards.concat(this.deck.drawCards(number))
+        player.pressedEitt = false
         if (switchTurn) {
             this.switchTurn()
         }

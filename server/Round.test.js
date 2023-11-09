@@ -93,6 +93,15 @@ describe('Round', () => {
         expect(player.cards.length).toBe(1)
     })
 
+    it('resets pressedEitt when drawing cards', () => {
+        let round = Round()
+        let player = { cards: [] }
+        round.players = [player]
+        player.pressedEitt = true
+        round.drawCards(player)
+        expect(player.pressedEitt).toBe(false)
+    })
+
     it('allows drawing specified number of cards outside turn', () => {
         let round = Round()
         let player = { cards: [] }
