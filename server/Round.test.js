@@ -153,6 +153,20 @@ describe('Round', () => {
         round.turn.addCardToPlay(players[0], 0)
         round.playTurn()
         round.turn.addCardToPlay(players[1], 0)
+        round.playTurn()
+        expect(round.deck.playedCards.pop()).toEqual(card)
+    })
+
+    it('disallows playing cards other than +2 while +2 is in play', () => {
+        let round = Round()
+        let card = { color: 'blue', value: '+2' }
+        let players = [ { cards: [card] }, { cards: [{ color: 'blue', value: '0' }] }]
+        round.players = players
+        round.deck.playedCards = []
+        round.turn.addCardToPlay(players[0], 0)
+        round.playTurn()
+        round.turn.addCardToPlay(players[1], 0)
+        round.playTurn()
         expect(round.deck.playedCards.pop()).toEqual(card)
     })
 })
