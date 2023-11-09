@@ -33,9 +33,7 @@ export function Round(deck = CardDeck()) {
                 else {
                     // checked player is innocent, checking player gets 6 cards
                     this.drawCards(player, 6)
-                    let length = this.players.length
-                    this.previousTurn = this.turn
-                    this.turn = Turn((this.turn.playerIndex + 1 * this.turnRotation + length) % length)
+                    this.switchTurn()
                 }
             }
         }
@@ -120,9 +118,6 @@ export function Round(deck = CardDeck()) {
         // remove null cards
         player.cards = player.cards.filter(Boolean)
         if (player.cards.length === 0) {
-            console.log('soon...')
-            console.log('+4 = ', plusFourInPlay)
-            console.log('+2 = ', plusTwoInPlay)
             if (plusFourInPlay || plusTwoInPlay) {
                 this.state = 'FINISHING'
             }
