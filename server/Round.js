@@ -5,10 +5,40 @@ export function Round(deck = CardDeck()) {
     let self = {
         deck: deck,
         players: [],
+        previousTurn: null,
         state: 'PLAYING',
         turn: Turn(0),
         turnRotation: 1,
         winner: ''
+    }
+    self.checkPlusFour = function (player) {
+        if (this.turn.plusFourInPlay) {
+            const playedCards = this.deck.playedCards
+            const index = playedCards.length - 2
+            const prevColor = index >= 0 && playedCards[index] ? playedCards[index].color : ''
+            if (!this.previousTurn) {
+                return false
+            }
+            const checkedPlayer = this.players[this.previousTurn.playerIndex]
+            if (checkedPlayer) {
+                const cardsWithPrevColor = checkedPlayer.cards.filter(function (card) {
+                    return card.color === prevColor
+                })
+                if (cardsWithPrevColor.length > 0) {
+                    // checked player played +4 while still having previous color
+                    // checked player must draw 4 instead, and turn doesn't switch
+                    this.drawCards(checkedPlayer, 4)
+                    this.turn.plusFourInPlay = false
+                }
+                else {
+                    // checked player is innocent, checking player gets 6 cards
+                    this.drawCards(player, 6)
+                    let length = this.players.length
+                    this.previousTurn = this.turn
+                    this.turn = Turn((this.turn.playerIndex + 1 * this.turnRotation + length) % length)
+                }
+            }
+        }
     }
     self.drawCards = function (player, number = 1) {
         let switchTurn = false
@@ -30,6 +60,7 @@ export function Round(deck = CardDeck()) {
         player.cards = player.cards.concat(this.deck.drawCards(number))
         if (switchTurn) {
             let length = this.players.length
+            this.previousTurn = this.turn
             this.turn = Turn((this.turn.playerIndex + 1 * this.turnRotation + length) % length)
         }
         return true
@@ -95,6 +126,7 @@ export function Round(deck = CardDeck()) {
         let nextTurn = Turn((turn.playerIndex + turnIncrement * this.turnRotation + length) % length)
         nextTurn.plusFourInPlay = plusFourInPlay
         nextTurn.plusTwoInPlay = plusTwoInPlay
+        this.previousTurn = turn
         this.turn = nextTurn
         return gotPlayed
     }

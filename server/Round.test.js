@@ -122,4 +122,26 @@ describe('Round', () => {
         round.playTurn('blue')
         expect(round.deck.playedCards.pop().color).toBe('blue')
     })
+
+    it('allows checking +4, giving 4 cards if color is found', () => {
+        let round = Round()
+        let players = [{ cards: [{ value: '+4' }, { color: 'blue' }] }, {cards: [] }]
+        round.players = players
+        round.deck.playedCards = [{ color: 'blue' }]
+        round.turn.addCardToPlay(players[0], 0)
+        round.playTurn()
+        round.checkPlusFour(players[1])
+        expect(players[0].cards.length).toEqual(5)
+    })
+
+    it('allows checking +4, giving 6 cards if color is not found', () => {
+        let round = Round()
+        let players = [ { cards: [{ color: 'blue'}, { value: '+4' }] }, { cards: [] }]
+        round.players = players
+        round.deck.playedCards = [{ color: 'green' }]
+        round.turn.addCardToPlay(players[0], 1)
+        round.playTurn()
+        round.checkPlusFour(players[1])
+        expect(players[1].cards.length).toEqual(6)
+    })
 })
