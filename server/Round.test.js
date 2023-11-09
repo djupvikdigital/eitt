@@ -144,4 +144,15 @@ describe('Round', () => {
         round.checkPlusFour(players[1])
         expect(players[1].cards.length).toEqual(6)
     })
+
+    it('disallows playing a card while +4 is in play', () => {
+        let round = Round()
+        let card = { value: '+4' }
+        let players = [ { cards: [card] }, { cards: [{ color: 'blue', value: '0' }] }]
+        round.players = players
+        round.turn.addCardToPlay(players[0], 0)
+        round.playTurn()
+        round.turn.addCardToPlay(players[1], 0)
+        expect(round.deck.playedCards.pop()).toEqual(card)
+    })
 })
