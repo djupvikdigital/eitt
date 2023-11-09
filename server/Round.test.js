@@ -75,14 +75,39 @@ describe('Round', () => {
     it('can draw a regular draw only once', () => {
         let round = Round()
         let player = { cards: [] }
+        round.players = [player]
         round.drawCards(player)
         round.drawCards(player)
         expect(player.cards.length).toBe(1)
     })
 
+    it('disallows regular drawing unless player has turn', () => {
+        let round = Round()
+        let player = { cards: [] }
+        round.players = [player]
+        round.turn.playerIndex = 1
+        round.drawCards(player)
+        expect(player.cards.length).toBe(0)
+        round.turn.playerIndex = 0
+        round.drawCards(player)
+        expect(player.cards.length).toBe(1)
+    })
+
+    it('allows drawing specified number of cards outside turn', () => {
+        let round = Round()
+        let player = { cards: [] }
+        round.players = [player]
+        round.turn.playerIndex = 1
+        round.drawCards(player)
+        expect(player.cards.length).toBe(0)
+        round.drawCards(player, 2)
+        expect(player.cards.length).toBe(2)
+    })
+
     it('draws four cards if +4 is in play', () => {
         let round = Round()
         let player = { cards: [] }
+        round.players = [player]
         round.turn.plusFourInPlay = true
         round.drawCards(player)
         expect(player.cards.length).toBe(4)
@@ -91,6 +116,7 @@ describe('Round', () => {
     it('draws double number of +2 cards in play', () => {
         let round = Round()
         let player = { cards: [] }
+        round.players = [player]
         round.turn.plusTwoInPlay = 3
         round.drawCards(player)
         expect(player.cards.length).toBe(6)
