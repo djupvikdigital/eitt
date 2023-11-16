@@ -261,4 +261,14 @@ describe('Round', () => {
         round.pressEitt(player)
         expect(player.pressedEitt).toBe(true)
     })
+
+    it('switches turn when playing card from player', () => {
+        let round = Round()
+        let player = { cards: [{ color: 'black', value: 'W' }, { color: 'black', value: 'W' }], id: Math.random() }
+        round.players = [player, { cards: [], id: Math.random() }]
+        round.turn.addCardToPlay(round.players[0], 0)
+        round.playTurn()
+        expect(round.hasTurn(round.players[0])).toBe(false)
+        expect(round.hasTurn(round.players[1])).toBe(true)
+    })
 })
