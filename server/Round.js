@@ -65,6 +65,10 @@ export function Round(deck = CardDeck()) {
         }
         return true
     }
+    self.hasTurn = function (player) {
+        let currentPlayer = this.players[this.turn.playerIndex]
+        return currentPlayer && player.id === currentPlayer.id
+    }
     self.playTurn = function (color = '') {
         if (this.state !== 'PLAYING' && this.state !== 'FINISHING') {
             return false
@@ -132,6 +136,12 @@ export function Round(deck = CardDeck()) {
         }
         this.switchTurn(turnIncrement, plusFourInPlay, plusTwoInPlay)
         return gotPlayed
+    }
+    self.pressEitt = function (player) {
+        if (this.hasTurn(player) && player.cards.length === 2) {
+            player.pressedEitt = true
+        }
+        return player.pressedEitt
     }
     self.switchTurn = function (increment = 1, plusFourInPlay = false, plusTwoInPlay = 0) {
         if (this.state === 'FINISHED' || (this.state === 'FINISHING' && !plusFourInPlay && !plusTwoInPlay)) {

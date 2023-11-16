@@ -241,4 +241,24 @@ describe('Round', () => {
         expect(players[1].cards.length).toBe(5)
         expect(round.state).toBe('FINISHED')
     })
+
+    it('allows pressing eitt before playing second last card', () => {
+        let round = Round()
+        let player = { cards: [{ value: 'W' }, { value: 'W' }], id: Math.random() }
+        round.players = [player, { cards: [{ color: 'blue', value: '0' }], id: Math.random() }]
+        round.pressEitt(player)
+        round.turn.addCardToPlay(player, 0)
+        expect(player.pressedEitt).toBe(true)
+    })
+
+    it('allows pressing eitt after playing second last card', () => {
+        let round = Round()
+        let player = { cards: [{ value: 'W' }, { value: 'W' }], id: Math.random() }
+        round.players = [player, { cards: [{ color: 'blue', value: '0' }], id: Math.random() }]
+        round.pressEitt(player)
+        round.turn.addCardToPlay(player, 0)
+        round.playTurn()
+        round.pressEitt(player)
+        expect(player.pressedEitt).toBe(true)
+    })
 })
