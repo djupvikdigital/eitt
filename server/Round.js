@@ -74,11 +74,17 @@ export function Round(deck = CardDeck()) {
             return false
         }
         let turn = this.turn
-        if (!turn.cardsToPlay.length) {
+        let player = this.players[turn.playerIndex]
+        if (!player.cardsToPlay.length) {
             return false
         }
-        let player = this.players[this.turn.playerIndex]
-        let card = player.cards[turn.cardsToPlay[0]]
+        let card = player.cards[player.cardsToPlay[0]]
+        if (turn.plusFourInPlay) {
+            return false
+        }
+        if (turn.plusTwoInPlay && card.value !== '+2') {
+            return false
+        }
         let plusFourInPlay = false
         let plusTwoInPlay = 0
         let turnIncrement = 1
@@ -87,25 +93,25 @@ export function Round(deck = CardDeck()) {
                 plusFourInPlay = true
                 break;
             case '+2':
-                plusTwoInPlay = turn.plusTwoInPlay + turn.cardsToPlay.length
+                plusTwoInPlay = turn.plusTwoInPlay + player.cardsToPlay.length
                 break;
             case 'R':
                 let turnRotation = this.turnRotation
-                for (let i = 0; i < turn.cardsToPlay.length; i++) {
+                for (let i = 0; i < player.cardsToPlay.length; i++) {
                     turnRotation = turnRotation * -1
                 }
                 this.turnRotation = turnRotation
                 break;
             case 'S':
-                turnIncrement = turnIncrement + turn.cardsToPlay.length
+                turnIncrement = turnIncrement + player.cardsToPlay.length
                 break;
             default:
                 break;
         }
         let cards = []
         // retrieve cards from hand
-        for (let i = 0; i < turn.cardsToPlay.length; i++) {
-            cards.push(player.cards[turn.cardsToPlay[i]])
+        for (let i = 0; i < player.cardsToPlay.length; i++) {
+            cards.push(player.cards[player.cardsToPlay[i]])
         }
         if (card.color === 'black' && color) {
             if (!this.deck.isLegitColor(color)) {
@@ -120,8 +126,8 @@ export function Round(deck = CardDeck()) {
             return false
         }
         // remove cards from hand
-        for (let i = 0; i < turn.cardsToPlay.length; i++) {
-            player.cards[turn.cardsToPlay[i]] = null
+        for (let i = 0; i < player.cardsToPlay.length; i++) {
+            player.cards[player.cardsToPlay[i]] = null
         }
         // remove null cards
         player.cards = player.cards.filter(Boolean)

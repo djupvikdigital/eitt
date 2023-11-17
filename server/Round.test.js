@@ -1,14 +1,14 @@
-import { CardDeck } from './CardDeck'
+import { Player } from './Player'
 import { Round } from './Round'
-import { Turn } from './Turn'
 
 describe('Round', () => {
     it('can play a turn', () => {
         let card = { color: 'blue', value: 1 }
         let round = Round()
-        let player = { cards: [card] }
+        let player = Player()
+        player.cards = [card]
         round.players = [player]
-        round.turn.addCardToPlay(player, 0)
+        player.addCardToPlay(0)
         round.playTurn()
         let playedCard = round.deck.playedCards[round.deck.playedCards.length - 1]
         expect(playedCard).toEqual(card)
@@ -17,15 +17,17 @@ describe('Round', () => {
     it('disallows playing a card while +4 is in play', () => {
         let card = { color: 'black', value: '+4' }
         let round = Round()
-        let player = { cards: [card] }
+        let player = Player()
+        player.cards = [card]
         round.players = [player]
-        round.turn.addCardToPlay(player, 0)
+        player.addCardToPlay(0)
         let played = round.playTurn()
         expect(played).toBe(true)
         card = { color: 'green', value: 1 }
-        player = { cards: [card] }
+        player = Player()
+        player.cards = [card]
         round.players = [player]
-        round.turn.addCardToPlay(player, 0)
+        player.addCardToPlay(0)
         played = round.playTurn()
         expect(played).toBe(false)
     })
@@ -33,10 +35,13 @@ describe('Round', () => {
     it('disallows playing cards other than +2 while +2 is in play', () => {
         const card = { color: 'blue', value: '+2' }
         const round = Round()
-        round.players = [{ cards: [card] }, { cards: [{ color: 'blue', value: '0' }] }]
-        round.turn.addCardToPlay(round.players[0], 0)
+        let players = [Player(), Player()]
+        players[0].cards = [card]
+        players[1].cards = [{ color: 'blue', value: '0' }]
+        round.players = players
+        players[0].addCardToPlay(0)
         round.playTurn()
-        round.turn.addCardToPlay(round.players[1], 0)
+        players[1].addCardToPlay(0)
         round.playTurn()
         expect(round.deck.playedCards.pop()).toEqual(card)
     })
@@ -44,10 +49,11 @@ describe('Round', () => {
     it('changes turn rotation when reverse card is played', () => {
         const card = { color: 'blue', value: 'R' }
         const round = Round()
-        let player = { cards: [card, { color: 'blue', value: '0' }] }
-        round.players = [player, player, player]
+        let player = Player()
+        player.cards = [card, { color: 'blue', value: '0' }]
+        round.players = [Player(), player]
         round.turn.playerIndex = 1
-        round.turn.addCardToPlay(player, 0)
+        player.addCardToPlay(0)
         round.playTurn()
         expect(round.turn.playerIndex).toBe(0)
     })
@@ -55,9 +61,10 @@ describe('Round', () => {
     it('skips a player when skip card is played', () => {
         const card = { color: 'blue', value: 'S' }
         const round = Round()
-        let player = { cards: [card, { color: 'blue', value: '0' }] }
+        let player = Player()
+        player.cards = [card, { color: 'blue', value: '0' }]
         round.players = [player, player, player]
-        round.turn.addCardToPlay(player, 0)
+        player.addCardToPlay(0)
         round.playTurn()
         expect(round.turn.playerIndex).toBe(2)
     })
@@ -65,9 +72,10 @@ describe('Round', () => {
     it('sets state to finished when playing last card', () => {
         let card = { color: 'blue', value: 1 }
         let round = Round()
-        let player = { cards: [card] }
+        let player = Player()
+        player.cards = [card]
         round.players = [player]
-        round.turn.addCardToPlay(player, 0)
+        player.addCardToPlay(0)
         round.playTurn()
         expect(round.state).toEqual('FINISHED')
     })
@@ -151,19 +159,22 @@ describe('Round', () => {
 
     it('changes the card color when playing wildcard from player', () => {
         let round = Round()
-        let player = { cards: [{ color: 'black', value: 'W' }] }
+        let player = Player()
+        player.cards = [{ color: 'black', value: 'W' }]
         round.players = [player]
-        round.turn.addCardToPlay(player, 0)
+        player.addCardToPlay(0)
         round.playTurn('blue')
         expect(round.deck.playedCards.pop().color).toBe('blue')
     })
 
     it('allows checking +4, giving 4 cards if color is found', () => {
         let round = Round()
-        let players = [{ cards: [{ value: '+4' }, { color: 'blue' }] }, {cards: [] }]
+        let players = [Player(), Player()]
+        players[0].cards = [{ color: 'blue'}, { value: '+4' }]
+        players[1].cards = []
         round.players = players
         round.deck.playedCards = [{ color: 'blue' }]
-        round.turn.addCardToPlay(players[0], 0)
+        players[0].addCardToPlay(1)
         round.playTurn()
         round.checkPlusFour(players[1])
         expect(players[0].cards.length).toEqual(5)
@@ -171,10 +182,12 @@ describe('Round', () => {
 
     it('allows checking +4, giving 6 cards if color is not found', () => {
         let round = Round()
-        let players = [ { cards: [{ color: 'blue'}, { value: '+4' }] }, { cards: [] }]
+        let players = [Player(), Player()]
+        players[0].cards = [{ color: 'blue'}, { value: '+4' }]
+        players[1].cards = []
         round.players = players
         round.deck.playedCards = [{ color: 'green' }]
-        round.turn.addCardToPlay(players[0], 1)
+        players[0].addCardToPlay(1)
         round.playTurn()
         round.checkPlusFour(players[1])
         expect(players[1].cards.length).toEqual(6)
@@ -183,11 +196,13 @@ describe('Round', () => {
     it('disallows playing a card while +4 is in play', () => {
         let round = Round()
         let card = { value: '+4' }
-        let players = [ { cards: [card] }, { cards: [{ color: 'blue', value: '0' }] }]
+        let players = [Player(), Player()]
+        players[0].cards = [card]
+        players[1].cards = [{ color: 'blue', value: '0' }]
         round.players = players
-        round.turn.addCardToPlay(players[0], 0)
+        players[0].addCardToPlay(0)
         round.playTurn()
-        round.turn.addCardToPlay(players[1], 0)
+        players[1].addCardToPlay(0)
         round.playTurn()
         expect(round.deck.playedCards.pop()).toEqual(card)
     })
@@ -195,33 +210,38 @@ describe('Round', () => {
     it('disallows playing cards other than +2 while +2 is in play', () => {
         let round = Round()
         let card = { color: 'blue', value: '+2' }
-        let players = [ { cards: [card] }, { cards: [{ color: 'blue', value: '0' }] }]
+        let players = [Player(), Player()]
+        players[0].cards = [card]
+        players[1].cards = [{ color: 'blue', value: '0' }]
         round.players = players
         round.deck.playedCards = []
-        round.turn.addCardToPlay(players[0], 0)
+        players[0].addCardToPlay(0)
         round.playTurn()
-        round.turn.addCardToPlay(players[1], 0)
+        players[1].addCardToPlay(0)
         round.playTurn()
         expect(round.deck.playedCards.pop()).toEqual(card)
     })
 
     it('disallows playing cards when round is finished', () => {
         let round = Round()
-        let player = { cards: [{ value: 'W' }] }
+        let player = Player()
+        player.cards = [{ value: 'W' }]
         round.players = [player]
         round.state = 'FINISHED'
         round.deck.playedCards = []
-        round.turn.addCardToPlay(player, 0)
+        player.addCardToPlay(0)
         round.playTurn()
         expect(player.cards.length).toBe(1)
     })
 
     it('allows round to continue while +2 is in play', () => {
         let round = Round()
-        let players = [{ cards: [{ value: '+2' }] }, { cards: [{ color: 'blue', value: '0' }] }]
+        let players = [Player(), Player()]
+        players[0].cards = [{ value: '+2' }]
+        players[1].cards = [{ color: 'blue', value: '0' }]
         round.players = players
         round.deck.playedCards = []
-        round.turn.addCardToPlay(players[0], 0)
+        players[0].addCardToPlay(0)
         round.playTurn()
         expect(round.state).toBe('FINISHING')
         round.drawCards(players[1])
@@ -231,10 +251,12 @@ describe('Round', () => {
 
     it('waits with finishing until player has drawn when +4 is in play', () => {
         let round = Round()
-        let players = [{ cards: [{ value: '+4' }] }, { cards: [{ color: 'blue', value: '0' }] }]
+        let players = [Player(), Player()]
+        players[0].cards = [{ value: '+4' }]
+        players[1].cards = [{ color: 'blue', value: '0' }]
         round.players = players
         round.deck.playedCards = []
-        round.turn.addCardToPlay(players[0], 0)
+        players[0].addCardToPlay(0)
         round.playTurn()
         expect(round.state).toBe('FINISHING')
         round.drawCards(players[1])
@@ -244,19 +266,21 @@ describe('Round', () => {
 
     it('allows pressing eitt before playing second last card', () => {
         let round = Round()
-        let player = { cards: [{ value: 'W' }, { value: 'W' }], id: Math.random() }
+        let player = Player()
+        player.cards = [{ value: 'W' }, { value: 'W' }]
         round.players = [player, { cards: [{ color: 'blue', value: '0' }], id: Math.random() }]
         round.pressEitt(player)
-        round.turn.addCardToPlay(player, 0)
+        player.addCardToPlay(0)
         expect(player.pressedEitt).toBe(true)
     })
 
     it('allows pressing eitt after playing second last card', () => {
         let round = Round()
-        let player = { cards: [{ value: 'W' }, { value: 'W' }], id: Math.random() }
+        let player = Player()
+        player.cards = [{ value: 'W' }, { value: 'W' }]
         round.players = [player, { cards: [{ color: 'blue', value: '0' }], id: Math.random() }]
         round.pressEitt(player)
-        round.turn.addCardToPlay(player, 0)
+        player.addCardToPlay(0)
         round.playTurn()
         round.pressEitt(player)
         expect(player.pressedEitt).toBe(true)
@@ -264,9 +288,10 @@ describe('Round', () => {
 
     it('switches turn when playing card from player', () => {
         let round = Round()
-        let player = { cards: [{ color: 'black', value: 'W' }, { color: 'black', value: 'W' }], id: Math.random() }
-        round.players = [player, { cards: [], id: Math.random() }]
-        round.turn.addCardToPlay(round.players[0], 0)
+        let player = Player()
+        player.cards = [{ color: 'black', value: 'W' }, { color: 'black', value: 'W' }]
+        round.players = [player, Player()]
+        player.addCardToPlay(0)
         round.playTurn()
         expect(round.hasTurn(round.players[0])).toBe(false)
         expect(round.hasTurn(round.players[1])).toBe(true)
