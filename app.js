@@ -145,7 +145,12 @@ io.sockets.on('connection', function(socket){
         if (!room.round.hasTurn(player)) {
             return
         }
-        room.round.playTurn()
+        if (data.color) {
+            room.round.playTurn(data.color)
+        }
+        else {
+            room.round.playTurn()
+        }
     })
 
     socket.on('playCard',function(data){
