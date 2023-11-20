@@ -319,3 +319,13 @@ it('removes the card from the player when playing card from player', () => {
     round.playTurn()
     expect(player.cards.length).toBe(0)
 })
+
+it('disallows pressing eitt with more than two cards', () => {
+    let round = Round()
+    let player = Player()
+    round.players = [player]
+    player.cards = [{ value: 'W' }, { value: 'W' }, { value: 'W' }]
+    player.addCardToPlay(0)
+    round.pressEitt(player)
+    expect(player.pressedEitt).toBe(false)
+})
