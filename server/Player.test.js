@@ -1,4 +1,5 @@
 import { Player } from './Player'
+import { Round } from './Round'
 
 describe('Player', () => {
     it('adds a card to cardsToPlay', () => {
@@ -52,5 +53,15 @@ describe('Player', () => {
         player.addCardToPlay(0)
         player.removeCardFromPlay(0)
         expect(player.cardsToPlay.length).toBe(0)
+    })
+
+    it('does nothing when playing card with invalid index from player', () => {
+        let round = Round()
+        let player = Player()
+        player.cards = [{ color: 'black', value: 'W' }]
+        round.players = [player]
+        player.addCardToPlay(1)
+        round.playTurn()
+        expect(player.cards.length).toBe(1)
     })
 })

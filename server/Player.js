@@ -16,6 +16,9 @@ export function Player() {
         if (!this.playMultiple && this.cardsToPlay.length) {
             return false
         }
+        if (index < 0 || index >= this.cards.length) {
+            return false
+        }
         let card = this.cards[index]
         // disallow adding another card with different value
         if (this.cardsToPlay.length && card.value !== this.cards[this.cardsToPlay[0]].value) {

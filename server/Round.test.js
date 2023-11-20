@@ -296,36 +296,47 @@ describe('Round', () => {
         expect(round.hasTurn(round.players[0])).toBe(false)
         expect(round.hasTurn(round.players[1])).toBe(true)
     })
-})
 
-it('sets state to FINISHED when playing last card from player', () => {
-    let round = Round()
-    let player = Player()
-    player.name = 'foo'
-    player.cards = [{ color: 'black', value: 'W' }]
-    round.players = [player]
-    player.addCardToPlay(0)
-    round.playTurn()
-    expect(round.state).toBe('FINISHED')
-    expect(round.winner).toBe('foo')
-})
+    it('sets state to FINISHED when playing last card from player', () => {
+        let round = Round()
+        let player = Player()
+        player.name = 'foo'
+        player.cards = [{ color: 'black', value: 'W' }]
+        round.players = [player]
+        player.addCardToPlay(0)
+        round.playTurn()
+        expect(round.state).toBe('FINISHED')
+        expect(round.winner).toBe('foo')
+    })
 
-it('removes the card from the player when playing card from player', () => {
-    let round = Round()
-    let player = Player()
-    player.cards = [{ color: 'black', value: 'W' }]
-    round.players = [player]
-    player.addCardToPlay(0)
-    round.playTurn()
-    expect(player.cards.length).toBe(0)
-})
+    it('removes the card from the player when playing card from player', () => {
+        let round = Round()
+        let player = Player()
+        player.cards = [{ color: 'black', value: 'W' }]
+        round.players = [player]
+        player.addCardToPlay(0)
+        round.playTurn()
+        expect(player.cards.length).toBe(0)
+    })
 
-it('disallows pressing eitt with more than two cards', () => {
-    let round = Round()
-    let player = Player()
-    round.players = [player]
-    player.cards = [{ value: 'W' }, { value: 'W' }, { value: 'W' }]
-    player.addCardToPlay(0)
-    round.pressEitt(player)
-    expect(player.pressedEitt).toBe(false)
+    it('disallows pressing eitt with more than two cards', () => {
+        let round = Round()
+        let player = Player()
+        round.players = [player]
+        player.cards = [{ value: 'W' }, { value: 'W' }, { value: 'W' }]
+        player.addCardToPlay(0)
+        round.pressEitt(player)
+        expect(player.pressedEitt).toBe(false)
+    })
+
+    it('does not change the card color if playing wildcard is not allowed', () => {
+        let round = Round()
+        let player = Player()
+        round.players = [player]
+        round.turn.plusFourInPlay = true
+        player.cards = [{ color: 'black', value: 'W' }]
+        player.addCardToPlay(0)
+        round.playTurn('blue')
+        expect(player.cards[0].color).toBe('black')
+    })
 })
