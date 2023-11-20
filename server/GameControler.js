@@ -1,6 +1,7 @@
 import { CardDeck } from './CardDeck.js'
 import { Turn } from './Turn.js'
 import { Room } from './Room.js'
+import { Round } from './Round.js'
 
 function add(a, b) {
     return a + b
@@ -20,12 +21,12 @@ export function GameControler(name) {
     self.lastPlayerId = 0,
     self.plusTwoInPlay = 0,
     self.plusFourInPlay = false,
+    self.round = Round()
     self.roundWinner = '',
     self.startNeutral = false,
     self.playMultiple = false,
     self.startScore = START_SCORE_AVERAGE,
     self.state = 'NOT_STARTED',
-    self.turn = Turn(0),
     self.turnRotation = 1,
     self.turnSkip = 1,
     self.playMulVal = null
@@ -48,7 +49,7 @@ export function GameControler(name) {
             let score = scores[id]
             currentPlayer.scores[roundNumber] = score
             if (id === idWithHighestScore) {
-                this.turn = Turn(i)
+                this.round.turn = Turn(i)
             }
             currentPlayer.pressedEitt = false
             if (this.calculateTotal(currentPlayer.scores)) this.state = 'FINISHED'
@@ -87,30 +88,8 @@ export function GameControler(name) {
         return thisScore >= 500
     }
     self.checkPlusFour = function (player) {
-        if (this.plusFourInPlay) {
-            const playedCards = this.deck.playedCards
-            const index = playedCards.length - 2
-            const prevColor = index >= 0 && playedCards[index] ? playedCards[index].color : ''
-            const checkedPlayer = this.getPlayerByPlayerId(this.lastPlayerId)
-            if (checkedPlayer) {
-                const cardsWithPrevColor = checkedPlayer.cards.filter(function (card) {
-                    return card.color === prevColor
-                })
-                if (cardsWithPrevColor.length > 0) {
-                    // checked player played +4 while still having previous color
-                    // checked player must draw 4 instead, and turn doesn't switch
-                    this.drawCards(checkedPlayer, 4)
-                    this.plusFourInPlay = false
-                }
-                else {
-                    // checked player is innocent, checking player gets 6 cards
-                    this.drawCards(player, 6)
-                    this.plusFourInPlay = false
-                    this.turnSwitch()
-                }
-                this.sendGameStatus()
-            }
-        }
+        this.round.checkPlusFour(player)
+        this.sendGameStatus()
     }
     self.disconnect = function (socketId) {
         const player = this.getPlayerBySocketId(socketId)
@@ -137,7 +116,7 @@ export function GameControler(name) {
     self.getPlayerWithTurn = function () {
         let playingPlayers = this.getPlayingPlayers()
         let length = playingPlayers.length
-        return length > 0 ? playingPlayers[this.turn.playerIndex % length] : null
+        return length > 0 ? playingPlayers[this.round.turn.playerIndex % length] : null
     }
     self.hasTurn = function (player) {
         let playerWithTurn = this.getPlayerWithTurn()
@@ -159,20 +138,20 @@ export function GameControler(name) {
         if (index < 0 || index >= this.players.length) {
             return false
         }
-        if (this.turn.playerIndex === index && this.turnRotation === -1) {
+        if (this.round.turn.playerIndex === index && this.turnRotation === -1) {
             // switch turn if leaving player has turn
             this.turnSwitch()
         }
-        else if (this.turn.playerIndex > index) {
+        else if (this.round.turn.playerIndex > index) {
             // make sure later player doesn't lose turn
-            this.turn.playerIndex = this.turn.playerIndex - 1
+            this.round.turn.playerIndex = this.round.turn.playerIndex - 1
         }
         let player = this.players.splice(index, 1)
         if (this.getPlayingPlayers().length === 0) {
             this.state = 'NOT_STARTED'
         }
         let length = this.players.length
-        this.turn.playerIndex = this.turn.playerIndex % length
+        this.round.turn.playerIndex = this.round.turn.playerIndex % length
         this.sendGameStatus()
         return player[0]
     }
@@ -268,129 +247,48 @@ export function GameControler(name) {
             deck.shuffleCards(deck.availableCards)
             card = deck.drawCard()
         }
-        this.deck = deck
+        this.round = Round(deck)
+        this.round.players = this.players
         this.state = 'PLAYING'
-        if (this.startNeutral) {
-            // avoid special card having effect
-            this.deck.playCard(card)
+        this.round.deck.playCard(card)
+        let plusTwoInPlay = 0
+        let turnIncrement = 1
+        if (!this.startNeutral) {
+            switch (card.value) {
+                case '+2':
+                    plusTwoInPlay = 1
+                    break;
+                case 'S':
+                    turnIncrement = 2
+                    break;
+                case 'R':
+                    turnIncrement = 0
+                    this.round.turnRotation = -1
+                    break;
+                default:
+                    break;
+            }
         }
-        else {
-            this.playCard(card)
-        }
-        if (card.value !== 'R' || this.startNeutral) {
-            // let dealer start if starting with reverse card unless starting neutral
-            this.turnSwitch()
-        }
+        this.round.switchTurn(turnIncrement, false, plusTwoInPlay)
         this.sendGameStatus()
         return true
     }
     self.drawCards = function (player, number = 1) {
-        let turn = false
-        if (number === 1) {
-            if (!this.hasTurn(player) || player.hasDrawn || this.playMulVal) {
-                return
-            }
-            if (this.plusFourInPlay) {
-                number = 4
-                this.plusFourInPlay = false
-                turn = true
-            }
-            else if (this.plusTwoInPlay) {
-                number = this.plusTwoInPlay * 2;
-                this.plusTwoInPlay = 0
-                turn = true
-            }
-            else {
-                player.hasDrawn = true
-            }
-        }
-        player.cards = player.cards.concat(this.deck.drawCards(number));
-        this.sortCards(player.cards);
-        player.pressedEitt = false
-        if (turn) {
-            this.turnSwitch()
-        }
+        this.round.drawCards(player, number)
         this.sendGameStatus()
-    }
-    self.playCard = function (card) {
-        if (this.state !== 'PLAYING' && this.state !== 'ROUND_FINISHING') {
-            return false
-        }
-        if (this.plusFourInPlay) {
-            return false
-        }
-        if (this.plusTwoInPlay > 0 && card.value !== '+2') {
-            return false
-        }
-        if (this.plusTwoInPlay === 0 && this.state === 'ROUND_FINISHING') {
-            return false
-        }
-        const gotPlayed = this.deck.playCard(card, this.playMulVal)
-        if (!gotPlayed) {
-            return false
-        }
-        if (card.value == '+4') this.plusFourInPlay = true
-        else if (card.value == '+2') this.plusTwoInPlay = this.plusTwoInPlay + 1
-        else if (card.value == 'R') this.turnRotation = (this.turnRotation * -1)
-        else if (card.value == 'S') this.turnSkip = this.turnSkip + 1
-        return true
-    }
-    self.playCardFromPlayer = function (player, index, color = '') {
-        if (!this.hasTurn(player) || index < 0 || index >= player.cards.length) {
-            return false
-        }
-        let card = player.cards[index]
-        if (card.color === 'black' && color) {
-            if (!this.deck.isLegitColor(color)) {
-                return false
-            }
-            card = Object.assign({}, card, { color: color })
-        }
-        const gotPlayed = this.playCard(card)
-        if (!gotPlayed) {
-            return false
-        }
-        this.lastPlayedIndex = index
-        player.playCount++
-        if (this.playMultiple) {
-            this.playMulVal = card.value
-        }
-        // remove played card from player cards
-        player.cards.splice(index, 1)
-        player.hasDrawn = false
-        this.lastPlayerId = player.id
-        if (player.cards.length === 0) {
-            if (card.value === '+2' || card.value === '+4') {
-                this.state = 'ROUND_FINISHING'
-            }
-            else {
-                this.state = 'ROUND_FINISHED'
-            }
-            this.roundWinner = player.name
-        }
-        if (!this.playMultiple || this.deck.wildCards.includes(card.value) || this.state == 'ROUND_FINISHED') {
-            this.turnSwitch()
-        }
-        this.sendGameStatus()
-        return true
     }
     self.pressEitt = function (player) {
-        if ((this.hasTurn(player) && player.cards.length === 2) || (this.lastPlayerId === player.id && player.cards.length === 1)) {
-            player.pressedEitt = true
-            this.sendGameStatus()
-        }
-        return player.pressedEitt
+        let pressedEitt = this.round.pressEitt(player)
+        this.sendGameStatus()
+        return pressedEitt
     }
     self.turnSwitch = function () {
-        if (this.state === 'ROUND_FINISHED' || (this.state === 'ROUND_FINISHING' && !this.plusTwoInPlay && !this.plusFourInPlay)) {
+        if (this.round.state === 'FINISHED') {
             this.state = 'ROUND_FINISHED'
             self.addScoresForRound()
             return
         }
-        let length = this.getPlayingPlayers().length
-        this.turn = Turn((this.turn.playerIndex + (1 * this.turnRotation * this.turnSkip) + length) % length)
-        this.turnSkip = 1;
-        this.playMulVal = null
+        this.round.switchTurn()
     }
     self.sendGameStatus = function () {
         let pack = [];

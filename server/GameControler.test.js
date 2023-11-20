@@ -114,18 +114,11 @@ describe('GameControler', () => {
         expect(player.socket).toBe(null)
     })
 
-    it('returns the player with the turn', () => {
-        const controler = setupControlerWithMocks(2)
-        const players = controler.players
-        controler.turn.playerIndex = 1
-        expect(controler.getPlayerWithTurn().id).toBe(players[1].id)
-    })
-
     it('allows reconnecting while still having turn', () => {
         const controler = setupControlerWithMocks(2)
         const players = controler.players
         let socket = { id: Math.random() }
-        controler.turn.playerIndex = 1
+        controler.round.turn.playerIndex = 1
         controler.disconnect(players[1].socket.id)
         controler.connect(socket, players[1].id)
         expect(controler.getPlayerWithTurn().id).toBe(players[1].id)
@@ -135,7 +128,7 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks(2)
         const players = controler.players
         let socket = { id: Math.random() }
-        controler.turn.playerIndex = 1
+        controler.round.turn.playerIndex = 1
         controler.leave(players[1].socket.id)
         controler.connect(socket)
         expect(controler.getPlayerWithTurn().id).toBe(players[0].id)
@@ -145,7 +138,7 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks(3)
         const players = controler.players
         let id = players[2].id
-        controler.turn.playerIndex = 1
+        controler.round.turn.playerIndex = 1
         controler.leave(players[1].socket.id)
         expect(controler.getPlayerWithTurn().id).toBe(id)
     })
@@ -153,7 +146,7 @@ describe('GameControler', () => {
     it('switches turn to previous player when leaving and direction is reverse', () => {
         const controler = setupControlerWithMocks(3)
         const players = controler.players
-        controler.turn.playerIndex = 1
+        controler.round.turn.playerIndex = 1
         controler.turnRotation = -1
         controler.leave(players[1].socket.id)
         expect(controler.getPlayerWithTurn().id).toBe(players[0].id)
@@ -163,7 +156,7 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks(3)
         const players = controler.players
         let id = players[2].id
-        controler.turn.playerIndex = 2
+        controler.round.turn.playerIndex = 2
         controler.leave(players[1].socket.id)
         expect(controler.getPlayerWithTurn().id).toBe(id)
     })
@@ -180,7 +173,7 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks(3)
         const players = controler.players
         players[2].isPlaying = false
-        controler.turn.playerIndex = 1
+        controler.round.turn.playerIndex = 1
         controler.turnSwitch()
         expect(controler.getPlayerWithTurn().id).toBe(players[0].id)
     })
@@ -189,7 +182,7 @@ describe('GameControler', () => {
         const controler = setupControlerWithMocks(3)
         const players = controler.players
         players[0].isPlaying = false
-        controler.turn.playerIndex = 1
+        controler.round.turn.playerIndex = 1
         controler.turnSwitch()
         expect(controler.getPlayerWithTurn().id).toBe(players[1].id)
     })
@@ -199,132 +192,6 @@ describe('GameControler', () => {
         const players = controler.players
         players[1].isPlaying = false
         expect(controler.getPlayerWithTurn().id).toBe(players[2].id)
-    })
-
-    it('sets plusFourInPlay to true', () => {
-        const controler = setupControlerWithMocks()
-        expect(controler.plusFourInPlay).toBe(false)
-        controler.playCard({ value: '+4' })
-        expect(controler.plusFourInPlay).toBe(true)
-    })
-
-    it('does not draw 4 two times after plusFourInPlay', () => {
-        const controler = setupControlerWithMocks()
-        const player = controler.players[0]
-        player.cards = []
-        controler.playCard({ value: '+4' })
-        controler.drawCards(player)
-        expect(player.cards.length).toBe(4)
-        controler.drawCards(player)
-        expect(player.cards.length).toBe(5)
-    })
-
-    it('disallows playing cards when round is finished', () => {
-        const controler = setupControlerWithMocks()
-        const player = controler.players[0]
-        player.cards = [{ value: 'W' }]
-        controler.state = 'ROUND_FINISHED'
-        controler.deck.playedCards = []
-        controler.playCardFromPlayer(player, 0)
-        expect(player.cards.length).toBe(1)
-    })
-
-    it('allows round to continue while +2 is in play', () => {
-        const controler = setupControlerWithMocks()
-        const player = controler.players[0]
-        player.cards = [{ value: '+2' }]
-        controler.deck.playedCards = []
-        controler.playCardFromPlayer(player, 0)
-        expect(controler.state).toBe('ROUND_FINISHING')
-        controler.drawCards(player)
-        expect(player.cards.length).toBe(2)
-        expect(controler.state).toBe('ROUND_FINISHED')
-    })
-
-    it('waits with finishing until player has drawn when +4 is in play', () => {
-        const controler = setupControlerWithMocks()
-        const player = controler.players[0]
-        player.cards = [{ value: '+4' }]
-        controler.deck.playedCards = []
-        controler.playCardFromPlayer(player, 0)
-        expect(controler.state).toBe('ROUND_FINISHING')
-        controler.drawCards(player)
-        expect(player.cards.length).toBe(4)
-        expect(controler.state).toBe('ROUND_FINISHED')
-    })
-
-    it('disallows playing cards other than +2 while +2 is in play', () => {
-        const controler = setupControlerWithMocks()
-        const card = { color: 'blue', value: '+2' }
-        controler.deck.playedCards = []
-        controler.playCard(card)
-        controler.playCard({ color: 'blue', value: '0' })
-        expect(controler.deck.playedCards.pop()).toEqual(card)
-    })
-
-    it('allows playing cards other than +2 after +2 was in play', () => {
-        const controler = setupControlerWithMocks()
-        const card = { color: 'blue', value: '0' }
-        controler.deck.playedCards = []
-        controler.playCard({ color: 'blue', value: '+2' })
-        controler.plusTwoInPlay = 0
-        controler.playCard(card)
-        expect(controler.deck.playedCards.pop()).toEqual(card)
-    })
-
-    it('disallows playing a card while +4 is in play', () => {
-        const controler = setupControlerWithMocks()
-        const card = { value: '+4' }
-        controler.playCard(card)
-        controler.playCard({ color: 'blue', value: '0' })
-        expect(controler.deck.playedCards.pop()).toEqual(card)
-    })
-
-    it('allows playing a card after +4 was in play', () => {
-        const controler = setupControlerWithMocks()
-        const card = { color: 'blue', value: '0' }
-        controler.playCard({ color: 'blue', value: '+4' })
-        controler.plusFourInPlay = false
-        controler.playCard(card)
-        expect(controler.deck.playedCards.pop()).toEqual(card)
-    })
-
-    it('allows checking +4, giving 4 cards if color is found', () => {
-        const controler = setupControlerWithMocks(2)
-        const players = controler.players
-        players[0].cards = [{ color: 'blue' }]
-        controler.deck.playedCards = [{ color: 'blue' }]
-        controler.playCard({ value: '+4' })
-        controler.lastPlayerId = players[0].id
-        controler.checkPlusFour(players[1])
-        expect(players[0].cards.length).toEqual(5)
-    })
-
-    it('allows checking +4, giving 6 cards if color is not found', () => {
-        const controler = setupControlerWithMocks(2)
-        const players = controler.players
-        players[0].cards = [{ color: 'blue' }]
-        players[1].cards = []
-        controler.deck.playedCards = [{ color: 'green' }]
-        controler.playCard({ value: '+4' })
-        controler.lastPlayerId = players[0].id
-        controler.checkPlusFour(players[1])
-        expect(players[1].cards.length).toEqual(6)
-    })
-
-    it('resets pressedEitt when drawing cards', () => {
-        const controler = setupControlerWithMocks()
-        const player = controler.players[0]
-        player.pressedEitt = true
-        controler.drawCards(player)
-        expect(player.pressedEitt).toBe(false)
-    })
-
-    it('sets hasDrawn after regular drawing', () => {
-        const controler = setupControlerWithMocks()
-        const player = controler.players[0]
-        controler.drawCards(player)
-        expect(player.hasDrawn).toBe(true)
     })
 
     it('does not set hasDrawn when +2 or +4 in play', () => {
@@ -343,36 +210,6 @@ describe('GameControler', () => {
         const player = controler.players[0]
         controler.drawCards(player, 2)
         expect(player.hasDrawn).toBe(false)
-    })
-
-    it('disallows regular drawing unless player has turn', () => {
-        const controler = setupControlerWithMocks(2)
-        const player = controler.players[0]
-        player.cards = []
-        controler.turn.playerIndex = 1
-        controler.drawCards(player)
-        expect(player.cards.length).toBe(0)
-        controler.turn.playerIndex = 0
-        controler.drawCards(player)
-        expect(player.cards.length).toBe(1)
-    })
-
-    it('disallows regular drawing if player already has drawn', () => {
-        const controler = setupControlerWithMocks()
-        const player = controler.players[0]
-        player.cards = []
-        player.hasDrawn = true
-        controler.drawCards(player)
-        expect(player.cards.length).toBe(0)
-    })
-
-    it('allows drawing specified number of cards outside turn', () => {
-        const controler = setupControlerWithMocks()
-        const player = controler.players[0]
-        player.cards = []
-        player.hasDrawn = true
-        controler.drawCards(player, 2)
-        expect(player.cards.length).toBe(2)
     })
 
     it('correctly calculates scores for numbered cards', () => {
@@ -541,9 +378,9 @@ describe('GameControler', () => {
         controler.addScoresForRound()
         controler.startNeutral = false
         controler.dealNewRound(deck)
-        expect(controler.hasTurn(players[0])).toBe(true)
-        expect(controler.hasTurn(players[1])).toBe(false)
-        expect(controler.turnRotation).toBe(-1)
+        expect(controler.round.hasTurn(players[0])).toBe(true)
+        expect(controler.round.hasTurn(players[1])).toBe(false)
+        expect(controler.round.turnRotation).toBe(-1)
     })
 
     it('does not have playMulVal set if first card is reverse', () => {
@@ -606,116 +443,11 @@ describe('GameControler', () => {
         expect(deck.getLastPlayedCard().value).not.toBe('W')
     })
 
-    it('removes the card from the player when playing card from player', () => {
-        const controler = setupControlerWithMocks()
-        const player = controler.players[0]
-        player.cards = [{ color: 'black', value: 'W' }]
-        controler.playCardFromPlayer(player, 0)
-        expect(player.cards.length).toBe(0)
-    })
-
-    it('does nothing when playing card with invalid index from player', () => {
-        const controler = setupControlerWithMocks()
-        const player = controler.players[0]
-        player.cards = [{ color: 'black', value: 'W' }]
-        controler.playCardFromPlayer(player, 1)
-        expect(player.cards.length).toBe(1)
-    })
-
-    it('resets player.hasDrawn when playing card from player', () => {
-        const controler = setupControlerWithMocks()
-        const player = controler.players[0]
-        player.cards = [{ color: 'black', value: 'W' }]
-        player.hasDrawn = true
-        controler.playCardFromPlayer(player, 0)
-        expect(player.hasDrawn).toBe(false)
-    })
-
-    it('sets lastPlayerId when playing card from player', () => {
-        const controler = setupControlerWithMocks()
-        const player = controler.players[0]
-        player.cards = [{ color: 'black', value: 'W' }]
-        controler.playCardFromPlayer(player, 0)
-        expect(controler.lastPlayerId).toBe(player.id)
-    })
-
-    it('sets state to ROUND_FINISHED when playing last card from player', () => {
-        const controler = setupControlerWithMocks()
-        const player = controler.players[0]
-        player.name = 'foo'
-        player.cards = [{ color: 'black', value: 'W' }]
-        controler.playCardFromPlayer(player, 0)
-        expect(controler.state).toBe('ROUND_FINISHED')
-        expect(controler.roundWinner).toBe('foo')
-    })
-
-    it('disallows playing unless player has turn when playing card from player', () => {
-        const controler = setupControlerWithMocks(2)
-        const player = controler.players[0]
-        controler.turn.playerIndex = 1
-        player.cards = [{ color: 'black', value: 'W' }]
-        controler.playCardFromPlayer(player, 0)
-        expect(player.cards.length).toBe(1)
-    })
-
-    it('switches turn when playing card from player', () => {
-        const controler = setupControlerWithMocks(2)
-        const players = controler.players
-        players[0].cards = [{ color: 'black', value: 'W' }, { color: 'black', value: 'W' }]
-        controler.playCardFromPlayer(players[0], 0)
-        expect(controler.hasTurn(players[0])).toBe(false)
-        expect(controler.hasTurn(players[1])).toBe(true)
-    })
-
-    it('changes the card color when playing wildcard from player', () => {
-        const controler = setupControlerWithMocks()
-        const player = controler.players[0]
-        player.cards = [{ color: 'black', value: 'W' }]
-        controler.playCardFromPlayer(player, 0, 'blue')
-        expect(controler.deck.playedCards.pop().color).toBe('blue')
-    })
-
-    it('does not change the card color if playing wildcard is not allowed', () => {
-        const controler = setupControlerWithMocks()
-        const player = controler.players[0]
-        controler.plusFourInPlay = true
-        player.cards = [{ color: 'black', value: 'W' }]
-        controler.playCardFromPlayer(player, 0, 'blue')
-        expect(player.cards[0].color).toBe('black')
-    })
-
-    it('allows pressing eitt before playing second last card', () => {
-        const controler = setupControlerWithMocks()
-        const player = controler.players[0]
-        player.cards = [{ value: 'W' }, { value: 'W' }]
-        controler.pressEitt(player)
-        controler.playCardFromPlayer(player, 0)
-        expect(player.pressedEitt).toBe(true)
-    })
-
-    it('allows pressing eitt after playing second last card', () => {
-        const controler = setupControlerWithMocks()
-        const player = controler.players[0]
-        player.cards = [{ value: 'W' }, { value: 'W' }]
-        controler.playCardFromPlayer(player, 0)
-        controler.pressEitt(player)
-        expect(player.pressedEitt).toBe(true)
-    })
-
-    it('disallows pressing eitt with more than two cards', () => {
-        const controler = setupControlerWithMocks(2)
-        const player = controler.players[0]
-        player.cards = [{ value: 'W' }, { value: 'W' }, { value: 'W' }]
-        controler.playCardFromPlayer(player, 0)
-        controler.pressEitt(player)
-        expect(player.pressedEitt).toBe(false)
-    })
-
     it('disallows pressing eitt outside of turn', () => {
         const controler = setupControlerWithMocks(2)
         const player = controler.players[0]
         player.cards = [{ value: 'W' }]
-        controler.turn.playerIndex = 1
+        controler.round.turn.playerIndex = 1
         controler.pressEitt(player)
         expect(player.pressedEitt).toBe(false)
     })
