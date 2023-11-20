@@ -123,7 +123,7 @@ io.sockets.on('connection', function(socket){
         if (!room.hasTurn(player) || index < 0 || index >= player.cards.length) {
             return
         }
-        room.turn.addCardToPlay(player.cards[data.index])
+        player.addCardToPlay(data.index)
     })
 
     socket.on('removeCardFromPlay', function (data) {
@@ -132,7 +132,20 @@ io.sockets.on('connection', function(socket){
         if (!room.hasTurn(player) || index < 0 || index >= player.cards.length) {
             return
         }
-        room.turn.removeCardFromPlay(data.index)
+        player.removeCardFromPlay(data.index)
+    })
+
+    socket.on('playTurn', function (data) {
+        let [room, player] = House.getRoomAndPlayerBySocketId(socket.id)
+        if (!player) {
+            console.log('Player with socket id ' + socket.id + ' not found in room ' + room.name)
+            console.log(JSON.stringify(room.players))
+            return
+        }
+        if (!room.round.hasTurn(player)) {
+            return
+        }
+        room.round.playTurn()
     })
 
     socket.on('playCard',function(data){
