@@ -297,3 +297,25 @@ describe('Round', () => {
         expect(round.hasTurn(round.players[1])).toBe(true)
     })
 })
+
+it('sets state to FINISHED when playing last card from player', () => {
+    let round = Round()
+    let player = Player()
+    player.name = 'foo'
+    player.cards = [{ color: 'black', value: 'W' }]
+    round.players = [player]
+    player.addCardToPlay(0)
+    round.playTurn()
+    expect(round.state).toBe('FINISHED')
+    expect(round.winner).toBe('foo')
+})
+
+it('removes the card from the player when playing card from player', () => {
+    let round = Round()
+    let player = Player()
+    player.cards = [{ color: 'black', value: 'W' }]
+    round.players = [player]
+    player.addCardToPlay(0)
+    round.playTurn()
+    expect(player.cards.length).toBe(0)
+})
