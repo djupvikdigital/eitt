@@ -155,22 +155,6 @@ export function GameControler(name) {
         this.sendGameStatus()
         return player[0]
     }
-    self.sortCards = function (cards) {
-        cards.sort(function (a, b) {
-            let stringA = '' + a.color + a.value;
-            let stringB = '' + b.color + b.value;
-
-            if (stringA < stringB) {
-                return -1;
-            }
-
-            if (stringA > stringB) {
-                return 1;
-            }
-
-            return 0;
-        })
-    }
     self.startNewGame = function () {
         this.state = 'NOT_STARTED'
         for (let i = 0; i < this.players.length; i++) {
@@ -193,13 +177,12 @@ export function GameControler(name) {
         if (!deck) {
             deck = CardDeck(numberOfDecks)
         }
+        this.round = Round(deck)
         let i = 0
         while (i < this.players.length) {
             let currentPlayer = this.players[i]
             if (currentPlayer.socket) {
-                let cards = deck.drawCards(7)
-                this.sortCards(cards)
-                currentPlayer.cards = cards
+                this.round.drawCards(currentPlayer, 7)
                 currentPlayer.isPlaying = true
                 if (this.playMultiple) {
                     currentPlayer.playMultiple = true
@@ -250,7 +233,6 @@ export function GameControler(name) {
             deck.shuffleCards(deck.availableCards)
             card = deck.drawCard()
         }
-        this.round = Round(deck)
         this.round.players = this.players
         this.state = 'PLAYING'
         this.round.deck.playCard(card)

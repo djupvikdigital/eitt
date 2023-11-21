@@ -1,6 +1,23 @@
 import { CardDeck } from './CardDeck.js'
 import { Turn } from './Turn.js'
 
+function sortCards(cards) {
+    cards.sort(function (a, b) {
+        let stringA = '' + a.color + a.value;
+        let stringB = '' + b.color + b.value;
+
+        if (stringA < stringB) {
+            return -1;
+        }
+
+        if (stringA > stringB) {
+            return 1;
+        }
+
+        return 0;
+    })
+}
+
 export function Round(deck = CardDeck()) {
     let self = {
         deck: deck,
@@ -59,6 +76,7 @@ export function Round(deck = CardDeck()) {
             this.turn.hasDrawn = true
         }
         player.cards = player.cards.concat(this.deck.drawCards(number))
+        sortCards(player.cards)
         player.pressedEitt = false
         if (switchTurn) {
             this.switchTurn()
