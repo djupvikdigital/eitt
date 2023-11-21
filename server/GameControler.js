@@ -314,7 +314,7 @@ export function GameControler(name) {
                 playCount: currentPlayer.playCount,
                 playerList: pack,
                 plusFourInPlay: this.plusFourInPlay,
-                lastPlayedCard: this.deck && this.deck.getLastPlayedCard(),
+                lastPlayedCard: this.round.deck.getLastPlayedCard(),
                 lastPlayedIndex: this.lastPlayedIndex,
                 lastPlayerIndex: lastPlayerIndex,
                 roundWinner: this.roundWinner,
