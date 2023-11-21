@@ -64,7 +64,7 @@ function createClickHandler(i, card) {
         }
         else {
             addCardToPlay(i)
-            console.log('playCard emitted, index = ' + i)
+            console.log('addCardToPlay emitted, index = ' + i)
         }
     }
 }
