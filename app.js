@@ -104,8 +104,7 @@ io.sockets.on('connection', function(socket){
     socket.on('pass',function(){
         let [room, player] = House.getRoomAndPlayerBySocketId(socket.id)
         if (room.type != 'gameRoom') return
-        if (room.hasTurn(player) && (room.playMulVal || player.hasDrawn)) {
-            player.hasDrawn = false
+        if (room.round.hasTurn(player)) {
             room.turnSwitch();
             room.sendGameStatus();
         }
