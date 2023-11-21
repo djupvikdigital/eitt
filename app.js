@@ -120,18 +120,12 @@ io.sockets.on('connection', function(socket){
     socket.on('addCardToPlay', function (data) {
         let [room, player] = House.getRoomAndPlayerBySocketId(socket.id)
         if (room.type != 'gameRoom') return
-        if (!room.hasTurn(player) || index < 0 || index >= player.cards.length) {
-            return
-        }
         player.addCardToPlay(data.index)
     })
 
     socket.on('removeCardFromPlay', function (data) {
         let [room, player] = House.getRoomAndPlayerBySocketId(socket.id)
         if (room.type != 'gameRoom') return
-        if (!room.hasTurn(player) || index < 0 || index >= player.cards.length) {
-            return
-        }
         player.removeCardFromPlay(data.index)
     })
 

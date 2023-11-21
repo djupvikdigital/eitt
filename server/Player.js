@@ -35,7 +35,11 @@ export function Player() {
         }
     }
     self.removeCardFromPlay = function (index) {
+        if (index < 0 || index >= this.cardsToPlay.length) {
+            return false
+        }
         this.cardsToPlay.splice(index, 1)
+        return true
     }
     return self
 }
