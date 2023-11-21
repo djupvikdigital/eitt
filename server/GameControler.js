@@ -201,6 +201,9 @@ export function GameControler(name) {
                 this.sortCards(cards)
                 currentPlayer.cards = cards
                 currentPlayer.isPlaying = true
+                if (this.playMultiple) {
+                    currentPlayer.playMultiple = true
+                }
                 i++
             }
             else {
