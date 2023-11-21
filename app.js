@@ -128,13 +128,15 @@ io.sockets.on('connection', function(socket){
             else {
                 room.round.playTurn()
             }
-        } 
+        }
+        room.sendGameStatus()
     })
 
     socket.on('removeCardFromPlay', function (data) {
         let [room, player] = House.getRoomAndPlayerBySocketId(socket.id)
         if (room.type != 'gameRoom') return
         player.removeCardFromPlay(data.index)
+        room.sendGameStatus()
     })
 
     socket.on('playTurn', function (data) {
