@@ -35,7 +35,7 @@ describe('Player', () => {
         expect(player.cards[player.cardsToPlay[0]]).toEqual(card)
     })
 
-    it('disallows adding another card when playMultiple is false', () => {
+    it('swaps cards when playMultiple is false', () => {
         let player = Player()
         let card = { color: 'blue', value: 1 }
         let card2 = { color: 'green', value: 1 }
@@ -43,7 +43,7 @@ describe('Player', () => {
         player.addCardToPlay(0)
         player.addCardToPlay(1)
         expect(player.cardsToPlay.length).toBe(1)
-        expect(player.cards[player.cardsToPlay[0]]).toEqual(card)
+        expect(player.cards[player.cardsToPlay[0]]).toEqual(card2)
     })
 
     it('allows removing a card from cardsToPlay', () => {

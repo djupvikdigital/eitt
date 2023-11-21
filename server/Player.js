@@ -13,18 +13,20 @@ export function Player() {
         pressedEitt: false
     }
     self.addCardToPlay = function (index) {
-        if (!this.playMultiple && this.cardsToPlay.length) {
-            return false
-        }
         if (index < 0 || index >= this.cards.length) {
             return false
         }
         let card = this.cards[index]
-        // disallow adding another card with different value
-        if (this.cardsToPlay.length && card.value !== this.cards[this.cardsToPlay[0]].value) {
-            return false
+        if (this.playMultiple) {
+            // disallow adding another card with different value
+            if (this.cardsToPlay.length && card.value !== this.cards[this.cardsToPlay[0]].value) {
+                return false
+            }
+            this.cardsToPlay.push(index)
         }
-        this.cardsToPlay.push(index)
+        else {
+            this.cardsToPlay = [index]
+        }
         return true
     }
     self.emit = function (arg1, arg2) {
