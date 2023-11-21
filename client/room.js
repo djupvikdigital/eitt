@@ -40,12 +40,12 @@ function animatePlayCard(index) {
     cardElement.style.transform = transform;
 }
 
-function playCard(index, color) {
+function addCardToPlay(index, color) {
     let data = { index: index };
     if (color) {
         data.color = color;
     }
-    socket.emit('playCard', data);
+    socket.emit('addCardToPlay', data);
 }
 
 function createTransitionEndHandler(i) {
@@ -63,7 +63,7 @@ function createClickHandler(i, card) {
             event.stopPropagation()
         }
         else {
-            playCard(i)
+            addCardToPlay(i)
             console.log('playCard emitted, index = ' + i)
         }
     }
@@ -519,19 +519,19 @@ document.getElementById('check-plus-four').addEventListener('click', function ()
 })
 
 document.getElementById('pick-blue').addEventListener('click', function () {
-    playCard(currentIndex, 'blue');
+    addCardToPlay(currentIndex, 'blue');
 });
 
 document.getElementById('pick-green').addEventListener('click', function () {
-    playCard(currentIndex, 'green');
+    addCardToPlay(currentIndex, 'green');
 });
 
 document.getElementById('pick-red').addEventListener('click', function () {
-    playCard(currentIndex, 'red');
+    addCardToPlay(currentIndex, 'red');
 });
 
 document.getElementById('pick-yellow').addEventListener('click', function () {
-    playCard(currentIndex, 'yellow');
+    addCardToPlay(currentIndex, 'yellow');
 });
 
 document.getElementById('new-round').addEventListener('click', function () {
