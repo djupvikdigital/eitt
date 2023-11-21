@@ -1,5 +1,5 @@
-import { CardDeck } from './CardDeck'
-import { Turn } from './Turn'
+import { CardDeck } from './CardDeck.js'
+import { Turn } from './Turn.js'
 
 export function Round(deck = CardDeck()) {
     let self = {
