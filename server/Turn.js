@@ -1,4 +1,4 @@
-export function Turn(playerIndex, playMultiple = false) {
+export function Turn(playerIndex) {
     let self = {
         cardsToPlay: [],
         hasDrawn: false,
