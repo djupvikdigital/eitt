@@ -315,17 +315,17 @@ export function GameControler(name) {
         for (let i = 0; i < this.players.length; i++) {
             let currentPlayer = this.players[i]
             let drawCount = 1
-            if (this.plusFourInPlay) {
+            if (this.round.turn.plusFourInPlay) {
                 drawCount = 4
             }
-            else if (this.plusTwoInPlay) {
-                drawCount = this.plusTwoInPlay * 2
+            else if (this.round.turn.plusTwoInPlay) {
+                drawCount = this.round.turn.plusTwoInPlay * 2
             }
             let hasTurn = this.hasTurn(currentPlayer)
             let gameStatus = {
                 id: currentPlayer.id,
                 index: i,
-                canPass: (this.playMulVal && hasTurn) || currentPlayer.hasDrawn,
+                canPass: this.round.turn.hasDrawn,
                 cards: currentPlayer.cards,
                 drawCount: drawCount,
                 hasTurn: hasTurn,
