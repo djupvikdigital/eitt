@@ -234,7 +234,7 @@ export function GameControler(name) {
             deck.shuffleCards(deck.availableCards)
             card = deck.drawCard()
         }
-        this.round.players = this.players
+        this.round.players = this.players.slice(0)
         this.state = 'PLAYING'
         this.round.deck.playCard(card)
         let plusTwoInPlay = 0
