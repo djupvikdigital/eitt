@@ -314,11 +314,11 @@ export function GameControler(name) {
                 hasTurn: hasTurn,
                 playCount: currentPlayer.playCount,
                 playerList: pack,
-                plusFourInPlay: this.plusFourInPlay,
+                plusFourInPlay: this.round.turn.plusFourInPlay,
                 lastPlayedCard: this.round.deck.getLastPlayedCard(),
                 lastPlayedIndex: this.lastPlayedIndex,
                 lastPlayerIndex: lastPlayerIndex,
-                roundWinner: this.roundWinner,
+                roundWinner: this.round.winner,
                 state: this.state,
             };
             currentPlayer.emit('gameStatus', gameStatus);
