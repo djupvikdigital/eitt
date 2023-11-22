@@ -58,7 +58,7 @@ export function Round(deck = CardDeck()) {
     self.drawCards = function (player, number = 1) {
         let switchTurn = false
         if (number === 1) {
-            if (player !== this.players[this.turn.playerIndex]) {
+            if (player.id !== this.players[this.turn.playerIndex].id) {
                 return false
             }
             // allow only one regular draw per turn
