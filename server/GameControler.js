@@ -147,6 +147,7 @@ export function GameControler(name) {
             this.round.turn.playerIndex = this.round.turn.playerIndex - 1
         }
         let player = this.players.splice(index, 1)
+        this.round.players.splice(index, 1)
         if (this.getPlayingPlayers().length === 0) {
             this.state = 'NOT_STARTED'
         }
