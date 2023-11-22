@@ -269,7 +269,7 @@ export function GameControler(name) {
         return pressedEitt
     }
     self.turnSwitch = function () {
-        if (this.round.state === 'FINISHED') {
+        if (this.round.state === 'FINISHED' && this.state !== 'ROUND_FINISHED') {
             this.state = 'ROUND_FINISHED'
             self.addScoresForRound()
             return
@@ -277,6 +277,10 @@ export function GameControler(name) {
         this.round.switchTurn()
     }
     self.sendGameStatus = function () {
+        if (this.round.state === 'FINISHED' && this.state !== 'ROUND_FINISHED') {
+            this.state = 'ROUND_FINISHED'
+            self.addScoresForRound()
+        }
         let pack = [];
         let lastPlayerIndex = -1;
         for (let i = 0; i < this.players.length; i++) {
