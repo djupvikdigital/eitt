@@ -215,7 +215,6 @@ html {
     font-size: calc(1rem + 0.5vw);
     height: 0;
 	margin-left: -70px;
-	margin-top: 40px;
 	overflow: hidden;
     padding: 181px 0 0 0;
     text-align: center;
@@ -224,7 +223,11 @@ html {
     width: 121px;
 }
 
-.card-to-play {
+.cards .card {
+	margin-top: 40px;
+}
+
+.cards .card-to-play {
 	margin-top: 0;
 }
 
