@@ -50,7 +50,7 @@ function addCardToPlay(index, color) {
 
 function createTransitionEndHandler(i) {
     return function transitionEndHandler() {
-        renderCards(gameStatus.cards);
+        renderCards(gameStatus.cards, gameStatus.cardsToPlay);
         renderLastPlayedCard(gameStatus.lastPlayedCard)
     }
 }
@@ -69,24 +69,25 @@ function createClickHandler(i, card) {
     }
 }
 
-function getClassNameForCard(card) {
-    return 'card card-' + card.color + ' card-' + card.color + '-' + card.value.replace('+', 'plus-')
+function getClassNameForCard(card, toPlay) {
+    return 'card ' + (toPlay ? 'card-to-play ' : '') + 'card-' + card.color + ' card-' + card.color + '-' + card.value.replace('+', 'plus-')
 }
 
 function hideColorPicker() {
     document.getElementById('color-picker').style.display = 'none';
 }
 
-function renderCards(cards) {
+function renderCards(cards, cardsToPlay = []) {
     let cardsElement = document.getElementById('cards');
     cardsElement.textContent = '';
     let fragment = document.createDocumentFragment();
     for (let i = 0; i < cards.length; i++) {
         let card = cards[i];
+        let toPlay = cardsToPlay.includes(i);
         let element = document.createElement('button');
         element.addEventListener('click', createClickHandler(i, card));
         element.addEventListener('transitionend', createTransitionEndHandler(i))
-        element.className = getClassNameForCard(card);
+        element.className = getClassNameForCard(card, toPlay);
         element.textContent = card.value;
         fragment.appendChild(element);
     }
@@ -351,12 +352,12 @@ function setGameStatus(status) {
         animatePlayCard(status.lastPlayedIndex)
     }
     else if (animatePlayFrom !== -1) {
-        renderCards(status.cards)
+        renderCards(status.cards, status.cardsToPlay)
         console.log('animatePlayFrom = ', animatePlayFrom)
         animateLastPlayedCardFrom(animatePlayFrom)
     }
     else {
-        renderCards(status.cards);
+        renderCards(status.cards, status.cardsToPlay);
         renderLastPlayedCard(status.lastPlayedCard)
     }
     renderPlayerList(status);

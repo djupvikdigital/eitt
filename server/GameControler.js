@@ -314,6 +314,7 @@ export function GameControler(name) {
                 index: i,
                 canPass: this.round.turn.hasDrawn,
                 cards: currentPlayer.cards,
+                cardsToPlay: currentPlayer.cardsToPlay,
                 drawCount: drawCount,
                 hasTurn: hasTurn,
                 playCount: currentPlayer.playCount,
