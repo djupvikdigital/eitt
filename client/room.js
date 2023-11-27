@@ -48,6 +48,11 @@ function addCardToPlay(index, color) {
     socket.emit('addCardToPlay', data);
 }
 
+function removeCardFromPlay(index) {
+    let data = { index: index };
+    socket.emit('removeCardFromPlay', data);
+}
+
 function createTransitionEndHandler(i) {
     return function transitionEndHandler() {
         renderCards(gameStatus.cards, gameStatus.cardsToPlay);
@@ -55,12 +60,16 @@ function createTransitionEndHandler(i) {
     }
 }
 
-function createClickHandler(i, card) {
+function createClickHandler(i, card, toPlay) {
     return function clickHandler(event) {
         currentIndex = i;
         if (card.color === 'black' && gameStatus.cards.length > 1) {
             showColorPicker();
             event.stopPropagation()
+        }
+        else if (toPlay) {
+            removeCardFromPlay(i)
+            console.log('removeCardFromPlay emitted, index = ' + i)
         }
         else {
             addCardToPlay(i)
@@ -85,7 +94,7 @@ function renderCards(cards, cardsToPlay = []) {
         let card = cards[i];
         let toPlay = cardsToPlay.includes(i);
         let element = document.createElement('button');
-        element.addEventListener('click', createClickHandler(i, card));
+        element.addEventListener('click', createClickHandler(i, card, toPlay));
         element.addEventListener('transitionend', createTransitionEndHandler(i))
         element.className = getClassNameForCard(card, toPlay);
         element.textContent = card.value;

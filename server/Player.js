@@ -35,10 +35,12 @@ export function Player() {
         }
     }
     self.removeCardFromPlay = function (index) {
-        if (index < 0 || index >= this.cardsToPlay.length) {
+        if (index < 0 || index >= this.cards.length) {
             return false
         }
-        this.cardsToPlay.splice(index, 1)
+        this.cardsToPlay = this.cardsToPlay.filter(function (value) {
+            return value !== index
+        })
         return true
     }
     return self
