@@ -131,12 +131,17 @@ export function Round(deck = CardDeck()) {
         for (let i = 0; i < player.cardsToPlay.length; i++) {
             cards.push(player.cards[player.cardsToPlay[i]])
         }
-        if (card.color === 'black' && color) {
-            if (!this.deck.isLegitColor(color)) {
-                return false
+        if (card.color === 'black') {
+            if (color) {
+                if (!this.deck.isLegitColor(color)) {
+                    return false
+                }
+                for (let i = 0; i < cards.length; i++) {
+                    cards[i] = Object.assign({}, cards[i], { color: color })
+                }
             }
-            for (let i = 0; i < cards.length; i++) {
-                cards[i] = Object.assign({}, cards[i], { color: color })
+            else {
+                return false
             }
         }
         let gotPlayed = this.deck.playCards(cards)
