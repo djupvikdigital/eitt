@@ -147,6 +147,8 @@ export function Round(deck = CardDeck()) {
         for (let i = 0; i < player.cardsToPlay.length; i++) {
             player.cards[player.cardsToPlay[i]] = null
         }
+        // reset
+        player.cardsToPlay = []
         // remove null cards
         player.cards = player.cards.filter(Boolean)
         if (player.cards.length === 0) {
