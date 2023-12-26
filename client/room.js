@@ -42,15 +42,20 @@ function animatePlayCard(index) {
 
 function addCardToPlay(index, color) {
     let data = { index: index };
-    if (color) {
-        data.color = color;
-    }
     socket.emit('addCardToPlay', data);
 }
 
 function removeCardFromPlay(index) {
     let data = { index: index };
     socket.emit('removeCardFromPlay', data);
+}
+
+function playTurn(color) {
+    let data = {}
+    if (color) {
+        data.color = color;
+    }
+    socket.emit('playTurn', data);
 }
 
 function createTransitionEndHandler(i) {
@@ -67,8 +72,9 @@ function createClickHandler(i, card, toPlay) {
             showColorPicker();
             event.stopPropagation()
         }
-        else if (toPlay) {
+        if (toPlay) {
             removeCardFromPlay(i)
+            hideColorPicker()
             console.log('removeCardFromPlay emitted, index = ' + i)
         }
         else {
@@ -84,6 +90,7 @@ function getClassNameForCard(card, toPlay) {
 
 function hideColorPicker() {
     document.getElementById('color-picker').style.display = 'none';
+    document.getElementById('play').style.display = 'inline-block';
 }
 
 function renderCards(cards, cardsToPlay = []) {
@@ -288,6 +295,8 @@ function setGameStatus(status) {
         animatePlayFrom = status.lastPlayerIndex
     }
     gameStatus = status;
+    let playBlack = status.cardsToPlay.length && status.cards[status.cardsToPlay[0]].color === 'black';
+    console.log('playBlack = ' + playBlack)
     if (status.state === 'NOT_STARTED') {
         if (status.index === 0) {
             // First player gets to set game options
@@ -305,6 +314,7 @@ function setGameStatus(status) {
         changeButtonDisableState(false)
         document.getElementById('game-options').style.display = ''
         document.getElementById('game-table').style.display = 'block'
+        document.getElementById('play').style.display = status.playMultiple && !playBlack ? 'inline-block' : ''
         document.getElementById('pass').style.display = status.canPass ? 'inline-block' : ''
         document.getElementById('check-plus-four').style.display = status.plusFourInPlay && status.hasTurn ? 'inline-block' : ''
         document.getElementById('round-controls').style.display = ''
@@ -383,6 +393,7 @@ function SVGupdateClassPod(color, selector) {
 
 function showColorPicker() {
     document.getElementById('color-picker').style.display = 'inline';
+    document.getElementById('play').style.display = 'none';
 }
 
 let currentIndex = 0;
@@ -521,7 +532,7 @@ document.getElementById('draw-card').addEventListener('click', function () {
 });
 
 document.getElementById('play').addEventListener('click', function () {
-    socket.emit('playTurn')
+    playTurn();
 })
 
 document.getElementById('pass').addEventListener('click', function () {
@@ -533,19 +544,19 @@ document.getElementById('check-plus-four').addEventListener('click', function ()
 })
 
 document.getElementById('pick-blue').addEventListener('click', function () {
-    addCardToPlay(currentIndex, 'blue');
+    playTurn('blue');
 });
 
 document.getElementById('pick-green').addEventListener('click', function () {
-    addCardToPlay(currentIndex, 'green');
+    playTurn('green');
 });
 
 document.getElementById('pick-red').addEventListener('click', function () {
-    addCardToPlay(currentIndex, 'red');
+    playTurn('red');
 });
 
 document.getElementById('pick-yellow').addEventListener('click', function () {
-    addCardToPlay(currentIndex, 'yellow');
+    playTurn('yellow');
 });
 
 document.getElementById('new-round').addEventListener('click', function () {

@@ -241,6 +241,7 @@ html {
 	margin-left: 0;
 }
 
+#play,
 #pass,
 #check-plus-four {
 	display: none;

@@ -318,6 +318,7 @@ export function GameControler(name) {
                 drawCount: drawCount,
                 hasTurn: hasTurn,
                 playCount: currentPlayer.playCount,
+                playMultiple: this.playMultiple,
                 playerList: pack,
                 plusFourInPlay: this.round.turn.plusFourInPlay,
                 lastPlayedCard: this.round.deck.getLastPlayedCard(),
