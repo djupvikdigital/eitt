@@ -180,6 +180,8 @@ export function Round(deck = CardDeck()) {
             // self.addScoresForRound()
             return
         }
+        let player = this.players[this.turn.playerIndex]
+        player.cardsToPlay = []
         let length = this.players.length
         this.previousTurn = this.turn
         this.turn = Turn((this.turn.playerIndex + increment * this.turnRotation + length) % length)
