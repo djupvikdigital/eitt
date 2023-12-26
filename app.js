@@ -148,12 +148,13 @@ io.sockets.on('connection', function(socket){
         if (!room.round.hasTurn(player)) {
             return
         }
-        if (data.color) {
+        if (data && data.color) {
             room.round.playTurn(data.color)
         }
         else {
             room.round.playTurn()
         }
+        room.sendGameStatus()
     })
 
     socket.on('playCard',function(data){

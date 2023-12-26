@@ -520,6 +520,10 @@ document.getElementById('draw-card').addEventListener('click', function () {
     socket.emit('drawCards');
 });
 
+document.getElementById('play').addEventListener('click', function () {
+    socket.emit('playTurn')
+})
+
 document.getElementById('pass').addEventListener('click', function () {
     socket.emit('pass');
 });
