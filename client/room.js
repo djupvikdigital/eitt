@@ -295,7 +295,7 @@ function setGameStatus(status) {
     }
     gameStatus = status;
     let playBlack = status.cardsToPlay.length && status.cards[status.cardsToPlay[0]].color === 'black';
-    let showPlay = status.playMultiple && status.hasTurn && !playBlack;
+    let showPlay = status.playMultiple && status.hasTurn && status.cardsToPlay.length && !playBlack;
     console.log('playBlack = ' + playBlack)
     if (status.state === 'NOT_STARTED') {
         if (status.index === 0) {
