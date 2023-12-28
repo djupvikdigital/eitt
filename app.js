@@ -120,13 +120,9 @@ io.sockets.on('connection', function(socket){
         let [room, player] = House.getRoomAndPlayerBySocketId(socket.id)
         if (room.type != 'gameRoom') return
         player.addCardToPlay(data.index)
-        if (!room.playMultiple && room.round.hasTurn(player)) {
-            if (data.color) {
-                room.round.playTurn(data.color)
-            }
-            else {
-                room.round.playTurn()
-            }
+        let card = player.cards[data.index]
+        if (!room.playMultiple && room.round.hasTurn(player) && card && card.color !== 'black') {
+            room.round.playTurn()
         }
         room.sendGameStatus()
     })
