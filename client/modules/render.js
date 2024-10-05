@@ -8,7 +8,7 @@ import { createTransitionEndHandler, createClickHandler } from "./handlers.js";
 export function SVGupdateClass(picker, selector, node) {
     let inClass = node.querySelectorAll(selector);
     for (let i = 0; i < inClass.length; i++) {
-        inClass[i].style.fill = picker.value;
+        inClass[i].style.fill = picker;
     }
 }
 
@@ -31,7 +31,7 @@ export function renderCards(cards, cardsToPlay = [], currentIndex, socket, gameS
         if (toPlay) {
             let number = document.createElement('h1')
             number.className = 'number'
-            number.textContent = cardsToPlay.indexOf(i)+1
+            number.textContent = cardsToPlay.indexOf(i) + 1
             element.appendChild(number)
         }
         fragment.appendChild(element);
@@ -138,7 +138,7 @@ export function renderPlayerList(status, atLoginPage) {
             group.appendChild(SVGheadGear);
         }
         SVG.appendChild(group);
-        for(let i = 0; i < player.numberOfCards; i++) {
+        for (let i = 0; i < player.numberOfCards; i++) {
             document.getElementById('loginDiv').style.display = 'block'
             let length = document.getElementById('SVGavatar').getBoundingClientRect().width
             let cardLength = document.getElementById('SVGcardBackside').getBoundingClientRect().width
