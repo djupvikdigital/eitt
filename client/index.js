@@ -42,10 +42,6 @@ function animatePlayCard(index) {
     cardElement.style.transform = transform;
 }
 
-function hideColorPicker() {
-    document.getElementById('color-picker').style.display = 'none';
-} 
-
 function setGameStatus(status) {
     console.log('Gamestatus received:')
     console.log(status)
@@ -54,6 +50,9 @@ function setGameStatus(status) {
         animatePlayFrom = status.lastPlayerIndex
     }
     gameStatus = status;
+    let playBlack = status.cardsToPlay.length && status.cards[status.cardsToPlay[0]].color === 'black';
+    let showPlay = status.playMultiple && status.hasTurn && status.cardsToPlay.length && !playBlack;
+    console.log('playBlack = ' + playBlack)
     if (status.state === 'NOT_STARTED') {
         if (status.index === 0) {
             // First player gets to set game options
@@ -71,6 +70,7 @@ function setGameStatus(status) {
         changeButtonDisableState(false)
         document.getElementById('game-options').style.display = ''
         document.getElementById('game-table').style.display = 'block'
+        document.getElementById('play').style.display = showPlay ? 'inline-block' : ''
         document.getElementById('pass').style.display = status.canPass ? 'inline-block' : ''
         document.getElementById('check-plus-four').style.display = status.plusFourInPlay && status.hasTurn ? 'inline-block' : ''
         document.getElementById('round-controls').style.display = ''
@@ -283,7 +283,7 @@ document.getElementById('draw-card').addEventListener('click', function () {
 });
 
 document.getElementById('play').addEventListener('click', function () {
-    socket.emit('playTurn')
+    playTurn();
 })
 
 document.getElementById('pass').addEventListener('click', function () {

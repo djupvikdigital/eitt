@@ -282,12 +282,9 @@ export function GameControler(name) {
             self.addScoresForRound()
         }
         let pack = [];
-        let lastPlayerIndex = -1;
+        let lastPlayerIndex = this.round.previousTurn ? this.round.previousTurn.playerIndex : -1;
         for (let i = 0; i < this.players.length; i++) {
             let currentPlayer = this.players[i]
-            if (currentPlayer.id === this.lastPlayerId) {
-                lastPlayerIndex = i;
-            }
             pack.push({
                 name: currentPlayer.name,
                 numberOfCards: currentPlayer.cards.length,
@@ -318,6 +315,7 @@ export function GameControler(name) {
                 drawCount: drawCount,
                 hasTurn: hasTurn,
                 playCount: currentPlayer.playCount,
+                playMultiple: this.playMultiple,
                 playerList: pack,
                 plusFourInPlay: this.round.turn.plusFourInPlay,
                 lastPlayedCard: this.round.deck.getLastPlayedCard(),
