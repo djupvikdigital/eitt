@@ -1,6 +1,5 @@
 Features:
 - Animation når man spiller kort
-- Se hvad rækkefølge man spiller kort i, i play multiple
 
 Bugs:
 - Siden flyver op når man trykker på noget
