@@ -134,14 +134,10 @@
                 <button id="headGearSelectRight" class="arrow right"></button>
                 <br>
                 <br>
-                <button id="avatarHeadSelector" data-jscolor="{
-                    onChange: 'SVGupdateClass(this, \'.avatarHead\', document)',
-                    value:'#f6d7d2'}"></button>
+                <input type="color" id="avatarHeadSelector" value="#f6d7d2">
                 <br>
                 <br>
-                <button id="avatarBodySelector" data-jscolor="{
-                    onChange: 'SVGupdateClass(this, \'.avatarBody\', document)',
-                    value:'#47535a'}"></button>
+                <input type="color" id="avatarBodySelector" value="#47535a">
 
             </span>
         </div>
@@ -349,12 +345,10 @@
         document.getElementById("room").style.display = "none";
         document.getElementById("mainlobby").style.display = "none";
     </script>
-    <script src="/client/jscolor.js"></script>
     <script src="https://cdn.socket.io/4.4.0/socket.io.min.js"
         integrity="sha384-1fOn6VtTq3PWwfsOrk45LnYcGosJwzMHv+Xh/Jx5303FVOXzEnw0EpLv30mtjmlj"
         crossorigin="anonymous"></script>
-    <script src="/client/mainlobby.js"></script>
-    <script src="/client/room.js"></script>
+    <script type="module" src="/client/index.js"></script>
 </body>
 
 </html>
