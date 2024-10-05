@@ -81,6 +81,7 @@ export function Round(deck = CardDeck()) {
         if (switchTurn) {
             this.switchTurn()
         }
+        player.cardsToPlay = []
         return true
     }
     self.hasTurn = function (player) {
