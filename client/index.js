@@ -20,9 +20,9 @@ function animateLastPlayedCardFrom(index) {
     let offsetTop = (lastPlayedElementRect.top - playerElementRect.top);
     let transform = 'translateX(' + offsetLeft + 'px) translateY(' + offsetTop + 'px)';
     animatedElement.className = getClassNameForCard(lastPlayedCard);
-    animatedElement.style.position = 'fixed';
+    animatedElement.style.position = 'absolute';
     animatedElement.style.left = playerElementRect.left + 70 + 'px';
-    animatedElement.style.top = playerElementRect.top + 'px';
+    animatedElement.style.top = playerElementRect.top + window.scrollY + 'px';
     animatedElement.addEventListener('transitionend', function() {
         document.body.removeChild(animatedElement);
         renderLastPlayedCard(lastPlayedCard);
