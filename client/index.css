@@ -161,6 +161,7 @@ html {
 	top: 100%;
 	transform: translateX(-50%);
 	width: max-content;
+	z-index: 1;
 }
 
 .details-body::after {

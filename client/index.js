@@ -1,8 +1,8 @@
 import { addEventListeners, hideColorPicker} from "./modules/handlers.js";
 import { renderCards, renderLastPlayedCard, renderPlayerList, renderPlayerScores, SVGupdateClass, getClassNameForCard } from "./modules/render.js";
 
-document.getElementById('avatarHeadSelector').addEventListener('input', function(){SVGupdateClass(this, '.avatarHead', document)} )
-document.getElementById('avatarBodySelector').addEventListener('input', function(){SVGupdateClass(this, '.avatarBody', document)} )
+document.getElementById('avatarHeadSelector').addEventListener('input', function(){SVGupdateClass(this.value, '.avatarHead', document)} )
+document.getElementById('avatarBodySelector').addEventListener('input', function(){SVGupdateClass(this.value, '.avatarBody', document)} )
 
 let atLoginPage = true;
 
