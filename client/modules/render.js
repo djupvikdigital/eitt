@@ -16,7 +16,7 @@ export function getClassNameForCard(card, toPlay) {
     return 'card ' + (toPlay ? 'card-to-play ' : '') + 'card-' + card.color + ' card-' + card.color + '-' + card.value.replace('+', 'plus-')
 }
 
-export function renderCards(cards, cardsToPlay = [], currentIndex, socket) {
+export function renderCards(cards, cardsToPlay = [], currentIndex, socket, gameStatus) {
     let cardsElement = document.getElementById('cards');
     cardsElement.textContent = '';
     let fragment = document.createDocumentFragment();
@@ -24,7 +24,7 @@ export function renderCards(cards, cardsToPlay = [], currentIndex, socket) {
         let card = cards[i];
         let toPlay = cardsToPlay.includes(i);
         let element = document.createElement('button');
-        element.addEventListener('click', createClickHandler(i, card, toPlay, currentIndex, socket));
+        element.addEventListener('click', createClickHandler(i, card, toPlay, currentIndex, socket, gameStatus));
         element.addEventListener('transitionend', createTransitionEndHandler(i))
         element.className = getClassNameForCard(card, toPlay);
         element.textContent = card.value;

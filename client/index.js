@@ -1,4 +1,4 @@
-import { createPickers } from "./modules/handlers.js";
+import { createPickers, hideColorPicker} from "./modules/handlers.js";
 import { renderCards, renderLastPlayedCard, renderPlayerList, renderPlayerScores, SVGupdateClass, getClassNameForCard } from "./modules/render.js";
 
 document.getElementById('avatarHeadSelector').addEventListener('input', function(){SVGupdateClass(this, '.avatarHead', document)} )
@@ -127,12 +127,12 @@ function setGameStatus(status) {
         animatePlayCard(status.lastPlayedIndex)
     }
     else if (animatePlayFrom !== -1) {
-        renderCards(status.cards, status.cardsToPlay, currentIndex, socket)
+        renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus)
         console.log('animatePlayFrom = ', animatePlayFrom)
         animateLastPlayedCardFrom(animatePlayFrom)
     }
     else {
-        renderCards(status.cards, status.cardsToPlay, currentIndex, socket);
+        renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus);
         renderLastPlayedCard(status.lastPlayedCard)
     }
     renderPlayerList(status, atLoginPage);
@@ -281,10 +281,6 @@ gameOptionsForm.addEventListener('submit', function (e) {
 document.getElementById('draw-card').addEventListener('click', function () {
     socket.emit('drawCards');
 });
-
-document.getElementById('play').addEventListener('click', function () {
-    playTurn();
-})
 
 document.getElementById('pass').addEventListener('click', function () {
     socket.emit('pass');

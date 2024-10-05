@@ -10,7 +10,7 @@ function showColorPicker() {
     document.getElementById('play').style.display = 'none';
 }
 
-function hideColorPicker() {
+export function hideColorPicker() {
     document.getElementById('color-picker').style.display = 'none';
 } 
 
@@ -32,7 +32,7 @@ function playTurn(color, socket) {
     socket.emit('playTurn', data);
 }
 
-export function createClickHandler(i, card, toPlay, currentIndex, socket) {
+export function createClickHandler(i, card, toPlay, currentIndex, socket, gameStatus) {
     return function clickHandler(event) {
         currentIndex = i;
         if (card.color === 'black' && gameStatus.cards.length > 1) {
@@ -67,4 +67,8 @@ export function createPickers(socket) {
     document.getElementById('pick-yellow').addEventListener('click', function () {
         playTurn('yellow', socket);
     });
+
+    document.getElementById('play').addEventListener('click', function () {
+        playTurn(null, socket);
+    })
 }
