@@ -221,6 +221,7 @@ html {
 	transition: transform 1000ms;
     vertical-align: middle;
     width: 121px;
+	position: relative;
 }
 
 .cards .card {
@@ -229,6 +230,22 @@ html {
 
 .cards .card-to-play {
 	margin-top: 0;
+}
+
+.number {
+	position: absolute;
+	top: 30px;
+	line-height: 0.6;
+
+	border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    padding: 8px;
+
+    background: #fff;
+    border: 2px solid #000000;
+    color: #000000;
+    text-align: center;
 }
 
 #draw-card {

@@ -28,6 +28,12 @@ export function renderCards(cards, cardsToPlay = [], currentIndex, socket, gameS
         element.addEventListener('transitionend', createTransitionEndHandler(i))
         element.className = getClassNameForCard(card, toPlay);
         element.textContent = card.value;
+        if (toPlay) {
+            let number = document.createElement('h1')
+            number.className = 'number'
+            number.textContent = cardsToPlay.indexOf(i)+1
+            element.appendChild(number)
+        }
         fragment.appendChild(element);
     }
     cardsElement.appendChild(fragment);
