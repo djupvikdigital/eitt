@@ -2,4 +2,3 @@ Features:
 - Animation når man spiller kort
 
 Bugs:
-- Siden flyver op når man trykker på noget

@@ -43,6 +43,7 @@ function animatePlayCard(index) {
 }
 
 function setGameStatus(status) {
+    let currentScroll = window.scrollY
     console.log('Gamestatus received:')
     console.log(status)
     let animatePlayFrom = -1
@@ -138,6 +139,7 @@ function setGameStatus(status) {
     renderPlayerList(status, atLoginPage);
     document.getElementById('your-turn').style.visibility = status.hasTurn ? 'inherit' : 'hidden'
     renderPlayerScores(status)
+    window.scroll({top: currentScroll})
 }
 
 function SVGupdateClassPod(color, selector) {
