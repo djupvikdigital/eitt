@@ -51,7 +51,7 @@ export function createClickHandler(i, card, toPlay, currentIndex, socket, gameSt
     }
 }
 
-export function createPickers(socket) {
+export function addEventListeners(socket) {
     document.getElementById('pick-blue').addEventListener('click', function () {
         playTurn('blue', socket);
     });
@@ -70,5 +70,21 @@ export function createPickers(socket) {
 
     document.getElementById('play').addEventListener('click', function () {
         playTurn(null, socket);
+    })
+
+    document.getElementById('draw-card').addEventListener('click', function () {
+        socket.emit('drawCards');
+    });
+    
+    document.getElementById('pass').addEventListener('click', function () {
+        socket.emit('pass');
+    });
+    
+    document.getElementById('check-plus-four').addEventListener('click', function () {
+        socket.emit('checkPlusFour')
+    })
+
+    document.getElementById('new-round').addEventListener('click', function () {
+        socket.emit('newRound')
     })
 }

@@ -1,4 +1,4 @@
-import { createPickers, hideColorPicker} from "./modules/handlers.js";
+import { addEventListeners, hideColorPicker} from "./modules/handlers.js";
 import { renderCards, renderLastPlayedCard, renderPlayerList, renderPlayerScores, SVGupdateClass, getClassNameForCard } from "./modules/render.js";
 
 document.getElementById('avatarHeadSelector').addEventListener('input', function(){SVGupdateClass(this, '.avatarHead', document)} )
@@ -278,23 +278,7 @@ gameOptionsForm.addEventListener('submit', function (e) {
     e.preventDefault()
 })
 
-document.getElementById('draw-card').addEventListener('click', function () {
-    socket.emit('drawCards');
-});
-
-document.getElementById('pass').addEventListener('click', function () {
-    socket.emit('pass');
-});
-
-document.getElementById('check-plus-four').addEventListener('click', function () {
-    socket.emit('checkPlusFour')
-})
-
-createPickers(socket)
-
-document.getElementById('new-round').addEventListener('click', function () {
-    socket.emit('newRound')
-})
+addEventListeners(socket)
 
 let SVGheadGear = document.querySelectorAll(".SVGheadGear")
 let selectedHeadGear = 0;
