@@ -35,7 +35,7 @@ function playTurn(color, socket) {
 export function createClickHandler(i, card, toPlay, currentIndex, socket, gameStatus) {
     return function clickHandler(event) {
         currentIndex = i;
-        if (card.color === 'black' && gameStatus.cards.length > 1) {
+        if (card.color === 'black') {
             showColorPicker();
             event.stopPropagation()
         }
