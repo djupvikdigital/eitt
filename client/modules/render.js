@@ -52,7 +52,7 @@ export function renderLastPlayedCard(card) {
     return true
 }
 
-export function renderPlayerList(status, atLoginPage) {
+export function renderPlayerList(status, atLoginPage, socket) {
     let playerListELement = document.getElementById('player-list');
     playerListELement.textContent = '';
     let fragment = document.createDocumentFragment();

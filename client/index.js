@@ -136,7 +136,7 @@ function setGameStatus(status) {
         renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus);
         renderLastPlayedCard(status.lastPlayedCard)
     }
-    renderPlayerList(status, atLoginPage);
+    renderPlayerList(status, atLoginPage, socket);
     document.getElementById('your-turn').style.visibility = status.hasTurn ? 'inherit' : 'hidden'
     renderPlayerScores(status)
     window.scroll({top: currentScroll})
