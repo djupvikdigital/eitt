@@ -31,7 +31,9 @@ describe('GameControler', () => {
 
     it('changes state from NOT_STARTED to PLAYING when dealing new round', () => {
         const controler = GameControler('', { 0: {}})
-        controler.players = [Player()]
+        let player = Player()
+        player.socket = { id: Math.random(), emit: noop }
+        controler.players = [player]
         expect(controler.state).toBe('NOT_STARTED')
         controler.dealNewRound()
         expect(controler.state).toBe('PLAYING')
