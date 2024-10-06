@@ -141,9 +141,6 @@ export function Round(deck = CardDeck()) {
                     cards[i] = Object.assign({}, cards[i], { color: color })
                 }
             }
-            else {
-                return false
-            }
         }
         let gotPlayed = this.deck.playCards(cards)
         if (!gotPlayed) {
