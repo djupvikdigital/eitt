@@ -183,6 +183,7 @@ export function GameControler(name) {
         while (i < this.players.length) {
             let currentPlayer = this.players[i]
             if (currentPlayer.socket) {
+                currentPlayer.cards = []
                 this.round.drawCards(currentPlayer, 7)
                 currentPlayer.isPlaying = true
                 if (this.playMultiple) {
