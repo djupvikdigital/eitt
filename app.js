@@ -90,7 +90,9 @@ io.sockets.on('connection', function(socket){
         let room = House.getRoomBySocketId(socket.id)
         if (room.type != 'gameRoom') return
         let accusedPlayer = room.players[index]
-        if (room.lastPlayerId === accusedPlayer.id && accusedPlayer.cards.length === 1 && accusedPlayer.pressedEitt == false) {
+        let lastPlayerIndex = room.round.previousTurn ? room.round.previousTurn.playerIndex : -1;
+        let lastPlayerId = room.round.players[lastPlayerIndex].id
+        if (lastPlayerId === accusedPlayer.id && accusedPlayer.cards.length === 1 && accusedPlayer.pressedEitt == false) {
             room.drawCards(accusedPlayer, 3)
         }
     })
