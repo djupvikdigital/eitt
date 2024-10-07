@@ -22,6 +22,12 @@ export function animateLastPlayedCardFrom(index, gameStatus) {
     animatedElement.style.transform = transform;
 }
 
+function setTransformTimeout(element, transform, time) {
+    setTimeout(function () {
+        element.style.transform = transform;
+    }, time);
+}
+
 export function animatePlayCards(playedCards, callback) {
     console.log('playedCards = ' + playedCards)
     let cardsElement = document.getElementById('cards');
@@ -34,7 +40,7 @@ export function animatePlayCards(playedCards, callback) {
         let offsetLeft = (cardElementRect.left - lastPlayedElementRect.left) * -1;
         let offsetTop = (cardElementRect.top - lastPlayedElementRect.top) * -1;
         let transform = 'translateX(' + offsetLeft + 'px) translateY(' + offsetTop + 'px)';
-        cardElement.style.transform = transform;
+        setTransformTimeout(cardElement, transform, i * 100);
     }
     cardElement.addEventListener('transitionend', callback);
 }
