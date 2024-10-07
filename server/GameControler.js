@@ -277,7 +277,7 @@ export function GameControler(name) {
         }
         this.round.switchTurn()
     }
-    self.sendGameStatus = function () {
+    self.sendGameStatus = function (action) {
         if (this.round.state === 'FINISHED' && this.state !== 'ROUND_FINISHED') {
             this.state = 'ROUND_FINISHED'
             self.addScoresForRound()
@@ -310,6 +310,7 @@ export function GameControler(name) {
             let gameStatus = {
                 id: currentPlayer.id,
                 index: i,
+                action: action ? action : null,
                 canPass: this.round.turn.hasDrawn,
                 cards: currentPlayer.cards,
                 cardsToPlay: currentPlayer.cardsToPlay,

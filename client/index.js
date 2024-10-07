@@ -13,10 +13,6 @@ function setGameStatus(status) {
     let currentScroll = window.scrollY
     console.log('Gamestatus received:')
     console.log(status)
-    let animatePlayFrom = -1
-    if (gameStatus.lastPlayerIndex !== status.lastPlayerIndex) {
-        animatePlayFrom = status.lastPlayerIndex
-    }
     gameStatus = status;
     let playBlack = status.cardsToPlay.length && status.cards[status.cardsToPlay[0]].color === 'black';
     let showPlay = status.playMultiple && status.hasTurn && status.cardsToPlay.length && !playBlack;
@@ -95,9 +91,9 @@ function setGameStatus(status) {
         playCount = status.playCount
         animatePlayCard(status.lastPlayedIndex)
     }
-    else if (animatePlayFrom !== -1) {
+    else if (status.action && status.action.type === 'playTurn') {
+        let animatePlayFrom = status.action.playerIndex
         renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus)
-        console.log('animatePlayFrom = ', animatePlayFrom)
         animateLastPlayedCardFrom(animatePlayFrom, status)
     }
     else {
