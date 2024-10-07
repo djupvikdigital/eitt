@@ -75,8 +75,13 @@ io.sockets.on('connection', function(socket){
             socket.emit('userMessage', "I've got " + House.MAX_PLAYERS + " players, but you ain't one")
             return
         }
-        House.moveSocketTo(socket, data.room, data.playerId)
-        socket.emit('joinRoom', { playerId: data.playerId, room: data.room })
+        let playerId = null
+        if (data.playerId) {
+            playerId = House.moveSocketTo(socket, data.room, data.playerId)
+        } else {
+            playerId = House.moveSocketTo(socket, data.room)
+        }
+        socket.emit('joinRoom', { playerId: playerId, room: data.room })
         House.refreshLobby()
     })
 

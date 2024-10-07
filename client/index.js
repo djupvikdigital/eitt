@@ -90,6 +90,7 @@ function setGameStatus(status) {
         }
     }
     document.getElementById('draw-card').textContent = 'Draw ' + status.drawCount
+    renderPlayerList(status, atLoginPage, socket);
     if (playCount !== status.playCount) {
         playCount = status.playCount
         animatePlayCard(status.lastPlayedIndex)
@@ -103,7 +104,6 @@ function setGameStatus(status) {
         renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus);
         renderLastPlayedCard(status.lastPlayedCard)
     }
-    renderPlayerList(status, atLoginPage, socket);
     document.getElementById('your-turn').style.visibility = status.hasTurn ? 'inherit' : 'hidden'
     renderPlayerScores(status)
     window.scroll({top: currentScroll})
