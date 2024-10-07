@@ -1,10 +1,3 @@
-export function createTransitionEndHandler(i) {
-    return function transitionEndHandler() {
-        renderCards(gameStatus.cards, gameStatus.cardsToPlay);
-        renderLastPlayedCard(gameStatus.lastPlayedCard)
-    }
-}
-
 function showColorPicker() {
     document.getElementById('color-picker').style.display = 'inline';
     document.getElementById('play').style.display = 'none';

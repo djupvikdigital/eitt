@@ -316,7 +316,6 @@ export function GameControler(name) {
                 cardsToPlay: currentPlayer.cardsToPlay,
                 drawCount: drawCount,
                 hasTurn: hasTurn,
-                playCount: currentPlayer.playCount,
                 playMultiple: this.playMultiple,
                 playerList: pack,
                 plusFourInPlay: this.round.turn.plusFourInPlay,

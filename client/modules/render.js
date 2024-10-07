@@ -3,7 +3,7 @@ const OPEN_ALWAYS = 1;
 const OPEN_NEVER = 2;
 let openPlayerScores = OPEN_WHEN_ROUND_FINISHED;
 
-import { createTransitionEndHandler, createClickHandler } from "./handlers.js";
+import { createClickHandler } from "./handlers.js";
 
 export function SVGupdateClass(picker, selector, node) {
     let inClass = node.querySelectorAll(selector);
@@ -25,7 +25,6 @@ export function renderCards(cards, cardsToPlay = [], currentIndex, socket, gameS
         let toPlay = cardsToPlay.includes(i);
         let element = document.createElement('button');
         element.addEventListener('click', createClickHandler(i, card, toPlay, currentIndex, socket, gameStatus));
-        element.addEventListener('transitionend', createTransitionEndHandler(i))
         element.className = getClassNameForCard(card, toPlay);
         element.textContent = card.value;
         if (toPlay) {

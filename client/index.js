@@ -1,4 +1,4 @@
-import { animateLastPlayedCardFrom, animatePlayCard } from "./modules/animations.js";
+import { animateLastPlayedCardFrom, animatePlayCards } from "./modules/animations.js";
 import { addEventListeners, hideColorPicker} from "./modules/handlers.js";
 import { renderCards, renderLastPlayedCard, renderPlayerList, renderPlayerScores, SVGupdateClass, getClassNameForCard } from "./modules/render.js";
 
@@ -6,8 +6,6 @@ document.getElementById('avatarHeadSelector').addEventListener('input', function
 document.getElementById('avatarBodySelector').addEventListener('input', function(){SVGupdateClass(this.value, '.avatarBody', document)} )
 
 let atLoginPage = true;
-
-let playCount = 0;
 
 function setGameStatus(status) {
     let currentScroll = window.scrollY
@@ -87,14 +85,19 @@ function setGameStatus(status) {
     }
     document.getElementById('draw-card').textContent = 'Draw ' + status.drawCount
     renderPlayerList(status, atLoginPage, socket);
-    if (playCount !== status.playCount) {
-        playCount = status.playCount
-        animatePlayCard(status.lastPlayedIndex)
-    }
-    else if (status.action && status.action.type === 'playTurn') {
+    if (status.action && status.action.type === 'playTurn') {
         let animatePlayFrom = status.action.playerIndex
-        renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus)
-        animateLastPlayedCardFrom(animatePlayFrom, status)
+        if (animatePlayFrom === status.index) {
+            // cards played from you
+            animatePlayCards(status.action.playedCards, function () {
+                renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus)
+                renderLastPlayedCard(gameStatus.lastPlayedCard)
+            })
+        }
+        else {
+            renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus)
+            animateLastPlayedCardFrom(animatePlayFrom, status)
+        }
     }
     else {
         renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus);

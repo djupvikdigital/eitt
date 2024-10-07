@@ -4,7 +4,6 @@ export function Player() {
         cards: [],
         cardsToPlay: [],
         name: '',
-        playCount: 0,
         playMultiple: false,
         scores: [],
         socket: null,

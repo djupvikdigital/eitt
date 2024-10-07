@@ -22,14 +22,19 @@ export function animateLastPlayedCardFrom(index, gameStatus) {
     animatedElement.style.transform = transform;
 }
 
-export function animatePlayCard(index) {
+export function animatePlayCards(playedCards, callback) {
+    console.log('playedCards = ' + playedCards)
     let cardsElement = document.getElementById('cards');
-    let cardElement = cardsElement.children[index];
-    let lastPlayedElement = document.getElementById('last-played-card');
-    let cardElementRect = cardElement.getBoundingClientRect();
-    let lastPlayedElementRect = lastPlayedElement.getBoundingClientRect();
-    let offsetLeft = (cardElementRect.left - lastPlayedElementRect.left) * -1;
-    let offsetTop = (cardElementRect.top - lastPlayedElementRect.top) * -1;
-    let transform = 'translateX(' + offsetLeft + 'px) translateY(' + offsetTop + 'px)';
-    cardElement.style.transform = transform;
+    let cardElement = null
+    for (let i = 0; i < playedCards.length; i++) {
+        cardElement = cardsElement.children[playedCards[i]];
+        let lastPlayedElement = document.getElementById('last-played-card');
+        let cardElementRect = cardElement.getBoundingClientRect();
+        let lastPlayedElementRect = lastPlayedElement.getBoundingClientRect();
+        let offsetLeft = (cardElementRect.left - lastPlayedElementRect.left) * -1;
+        let offsetTop = (cardElementRect.top - lastPlayedElementRect.top) * -1;
+        let transform = 'translateX(' + offsetLeft + 'px) translateY(' + offsetTop + 'px)';
+        cardElement.style.transform = transform;
+    }
+    cardElement.addEventListener('transitionend', callback);
 }
