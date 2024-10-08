@@ -319,7 +319,7 @@ export function GameControler(name) {
                 playMultiple: this.playMultiple,
                 playerList: pack,
                 plusFourInPlay: this.round.turn.plusFourInPlay,
-                lastPlayedCard: this.round.deck.getLastPlayedCard(),
+                lastPlayedCards: this.round.deck.getLastPlayedCards(),
                 lastPlayedIndex: this.lastPlayedIndex,
                 lastPlayerIndex: lastPlayerIndex,
                 roundWinner: this.round.winner,

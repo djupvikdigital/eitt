@@ -38,15 +38,25 @@ export function renderCards(cards, cardsToPlay = [], currentIndex, socket, gameS
     cardsElement.appendChild(fragment);
 }
 
-export function renderLastPlayedCard(card) {
-    let lastPlayedCardElement = document.getElementById('last-played-card');
-    if (card) {
-        lastPlayedCardElement.className = getClassNameForCard(card);
-        lastPlayedCardElement.textContent = card.value;
+export function renderLastPlayedCards(cards) {
+    let lastPlayedCardsElement = document.getElementById('last-played-cards');
+    lastPlayedCardsElement.textContent = '';
+    let fragment = document.createDocumentFragment();
+    if (cards) {
+        for (let i = 0; i < cards.length; i++) {
+            let card = cards[i];
+            let element = document.createElement('span');
+            element.className = getClassNameForCard(card);
+            element.textContent = card.value;
+            fragment.appendChild(element);
+        }
+        lastPlayedCardsElement.appendChild(fragment);
     }
     else {
-        lastPlayedCardElement.className = 'card';
-        lastPlayedCardElement.textContent = '';
+        let element = document.createElement('div');
+        element.className = 'card';
+        element.textContent = '';
+        lastPlayedCardsElement.appendChild(element);
     }
     return true
 }

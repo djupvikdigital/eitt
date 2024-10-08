@@ -406,7 +406,7 @@ describe('GameControler', () => {
         deck.availableCards[deck.availableCards.length - 8] = { value: '+4' }
         controler.state = 'ROUND_FINISHED'
         controler.dealNewRound(deck)
-        expect(deck.getLastPlayedCard().value).not.toBe('+4')
+        expect(deck.getLastPlayedCards()[0].value).not.toBe('+4')
     })
 
     it('does not set plusTwoInPlay when starting neutral', () => {
@@ -442,7 +442,7 @@ describe('GameControler', () => {
         controler.state = 'ROUND_FINISHED'
         controler.startNeutral = true
         controler.dealNewRound(deck)
-        expect(deck.getLastPlayedCard().value).not.toBe('W')
+        expect(deck.getLastPlayedCards()[0].value).not.toBe('W')
     })
 
     it('disallows pressing eitt outside of turn', () => {

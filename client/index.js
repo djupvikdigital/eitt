@@ -1,6 +1,6 @@
-import { animateLastPlayedCardFrom, animatePlayCards } from "./modules/animations.js";
+import { animatePlayedCardsFrom, animatePlayCards } from "./modules/animations.js";
 import { addEventListeners, hideColorPicker} from "./modules/handlers.js";
-import { renderCards, renderLastPlayedCard, renderPlayerList, renderPlayerScores, SVGupdateClass, getClassNameForCard } from "./modules/render.js";
+import { renderCards, renderLastPlayedCards, renderPlayerList, renderPlayerScores, SVGupdateClass, getClassNameForCard } from "./modules/render.js";
 
 document.getElementById('avatarHeadSelector').addEventListener('input', function(){SVGupdateClass(this.value, '.avatarHead', document)} )
 document.getElementById('avatarBodySelector').addEventListener('input', function(){SVGupdateClass(this.value, '.avatarBody', document)} )
@@ -91,17 +91,17 @@ function setGameStatus(status) {
             // cards played from you
             animatePlayCards(status.action.playedCards, function () {
                 renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus)
-                renderLastPlayedCard(gameStatus.lastPlayedCard)
+                renderLastPlayedCards(gameStatus.lastPlayedCards)
             })
         }
         else {
             renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus)
-            animateLastPlayedCardFrom(animatePlayFrom, status)
+            animatePlayedCardsFrom(animatePlayFrom, status)
         }
     }
     else {
         renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus);
-        renderLastPlayedCard(status.lastPlayedCard)
+        renderLastPlayedCards(status.lastPlayedCards)
     }
     document.getElementById('your-turn').style.visibility = status.hasTurn ? 'inherit' : 'hidden'
     renderPlayerScores(status)

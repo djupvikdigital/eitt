@@ -21,6 +21,7 @@ export function CardDeck(numberOfDecks = 1) {
     }
     let self = {
         colors: colors,
+        numberLastPlayed: 1,
         playedCards: [],
         wildCards: wildCards
     }
@@ -39,8 +40,8 @@ export function CardDeck(numberOfDecks = 1) {
         }
         return drawnCards
     }
-    self.getLastPlayedCard = function () {
-        return this.playedCards[this.playedCards.length - 1]
+    self.getLastPlayedCards = function () {
+        return this.playedCards.slice(this.playedCards.length - this.numberLastPlayed)
     }
     self.isLegitCard = function (card) {
         if (typeof card !== 'object' || !Object.hasOwn(card, 'value')) {
@@ -68,12 +69,14 @@ export function CardDeck(numberOfDecks = 1) {
         return true
     }
     self.playCards = function (cards) {
-        for (let i = 0; i < cards.length; i++) {
+        let i = 0;
+        for (i = 0; i < cards.length; i++) {
             let gotPlayed = this.playCard(cards[i])
             if (!gotPlayed) {
                 return false
             }
         }
+        this.numberLastPlayed = i
         return true
     }
     self.shuffleCards = function(array) {

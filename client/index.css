@@ -229,6 +229,10 @@ html {
 	margin-top: 40px;
 }
 
+#last-played-cards .card {
+	margin-top: 0;
+}
+
 .cards .card-to-play {
 	margin-top: 0;
 }
@@ -255,8 +259,13 @@ html {
 	padding: 0;
 }
 
-.pick-card, #last-played-card {
+.pick-card {
 	margin-left: 0;
+}
+
+#last-played-cards {
+	display: inline-flex;
+	vertical-align: middle;
 }
 
 #play,
