@@ -6,6 +6,34 @@ function setTransformTimeout(element, transform, time) {
     }, time);
 }
 
+export function animateDrawCardsTo(index, number, callback) {
+    let playerElement = document.getElementsByClassName('player')[index];
+    let playerElementRect = playerElement.getBoundingClientRect();
+    let drawCardElement = document.getElementById('draw-card');
+    let drawCardElementRect = drawCardElement.getBoundingClientRect();
+    let animatedElements = [];
+    for (let i = 0; i < number; i++) {
+        let animatedElement = document.createElement('span');
+        animatedElements[i] = animatedElement;
+        document.body.appendChild(animatedElement);
+        let offsetLeft = playerElementRect.left;
+        let offsetTop = playerElementRect.top;
+        let transform = 'translateX(' + offsetLeft + 'px) translateY(-' + offsetTop + 'px)';
+        animatedElement.className = 'card';
+        animatedElement.style.position = 'absolute';
+        animatedElement.style.left = drawCardElementRect.left + 70 + 'px';
+        animatedElement.style.top = drawCardElementRect.top + window.scrollY + 'px';
+        setTransformTimeout(animatedElement, transform, i * 100);
+    }
+    animatedElements[animatedElements.length - 1].addEventListener('transitionend', function() {
+        for (let i = 0; i < animatedElements.length; i++) {
+            document.body.removeChild(animatedElements[i]);
+        }
+        callback();
+    })
+
+}
+
 export function animatePlayedCardsFrom(index, gameStatus) {
     let lastPlayedCards = gameStatus.lastPlayedCards;
     let playerElement = document.getElementsByClassName('player')[index];

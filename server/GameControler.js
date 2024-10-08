@@ -261,8 +261,19 @@ export function GameControler(name) {
         return true
     }
     self.drawCards = function (player, number = 1) {
+        let drawCount = this.round.turn.getDrawCount()
         this.round.drawCards(player, number)
-        this.sendGameStatus()
+        let playerIndex = 0;
+        for (let i = 0; i < this.round.players.length; i++) {
+            if (this.round.players[i].id == player.id) {
+                playerIndex = i;
+                break;
+            }
+        }
+        if (number > 1) {
+            drawCount = number
+        }
+        this.sendGameStatus({ type: 'drawCards', drawCount: drawCount, playerIndex: playerIndex })
     }
     self.pressEitt = function (player) {
         let pressedEitt = this.round.pressEitt(player)
@@ -299,13 +310,6 @@ export function GameControler(name) {
         }
         for (let i = 0; i < this.players.length; i++) {
             let currentPlayer = this.players[i]
-            let drawCount = 1
-            if (this.round.turn.plusFourInPlay) {
-                drawCount = 4
-            }
-            else if (this.round.turn.plusTwoInPlay) {
-                drawCount = this.round.turn.plusTwoInPlay * 2
-            }
             let hasTurn = this.hasTurn(currentPlayer)
             let gameStatus = {
                 id: currentPlayer.id,
@@ -314,7 +318,7 @@ export function GameControler(name) {
                 canPass: this.round.turn.hasDrawn,
                 cards: currentPlayer.cards,
                 cardsToPlay: currentPlayer.cardsToPlay,
-                drawCount: drawCount,
+                drawCount: this.round.turn.getDrawCount(),
                 hasTurn: hasTurn,
                 playMultiple: this.playMultiple,
                 playerList: pack,

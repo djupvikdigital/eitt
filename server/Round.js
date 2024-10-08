@@ -65,12 +65,8 @@ export function Round(deck = CardDeck()) {
             if (this.turn.hasDrawn) {
                 return false
             }
-            if (this.turn.plusFourInPlay) {
-                number = 4
-                switchTurn = true
-            }
-            else if (this.turn.plusTwoInPlay) {
-                number = this.turn.plusTwoInPlay * 2
+            number = this.turn.getDrawCount()
+            if (this.turn.plusFourInPlay || this.turn.plusTwoInPlay) {
                 switchTurn = true
             }
             this.turn.hasDrawn = true

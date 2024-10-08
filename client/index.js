@@ -1,4 +1,4 @@
-import { animatePlayedCardsFrom, animatePlayCards } from "./modules/animations.js";
+import { animatePlayedCardsFrom, animatePlayCards, animateDrawCardsTo } from "./modules/animations.js";
 import { addEventListeners, hideColorPicker} from "./modules/handlers.js";
 import { renderCards, renderLastPlayedCards, renderPlayerList, renderPlayerScores, SVGupdateClass, getClassNameForCard } from "./modules/render.js";
 
@@ -85,18 +85,35 @@ function setGameStatus(status) {
     }
     document.getElementById('draw-card').textContent = 'Draw ' + status.drawCount
     renderPlayerList(status, atLoginPage, socket);
-    if (status.action && status.action.type === 'playTurn') {
-        let animatePlayFrom = status.action.playerIndex
-        if (animatePlayFrom === status.index) {
-            // cards played from you
-            animatePlayCards(status.action.playedCards, function () {
-                renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus)
-                renderLastPlayedCards(gameStatus.lastPlayedCards)
-            })
-        }
-        else {
-            renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus)
-            animatePlayedCardsFrom(animatePlayFrom, status)
+    if (status.action) {
+        switch (status.action.type) {
+            case 'playTurn':
+                let animatePlayFrom = status.action.playerIndex
+                if (animatePlayFrom === status.index) {
+                    // cards played from you
+                    animatePlayCards(status.action.playedCards, function () {
+                        renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus)
+                        renderLastPlayedCards(gameStatus.lastPlayedCards)
+                    })
+                }
+                else {
+                    renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus)
+                    animatePlayedCardsFrom(animatePlayFrom, status)
+                }
+                break;
+            case 'drawCards':
+                let animateDrawTo = status.action.playerIndex
+                if (animateDrawTo === status.index) {
+                    // cards drawn to you
+                    renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus)
+                }
+                else {
+                    animateDrawCardsTo(animateDrawTo, status.action.drawCount, function () {
+                        renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus)
+                    })
+
+                }
+                break;
         }
     }
     else {
