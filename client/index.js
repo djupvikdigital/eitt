@@ -1,9 +1,9 @@
 import { animatePlayedCardsFrom, animatePlayCards, animateDrawCardsTo } from "./modules/animations.js";
-import { addEventListeners, hideColorPicker} from "./modules/handlers.js";
+import { addEventListeners, hideColorPicker } from "./modules/handlers.js";
 import { renderCards, renderLastPlayedCards, renderPlayerList, renderPlayerScores, SVGupdateClass, getClassNameForCard } from "./modules/render.js";
 
-document.getElementById('avatarHeadSelector').addEventListener('input', function(){SVGupdateClass(this.value, '.avatarHead', document)} )
-document.getElementById('avatarBodySelector').addEventListener('input', function(){SVGupdateClass(this.value, '.avatarBody', document)} )
+document.getElementById('avatarHeadSelector').addEventListener('input', function () { SVGupdateClass(this.value, '.avatarHead', document) })
+document.getElementById('avatarBodySelector').addEventListener('input', function () { SVGupdateClass(this.value, '.avatarBody', document) })
 
 let atLoginPage = true;
 
@@ -40,7 +40,7 @@ function setGameStatus(status) {
     else if (status.state === 'ROUND_FINISHED') {
         let roundWinnerElement = document.getElementById('roundWinner')
         roundWinnerElement.textContent = 'The round winner is..... ' + status.roundWinner + '!!'
-        changeButtonDisableState(true)    
+        changeButtonDisableState(true)
         document.getElementById('game-options').style.display = ''
         document.getElementById('game-table').style.display = 'block'
         if (status.hasTurn) {
@@ -65,7 +65,7 @@ function setGameStatus(status) {
             }
             winnerList.push(winner)
         }
-        winnerList = winnerList.sort(function(a,b){return a.score - b.score})
+        winnerList = winnerList.sort(function (a, b) { return a.score - b.score })
         for (let i = 0; i < 3; i++) {
             if (i < winnerList.length) {
                 document.getElementById('textx' + i).innerHTML = winnerList[i].name + ' - ' + winnerList[i].score
@@ -83,7 +83,19 @@ function setGameStatus(status) {
             }
         }
     }
-    document.getElementById('draw-card').textContent = 'Draw ' + status.drawCount
+    if (status.hasTurn) {
+        document.getElementById('draw-card-text').textContent = 'Draw ' + status.drawCount
+        document.getElementById('draw-card-text').style.fontFamily = 'sans-serif'
+        document.getElementById('draw-card-text').style.fontSize = '24px'
+        document.getElementById('draw-card-text').style.fontWeight = 'normal'
+        document.getElementById('draw-card-text').style.transform = 'rotate(0deg)'
+    } else {
+        document.getElementById('draw-card-text').textContent = 'Eitt!'
+        document.getElementById('draw-card-text').style.fontFamily = 'monospace'
+        document.getElementById('draw-card-text').style.fontSize = '46px'
+        document.getElementById('draw-card-text').style.fontWeight = 'bold'
+        document.getElementById('draw-card-text').style.transform = 'rotate(-90deg)'
+    }
     renderPlayerList(status, atLoginPage, socket);
     if (status.action) {
         switch (status.action.type) {
@@ -122,7 +134,7 @@ function setGameStatus(status) {
     }
     document.getElementById('your-turn').style.visibility = status.hasTurn ? 'inherit' : 'hidden'
     renderPlayerScores(status)
-    window.scroll({top: currentScroll})
+    window.scroll({ top: currentScroll })
 }
 
 function SVGupdateClassPod(color, selector) {
@@ -155,7 +167,7 @@ socket.on('connect', function () {
         socket.emit('joinRoom', { playerId: sessionStorage.getItem('playerId'), room: storedRoom })
     }
 })
-socket.on('joinRoom', function(data){
+socket.on('joinRoom', function (data) {
     inRoom = data.room
     /*
     if (inRoom == 'mainlobby') {
@@ -163,7 +175,7 @@ socket.on('joinRoom', function(data){
         document.getElementById("room").style.display = "none";
     }
     */
-    if (inRoom != 'mainlobby' && inRoom != '' ) {
+    if (inRoom != 'mainlobby' && inRoom != '') {
         document.getElementById("loginDiv").style.display = "none";
         document.getElementById("mainlobby").style.display = "none";
         document.getElementById("room").style.display = "block";
@@ -172,10 +184,10 @@ socket.on('joinRoom', function(data){
     }
     sessionStorage.setItem('room', data.room)
 })
-socket.on('roomExists', function(){
+socket.on('roomExists', function () {
     alert('Sorry, this room already exists, please be more creative and find another name!')
 })
-socket.on('roomStatus', function(data){
+socket.on('roomStatus', function (data) {
     let divElement = document.getElementById('openRooms')
     divElement.textContent = ''
     for (let i = 0; i < data.length; i++) {
@@ -189,7 +201,7 @@ socket.on('roomStatus', function(data){
         }
     }
 })
-socket.on('userMessage', function(message) {
+socket.on('userMessage', function (message) {
     document.getElementById('user-message-text').textContent = message
     document.getElementById('user-message').style.visibility = 'visible'
 })
@@ -289,7 +301,7 @@ document.getElementById('headGearSelectRight').addEventListener('click', functio
     swithSVGheadGear();
 })
 
-document.getElementById('user-message-close').addEventListener('click', function() {
+document.getElementById('user-message-close').addEventListener('click', function () {
     document.getElementById('user-message').style.visibility = ''
 })
 
