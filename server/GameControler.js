@@ -57,7 +57,6 @@ export function GameControler(name) {
             currentPlayer.pressedEitt = false
             if (this.calculateTotal(currentPlayer.scores)) this.state = 'FINISHED'
         }
-        this.sendGameStatus()
     }
     self.calculateScores = function () {
         let players = this.getPlayingPlayers()
@@ -287,6 +286,7 @@ export function GameControler(name) {
         if (this.round.state === 'FINISHED' && this.state !== 'ROUND_FINISHED') {
             this.state = 'ROUND_FINISHED'
             self.addScoresForRound()
+            self.sendGameStatus()
             return
         }
         this.round.switchTurn()
