@@ -1,4 +1,4 @@
-import { animatePlayedCardsFrom, animatePlayCards, animateDrawCardsTo } from "./modules/animations.js";
+import { animateDrawCards, animatePlayedCardsFrom, animatePlayCards, animateDrawCardsTo } from "./modules/animations.js";
 import { addEventListeners, hideColorPicker} from "./modules/handlers.js";
 import { renderCards, renderLastPlayedCards, renderPlayerList, renderPlayerScores, SVGupdateClass, getClassNameForCard } from "./modules/render.js";
 
@@ -105,7 +105,9 @@ function setGameStatus(status) {
                 let animateDrawTo = status.action.playerIndex
                 if (animateDrawTo === status.index) {
                     // cards drawn to you
-                    renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus)
+                    animateDrawCards(status.action.drawCount, function () {
+                        renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus)
+                    })
                 }
                 else {
                     animateDrawCardsTo(animateDrawTo, status.action.drawCount, function () {
