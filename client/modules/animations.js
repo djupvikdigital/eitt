@@ -46,9 +46,18 @@ export function animateDrawCardsTo(index, number, callback) {
     let animatedElements = [];
     for (let i = 0; i < number; i++) {
         let animatedElement = document.createElement('span');
+        let elementText = document.createElement('div')
         animatedElements[i] = animatedElement;
+        animatedElement.appendChild(elementText);
         document.body.appendChild(animatedElement);
         animatedElement.className = 'card';
+        elementText.textContent = 'Eitt!'
+        elementText.style.transform = 'rotate(-90deg) translate(120px)'
+        elementText.style.color = 'white'
+        elementText.style.fontFamily = 'monospace'
+        elementText.style.fontSize = '50px'
+        elementText.style.fontWeight = 'bold'
+        animatedElement.style.transform = 'rotate(-90deg)'
         animatedElement.style.position = 'absolute';
         animatedElement.style.left = drawCardElementRect.left + 70 + 'px';
         animatedElement.style.top = drawCardElementRect.top + window.scrollY + 'px';
