@@ -40,9 +40,9 @@ export function animateDrawCardsTo(index, number, callback) {
     let playerElementRect = playerElement.getBoundingClientRect();
     let drawCardElement = document.getElementById('draw-card');
     let drawCardElementRect = drawCardElement.getBoundingClientRect();
-    let offsetLeft = drawCardElementRect.left - drawCardElementRect.width / 2 - playerElementRect.left + playerElementRect.width / 2;
-    let offsetTop = drawCardElementRect.top + drawCardElementRect.height / 2 - playerElementRect.top - playerElementRect.height / 2;
-    let transform = 'translateX(' + offsetLeft + 'px) translateY(-' + offsetTop + 'px) scale(0.2)';
+    let offsetLeft = playerElementRect.left + playerElementRect.width / 2 - drawCardElementRect.left - drawCardElementRect.width / 2;
+    let offsetTop = playerElementRect.top + playerElementRect.height / 2 - drawCardElementRect.top - drawCardElementRect.height / 2;
+    let transform = 'translateX(' + offsetLeft + 'px) translateY(' + offsetTop + 'px) scale(0.2)';
     let animatedElements = [];
     for (let i = 0; i < number; i++) {
         let animatedElement = document.createElement('span');
