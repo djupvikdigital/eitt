@@ -35,6 +35,9 @@ export function GameControler(name) {
         let idWithHighestScore = 0
         let highestScore = 0
         let players = this.getPlayingPlayers()
+        if (!players.length) {
+            return
+        }
         let roundNumber = players[0].scores.length
         for (let id in scores) {
             let score = scores[id]
