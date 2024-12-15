@@ -33,7 +33,7 @@ function setGameStatus(status) {
         document.getElementById('game-options').style.display = ''
         document.getElementById('game-table').style.display = 'block'
         document.getElementById('play').style.display = showPlay ? 'inline-block' : ''
-        document.getElementById('pass').style.display = status.canPass ? 'inline-block' : ''
+        document.getElementById('pass').style.display = status.canPass && status.hasTurn ? 'inline-block' : ''
         document.getElementById('check-plus-four').style.display = status.plusFourInPlay && status.hasTurn ? 'inline-block' : ''
         document.getElementById('round-controls').style.display = ''
     }
