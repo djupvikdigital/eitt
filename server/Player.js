@@ -3,6 +3,7 @@ export function Player() {
         id: '' + Math.random(),
         cards: [],
         cardsToPlay: [],
+        drawnCards: [],
         name: '',
         playMultiple: false,
         scores: [],

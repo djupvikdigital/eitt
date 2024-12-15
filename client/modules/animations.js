@@ -6,17 +6,17 @@ function setTransformTimeout(element, transform, time) {
     }, time);
 }
 
-export function animateDrawCards(number, callback) {
+export function animateDrawCards(cards, callback) {
     let drawCardElement = document.getElementById('draw-card');
     let drawCardElementRect = drawCardElement.getBoundingClientRect();
     let cardsElement = document.getElementById('cards');
     let cardElement = null
     let animatedElements = [];
-    for (let i = 0; i < number; i++) {
+    for (let i = 0; i < cards.length; i++) {
         let animatedElement = document.createElement('span');
         animatedElements[i] = animatedElement;
         document.body.appendChild(animatedElement);
-        animatedElement.className = 'card';
+        animatedElement.className = getClassNameForCard(cards[i]);
         animatedElement.style.position = 'absolute';
         animatedElement.style.left = drawCardElementRect.left + 70 + 'px';
         animatedElement.style.top = drawCardElementRect.top + window.scrollY + 'px';

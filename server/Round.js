@@ -71,14 +71,15 @@ export function Round(deck = CardDeck()) {
             }
             this.turn.hasDrawn = true
         }
-        player.cards = player.cards.concat(this.deck.drawCards(number))
+        let drawnCards = this.deck.drawCards(number)
+        player.cards = player.cards.concat(drawnCards)
         sortCards(player.cards)
         player.pressedEitt = false
         if (switchTurn) {
             this.switchTurn()
         }
         player.cardsToPlay = []
-        return true
+        return drawnCards
     }
     self.hasTurn = function (player) {
         let currentPlayer = this.players[this.turn.playerIndex]

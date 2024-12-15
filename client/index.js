@@ -117,7 +117,7 @@ function setGameStatus(status) {
                 let animateDrawTo = status.action.playerIndex
                 if (animateDrawTo === status.index) {
                     // cards drawn to you
-                    animateDrawCards(status.action.drawCount, function () {
+                    animateDrawCards(status.drawnCards, function () {
                         renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus)
                     })
                 }

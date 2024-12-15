@@ -264,7 +264,7 @@ export function GameControler(name) {
     }
     self.drawCards = function (player, number = 1) {
         let drawCount = this.round.turn.getDrawCount()
-        this.round.drawCards(player, number)
+        player.drawnCards = this.round.drawCards(player, number);
         let playerIndex = 0;
         for (let i = 0; i < this.round.players.length; i++) {
             if (this.round.players[i].id == player.id) {
@@ -331,6 +331,7 @@ export function GameControler(name) {
                 lastPlayerIndex: lastPlayerIndex,
                 roundWinner: this.round.winner,
                 state: this.state,
+                drawnCards: currentPlayer.drawnCards,
             };
             currentPlayer.emit('gameStatus', gameStatus);
         }
