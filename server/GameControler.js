@@ -264,7 +264,11 @@ export function GameControler(name) {
     }
     self.drawCards = function (player, number = 1) {
         let drawCount = this.round.turn.getDrawCount()
-        player.drawnCards = this.round.drawCards(player, number);
+        let result = this.round.drawCards(player, number);
+        if (!result) {
+            return false
+        }
+        player.drawnCards = result
         let playerIndex = 0;
         for (let i = 0; i < this.round.players.length; i++) {
             if (this.round.players[i].id == player.id) {
