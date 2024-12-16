@@ -155,15 +155,18 @@ io.sockets.on('connection', function(socket){
         if (!room.round.hasTurn(player)) {
             return
         }
+        let gotPlayed = false
         let playerIndex = room.round.turn.playerIndex
         let playedCards = player.cardsToPlay
         if (data && data.color) {
-            room.round.playTurn(data.color)
+            gotPlayed = room.round.playTurn(data.color)
         }
         else {
-            room.round.playTurn()
+            gotPlayed = room.round.playTurn()
         }
-        room.sendGameStatus({ type: 'playTurn', playedCards: playedCards, playerIndex: playerIndex })
+        if (gotPlayed) {
+            room.sendGameStatus({ type: 'playTurn', playedCards: playedCards, playerIndex: playerIndex })
+        }
     })
 
     socket.on('playCard',function(data){
