@@ -129,7 +129,11 @@ io.sockets.on('connection', function(socket){
         player.addCardToPlay(data.index)
         let card = player.cards[data.index]
         if (!room.playMultiple && room.round.hasTurn(player) && card && card.color !== 'black') {
+            let playerIndex = room.round.turn.playerIndex
+            let playedCards = player.cardsToPlay
             room.round.playTurn()
+            room.sendGameStatus({ type: 'playTurn', playedCards: playedCards, playerIndex: playerIndex })
+            return
         }
         room.sendGameStatus()
     })
