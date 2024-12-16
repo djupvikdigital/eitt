@@ -151,14 +151,13 @@ html {
 	background-color: white;
 	border: 1px solid black;
 	border-radius: 4px;
+	bottom: 100%;
 	left: 50%;
 	line-height: 1.5;
-	margin-top: 15px;
 	max-width: 100%;
 	padding: 0.75em;
 	position: absolute;
 	text-align: center;
-	top: 100%;
 	transform: translateX(-50%);
 	width: max-content;
 	z-index: 1;
@@ -167,13 +166,13 @@ html {
 .details-body::after {
 	background-color: white;
 	border: 1px solid black;
-	border-color: black transparent transparent black;
+	border-color: transparent black black transparent;
+	bottom: -8px;
 	content: '';
 	display: block;
 	height: 8px;
 	left: 50%;
 	position: absolute;
-	top: -2px;
 	transform: rotate(45deg) translateX(-50%);
 	width: 8px;
 }
