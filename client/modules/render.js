@@ -16,7 +16,8 @@ export function getClassNameForCard(card, toPlay) {
     return 'card ' + (toPlay ? 'card-to-play ' : '') + 'card-' + card.color + ' card-' + card.color + '-' + card.value.replace('+', 'plus-')
 }
 
-export function renderCards(cards, cardsToPlay = [], currentIndex, socket, gameStatus) {
+export function renderCards(cards, cardsToPlay = [], currentIndex, socket, gameStatus, drawnCards = []) {
+    let returnPos = []
     let cardsElement = document.getElementById('cards');
     cardsElement.textContent = '';
     let fragment = document.createDocumentFragment();
@@ -27,6 +28,16 @@ export function renderCards(cards, cardsToPlay = [], currentIndex, socket, gameS
         element.addEventListener('click', createClickHandler(i, card, toPlay, currentIndex, socket, gameStatus));
         element.className = getClassNameForCard(card, toPlay);
         element.textContent = card.value;
+        for (let j = 0; j < drawnCards.length; j++) {
+            let drawnCard = drawnCards[j]
+            if (card.value == drawnCard.value && card.color == drawnCard.color) {
+                element.style.visibility = 'hidden'
+                drawnCard.value = null
+                drawnCard.color = null
+                returnPos.push(i)
+                break
+            }
+        }
         if (toPlay) {
             let number = document.createElement('h1')
             number.className = 'number'
@@ -36,6 +47,7 @@ export function renderCards(cards, cardsToPlay = [], currentIndex, socket, gameS
         fragment.appendChild(element);
     }
     cardsElement.appendChild(fragment);
+    return returnPos
 }
 
 export function renderLastPlayedCards(cards) {

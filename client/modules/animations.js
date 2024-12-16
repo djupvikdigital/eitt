@@ -6,7 +6,7 @@ function setTransformTimeout(element, transform, time) {
     }, time);
 }
 
-export function animateDrawCards(cards, callback) {
+export function animateDrawCards(cards, goToPos, callback) {
     let drawCardElement = document.getElementById('draw-card');
     let drawCardElementRect = drawCardElement.getBoundingClientRect();
     let cardsElement = document.getElementById('cards');
@@ -20,19 +20,21 @@ export function animateDrawCards(cards, callback) {
         animatedElement.style.position = 'absolute';
         animatedElement.style.left = drawCardElementRect.left + 70 + 'px';
         animatedElement.style.top = drawCardElementRect.top + window.scrollY + 'px';
-        cardElement = cardsElement.children[cardsElement.children.length - 1];
+        cardElement = cardsElement.children[goToPos[i]];
         let cardElementRect = cardElement.getBoundingClientRect();
-        let offsetLeft = (cardElementRect.left + 70 - drawCardElementRect.left);
+        let offsetLeft = (cardElementRect.left - drawCardElementRect.left);
         let offsetTop = (cardElementRect.top - drawCardElementRect.top);
         let transform = 'translateX(' + offsetLeft + 'px) translateY(' + offsetTop + 'px)';
         setTransformTimeout(animatedElement, transform, i * 100);
     }
-    animatedElements[animatedElements.length - 1].addEventListener('transitionend', function() {
-        for (let i = 0; i < animatedElements.length; i++) {
-            document.body.removeChild(animatedElements[i]);
-        }
-        callback();
-    })
+    if (animatedElements.length > 0) {
+        animatedElements[animatedElements.length - 1].addEventListener('transitionend', function () {
+            for (let i = 0; i < animatedElements.length; i++) {
+                document.body.removeChild(animatedElements[i]);
+            }
+            callback();
+        })
+    }
 }
 
 export function animateDrawCardsTo(index, number, callback) {
@@ -63,7 +65,7 @@ export function animateDrawCardsTo(index, number, callback) {
         animatedElement.style.top = drawCardElementRect.top + window.scrollY + 'px';
         setTransformTimeout(animatedElement, transform, i * 100);
     }
-    animatedElements[animatedElements.length - 1].addEventListener('transitionend', function() {
+    animatedElements[animatedElements.length - 1].addEventListener('transitionend', function () {
         for (let i = 0; i < animatedElements.length; i++) {
             document.body.removeChild(animatedElements[i]);
         }
@@ -92,7 +94,7 @@ export function animatePlayedCardsFrom(index, gameStatus) {
         animatedElement.style.top = playerElementRect.top + window.scrollY + 'px';
         setTransformTimeout(animatedElement, transform, i * 100);
     }
-    animatedElements[animatedElements.length - 1].addEventListener('transitionend', function() {
+    animatedElements[animatedElements.length - 1].addEventListener('transitionend', function () {
         for (let i = 0; i < animatedElements.length; i++) {
             document.body.removeChild(animatedElements[i]);
         }

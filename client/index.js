@@ -115,9 +115,11 @@ function setGameStatus(status) {
                 break;
             case 'drawCards':
                 let animateDrawTo = status.action.playerIndex
+                let newDrawnCards = JSON.parse(JSON.stringify(status.drawnCards))
                 if (animateDrawTo === status.index) {
+                    let goToPos = renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus, newDrawnCards)
                     // cards drawn to you
-                    animateDrawCards(status.drawnCards, function () {
+                    animateDrawCards(status.drawnCards, goToPos, function () {
                         renderCards(status.cards, status.cardsToPlay, currentIndex, socket, gameStatus)
                     })
                 }
