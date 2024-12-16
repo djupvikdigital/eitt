@@ -22,9 +22,11 @@ export function animateDrawCards(cards, goToPos, callback) {
         animatedElement.style.top = drawCardElementRect.top + window.scrollY + 'px';
         cardElement = cardsElement.children[goToPos[i]];
         let cardElementRect = cardElement.getBoundingClientRect();
-        let offsetLeft = (cardElementRect.left - drawCardElementRect.left);
-        let offsetTop = (cardElementRect.top - drawCardElementRect.top);
-        let transform = 'translateX(' + offsetLeft + 'px) translateY(' + offsetTop + 'px)';
+        let scale = cardElementRect.width / drawCardElementRect.width
+        console.log('Scale: ' + scale)
+        let offsetLeft = (cardElementRect.left - drawCardElementRect.left + (cardElementRect.width * scale - cardElementRect.width));
+        let offsetTop = (cardElementRect.top - drawCardElementRect.top + (cardElementRect.width * scale - cardElementRect.width));
+        let transform = 'translateX(' + offsetLeft + 'px) translateY(' + offsetTop + 'px) scale(' + scale + ')';
         setTransformTimeout(animatedElement, transform, i * 100);
     }
     if (animatedElements.length > 0) {
@@ -82,12 +84,13 @@ export function animatePlayedCardsFrom(index, gameStatus) {
     let playerElementRect = playerElement.getBoundingClientRect();
     let offsetLeft = (lastPlayedElementRect.left - playerElementRect.left);
     let offsetTop = (lastPlayedElementRect.top - playerElementRect.top);
-    let transform = 'translateX(' + offsetLeft + 'px) translateY(' + offsetTop + 'px)';
+    let transform = 'translateX(' + offsetLeft + 'px) translateY(' + offsetTop + 'px) scale(1)';
     let animatedElements = [];
     for (let i = 0; i < lastPlayedCards.length; i++) {
         animatedElements[i] = document.createElement('span');
         let animatedElement = animatedElements[i];
         document.body.appendChild(animatedElement);
+        animatedElement.style.transform = 'scale(0.2)'
         animatedElement.className = getClassNameForCard(lastPlayedCards[i]);
         animatedElement.style.position = 'absolute';
         animatedElement.style.left = playerElementRect.left + 70 + 'px';
@@ -111,9 +114,10 @@ export function animatePlayCards(playedCards, callback) {
     for (let i = 0; i < playedCards.length; i++) {
         cardElement = cardsElement.children[playedCards[i]];
         let cardElementRect = cardElement.getBoundingClientRect();
-        let offsetLeft = (cardElementRect.left - lastPlayedElementRect.left) * -1;
-        let offsetTop = (cardElementRect.top - lastPlayedElementRect.top) * -1;
-        let transform = 'translateX(' + offsetLeft + 'px) translateY(' + offsetTop + 'px)';
+        let scale = lastPlayedElementRect.width / cardElementRect.width
+        let offsetLeft = ((cardElementRect.left - lastPlayedElementRect.left) * -1) + (cardElementRect.width - cardElementRect.width / scale);
+        let offsetTop = ((cardElementRect.top - lastPlayedElementRect.top) * -1) + (cardElementRect.width - cardElementRect.width / scale);
+        let transform = 'translateX(' + offsetLeft + 'px) translateY(' + offsetTop + 'px) scale(' + scale + ')';
         setTransformTimeout(cardElement, transform, i * 100);
     }
     cardElement.addEventListener('transitionend', callback);
