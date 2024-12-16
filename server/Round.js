@@ -46,7 +46,8 @@ export function Round(deck = CardDeck()) {
                 if (cardsWithPrevColor.length > 0) {
                     // checked player played +4 while still having previous color
                     // checked player must draw 4 instead, and turn doesn't switch
-                    this.drawCards(checkedPlayer, drawCount)
+                    let drawnCards = this.drawCards(checkedPlayer, drawCount)
+                    checkedPlayer.drawnCards = drawnCards
                     this.turn.plusFourInPlay = false
                 }
                 else {
@@ -57,7 +58,8 @@ export function Round(deck = CardDeck()) {
                         }
                     }
                     drawCount = 6
-                    this.drawCards(player, drawCount)
+                    let drawnCards = this.drawCards(player, drawCount)
+                    player.drawnCards = drawnCards
                     this.switchTurn()
                 }
                 return { type: 'drawCards', drawCount: drawCount, playerIndex: playerIndex }
