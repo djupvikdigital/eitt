@@ -102,18 +102,24 @@ export function renderPlayerList(status, atLoginPage, socket) {
         let title = document.createElement('div');
         let avatar = document.createElement('div');
         let box = document.createElement('div')
-        let dl = document.createElement('dl')
         box.className = 'details-body'
         details.className = 'player'
         summary.className = 'player-summary'
         title.textContent = player.name;
-        let dt = document.createElement('dt')
-        dt.textContent = 'Status'
-        dl.appendChild(dt)
-        let dd = document.createElement('dd')
-        dd.textContent = player.connected ? (player.isPlaying ? 'Playing' : 'Waiting') : 'Not connected'
-        dl.appendChild(dd)
-        box.appendChild(dl);
+        if (player.pressedEitt) {
+            box.textContent = 'Eitt!'
+            details.open = true
+        }
+        else {
+            let dl = document.createElement('dl')
+            let dt = document.createElement('dt')
+            dt.textContent = 'Status'
+            dl.appendChild(dt)
+            let dd = document.createElement('dd')
+            dd.textContent = player.connected ? (player.isPlaying ? 'Playing' : 'Waiting') : 'Not connected'
+            dl.appendChild(dd)
+            box.appendChild(dl);
+        }
         if (player.hasTurn) {
             title.style.fontWeight = 'bold';
             let SVGavatarGlow = document.getElementById('SVGavatarGlow').cloneNode(true);
