@@ -309,6 +309,14 @@ document.getElementById('user-message-close').addEventListener('click', function
     document.getElementById('user-message').style.visibility = ''
 })
 
+document.getElementById('eitt').addEventListener('click', function () {
+    socket.emit('eitt')
+})
+
+document.getElementById('didntPressEitt').addEventListener('click', function () {
+    socket.emit('didntPressEitt')
+})
+
 document.addEventListener('click', function (e) {
     // Close open player details when clicking outside them
     let playerDetailsElements = document.getElementsByClassName('player')

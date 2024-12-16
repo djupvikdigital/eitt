@@ -138,25 +138,6 @@ export function renderPlayerList(status, atLoginPage, socket) {
             })
             box.appendChild(button);
         }
-        else if (!player.pressedEitt) {
-            let numberOfCards = player.numberOfCards
-            if (i === status.index && numberOfCards <= 2 && numberOfCards > 0) {
-                let button = document.createElement('button')
-                button.textContent = 'Eitt'
-                button.addEventListener('click', function () {
-                    socket.emit('eitt')
-                })
-                box.appendChild(button);
-            }
-            else if (numberOfCards === 1) {
-                let button = document.createElement('button')
-                button.textContent = "Didn't press eitt"
-                button.addEventListener('click', function () {
-                    socket.emit('didntPressEitt', i)
-                })
-                box.appendChild(button);
-            }
-        }
         group.appendChild(SVGavatar);
         if (player.style.headGear > 0) {
             let SVGheadGear = document.getElementById('SVGheadGear' + player.style.headGear).cloneNode(true);
