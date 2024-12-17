@@ -1,6 +1,6 @@
 function showColorPicker() {
     document.getElementById('color-picker').style.display = 'inline';
-    document.getElementById('play').style.display = 'none';
+    document.getElementById('play').disabled = true;
 }
 
 export function hideColorPicker() {
