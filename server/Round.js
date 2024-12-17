@@ -36,7 +36,9 @@ export function Round(deck = CardDeck()) {
             if (!this.previousTurn) {
                 return false
             }
-            const checkedPlayer = this.players[this.previousTurn.playerIndex]
+            let drawCount = 4
+            let playerIndex = this.previousTurn.playerIndex
+            const checkedPlayer = this.players[playerIndex]
             if (checkedPlayer) {
                 const cardsWithPrevColor = checkedPlayer.cards.filter(function (card) {
                     return card.color === prevColor
@@ -44,14 +46,23 @@ export function Round(deck = CardDeck()) {
                 if (cardsWithPrevColor.length > 0) {
                     // checked player played +4 while still having previous color
                     // checked player must draw 4 instead, and turn doesn't switch
-                    this.drawCards(checkedPlayer, 4)
+                    let drawnCards = this.drawCards(checkedPlayer, drawCount)
+                    checkedPlayer.drawnCards = drawnCards
                     this.turn.plusFourInPlay = false
                 }
                 else {
                     // checked player is innocent, checking player gets 6 cards
-                    this.drawCards(player, 6)
+                    for (let i = 0; i < this.players.length; i++) {
+                        if (this.players[i].id === player.id) {
+                            playerIndex = i
+                        }
+                    }
+                    drawCount = 6
+                    let drawnCards = this.drawCards(player, drawCount)
+                    player.drawnCards = drawnCards
                     this.switchTurn()
                 }
+                return { type: 'drawCards', drawCount: drawCount, playerIndex: playerIndex }
             }
         }
     }

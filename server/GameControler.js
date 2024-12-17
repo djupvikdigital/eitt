@@ -90,8 +90,8 @@ export function GameControler(name) {
         return thisScore >= 500
     }
     self.checkPlusFour = function (player) {
-        this.round.checkPlusFour(player)
-        this.sendGameStatus()
+        let action = this.round.checkPlusFour(player)
+        this.sendGameStatus(action)
     }
     self.disconnect = function (socketId) {
         const player = this.getPlayerBySocketId(socketId)

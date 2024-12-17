@@ -91,14 +91,13 @@ io.sockets.on('connection', function(socket){
         room.drawCards(player);
     });
 
-    socket.on('didntPressEitt', function(index) {
+    socket.on('didntPressEitt', function() {
         let room = House.getRoomBySocketId(socket.id)
         if (room.type != 'gameRoom') return
-        let accusedPlayer = room.players[index]
         let lastPlayerIndex = room.round.previousTurn ? room.round.previousTurn.playerIndex : -1;
-        let lastPlayerId = room.round.players[lastPlayerIndex].id
-        if (lastPlayerId === accusedPlayer.id && accusedPlayer.cards.length === 1 && accusedPlayer.pressedEitt == false) {
-            room.drawCards(accusedPlayer, 3)
+        let lastPlayer = room.round.players[lastPlayerIndex]
+        if (lastPlayer.cards.length === 1 && lastPlayer.pressedEitt == false) {
+            room.drawCards(lastPlayer, 3)
         }
     })
 
@@ -155,15 +154,18 @@ io.sockets.on('connection', function(socket){
         if (!room.round.hasTurn(player)) {
             return
         }
+        let gotPlayed = false
         let playerIndex = room.round.turn.playerIndex
         let playedCards = player.cardsToPlay
         if (data && data.color) {
-            room.round.playTurn(data.color)
+            gotPlayed = room.round.playTurn(data.color)
         }
         else {
-            room.round.playTurn()
+            gotPlayed = room.round.playTurn()
         }
-        room.sendGameStatus({ type: 'playTurn', playedCards: playedCards, playerIndex: playerIndex })
+        if (gotPlayed) {
+            room.sendGameStatus({ type: 'playTurn', playedCards: playedCards, playerIndex: playerIndex })
+        }
     })
 
     socket.on('playCard',function(data){

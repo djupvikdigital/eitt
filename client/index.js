@@ -13,7 +13,8 @@ function setGameStatus(status) {
     console.log(status)
     gameStatus = status;
     let playBlack = status.cardsToPlay.length && status.cards[status.cardsToPlay[0]].color === 'black';
-    let showPlay = status.playMultiple && status.hasTurn && status.cardsToPlay.length && !playBlack;
+    let enablePlay = status.playMultiple && status.hasTurn && status.cardsToPlay.length && !playBlack;
+    let canSayEitt = status.cards.length === 1 || (status.cards.length === 2 && status.hasTurn);
     console.log('playBlack = ' + playBlack)
     if (status.state === 'NOT_STARTED') {
         if (status.index === 0) {
@@ -32,9 +33,10 @@ function setGameStatus(status) {
         changeButtonDisableState(false)
         document.getElementById('game-options').style.display = ''
         document.getElementById('game-table').style.display = 'block'
-        document.getElementById('play').style.display = showPlay ? 'inline-block' : ''
-        document.getElementById('pass').style.display = status.canPass && status.hasTurn ? 'inline-block' : ''
-        document.getElementById('check-plus-four').style.display = status.plusFourInPlay && status.hasTurn ? 'inline-block' : ''
+        document.getElementById('play').disabled = !enablePlay
+        document.getElementById('pass').disabled = !(status.canPass && status.hasTurn)
+        document.getElementById('check-plus-four').disabled = !(status.plusFourInPlay && status.hasTurn)
+        document.getElementById('eitt').disabled = !canSayEitt
         document.getElementById('round-controls').style.display = ''
     }
     else if (status.state === 'ROUND_FINISHED') {
@@ -307,6 +309,14 @@ document.getElementById('headGearSelectRight').addEventListener('click', functio
 
 document.getElementById('user-message-close').addEventListener('click', function () {
     document.getElementById('user-message').style.visibility = ''
+})
+
+document.getElementById('eitt').addEventListener('click', function () {
+    socket.emit('eitt')
+})
+
+document.getElementById('didntPressEitt').addEventListener('click', function () {
+    socket.emit('didntPressEitt')
 })
 
 document.addEventListener('click', function (e) {
