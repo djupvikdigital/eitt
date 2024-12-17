@@ -175,7 +175,7 @@ export function Round(deck = CardDeck()) {
         return gotPlayed
     }
     self.pressEitt = function (player) {
-        if (this.hasTurn(player) && player.cards.length <= 2) {
+        if (player.cards.length <= 1 || (this.hasTurn(player) && player.cards.length <= 2)) {
             player.pressedEitt = true
         }
         return player.pressedEitt
