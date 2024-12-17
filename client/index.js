@@ -319,6 +319,14 @@ document.getElementById('didntPressEitt').addEventListener('click', function () 
     socket.emit('didntPressEitt')
 })
 
+document.getElementById('show-scores').addEventListener('click', function () {
+    document.getElementById('player-scores').showModal()
+})
+
+document.getElementById('close-scores').addEventListener('click', function () {
+    document.getElementById('player-scores').close()
+})
+
 document.addEventListener('click', function (e) {
     // Close open player details when clicking outside them
     let playerDetailsElements = document.getElementsByClassName('player')

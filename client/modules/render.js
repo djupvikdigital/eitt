@@ -174,22 +174,11 @@ export function renderPlayerList(status, atLoginPage, socket) {
 export function renderPlayerScores(status) {
     let playerList = status.playerList
     let playerScoresElement = document.getElementById('player-scores')
-    playerScoresElement.textContent = ''
-    let details = document.createElement('details')
-    let summary = document.createElement('summary')
-    let table = document.createElement('table')
+    let table = document.getElementById('scores-table')
+    table.textContent = ''
     if (openPlayerScores === OPEN_ALWAYS || (status.state === 'ROUND_FINISHED' && openPlayerScores === OPEN_WHEN_ROUND_FINISHED)) {
-        details.open = true
+        playerScoresElement.showModal()
     }
-    details.addEventListener('toggle', function () {
-        if (status.state === 'ROUND_FINISHED') {
-            openPlayerScores = details.open ? OPEN_WHEN_ROUND_FINISHED : OPEN_NEVER
-        }
-        else {
-            openPlayerScores = details.open ? OPEN_ALWAYS : OPEN_WHEN_ROUND_FINISHED
-        }
-    })
-    summary.textContent = 'Player scores'
     let scores = []
     for (let i = 0; i < playerList.length; i++) {
         let player = playerList[i]
@@ -219,7 +208,4 @@ export function renderPlayerScores(status) {
         }
         table.appendChild(rowElement)
     }
-    details.appendChild(summary)
-    details.appendChild(table)
-    playerScoresElement.appendChild(details)
 }

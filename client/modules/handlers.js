@@ -79,5 +79,6 @@ export function addEventListeners(socket) {
 
     document.getElementById('new-round').addEventListener('click', function () {
         socket.emit('newRound')
+        document.getElementById('player-scores').close()
     })
 }

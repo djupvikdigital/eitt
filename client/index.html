@@ -228,9 +228,6 @@
         </div>
         <h1 class="headliner2" id="roomNameHeadline">Det her er mega fedt!!!!</h1>
         <div id="roundWinner"></div>
-        <div id="round-controls">
-            <button class="inputStyle" id="new-round">New round</button>
-        </div>
         <ul id="player-list"></ul>
         <form id="game-options">
             <h1 class="headliner2">Game options</h1>
@@ -291,11 +288,19 @@
                 <button class="inputStyle" id="check-plus-four">Check +4</button>
                 <button class="inputStyle" id="eitt">Eitt!</button>
                 <button class="inputStyle" id="didntPressEitt">Didn't press Eitt!</button>
+                <button class="inputStyle" id="show-scores">Scores</button>
                 <span id="your-turn">Your turn</span>
             </div>
         </div>
         <div class="cards" id="cards"></div>
-        <div id="player-scores"></div>
+        <dialog id="player-scores">
+            <h1>Player scores</h1>
+            <table id="scores-table"></table>
+            <span id="round-controls">
+                <button class="inputStyle" id="new-round">New round</button>
+            </span>
+            <button class="inputStyle" id="close-scores">Close</button>
+        </dialog>
     </div>
 
     <div id="podium" style="overflow: hidden;">
