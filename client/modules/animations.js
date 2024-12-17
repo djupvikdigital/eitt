@@ -19,14 +19,14 @@ export function animateDrawCards(cards, goToPos, callback) {
         animatedElement.className = getClassNameForCard(cards[i]);
         animatedElement.style.position = 'absolute';
         animatedElement.style.left = drawCardElementRect.left + 70 + 'px';
-        animatedElement.style.top = drawCardElementRect.top + window.scrollY + 'px';
+        animatedElement.style.top = drawCardElementRect.top + 'px';
         cardElement = cardsElement.children[goToPos[i]];
         let cardElementRect = cardElement.getBoundingClientRect();
-        let scale = cardElementRect.width / drawCardElementRect.width
-        console.log('Scale: ' + scale)
-        let offsetLeft = (cardElementRect.left - drawCardElementRect.left + (cardElementRect.width * scale - cardElementRect.width));
-        let offsetTop = (cardElementRect.top - drawCardElementRect.top + (cardElementRect.width * scale - cardElementRect.width));
-        let transform = 'translateX(' + offsetLeft + 'px) translateY(' + offsetTop + 'px) scale(' + scale + ')';
+        let scale = drawCardElementRect.width / cardElementRect.width
+        let scaleRev = cardElementRect.width / drawCardElementRect.width
+        let offsetLeft = (cardElementRect.left - drawCardElementRect.left) + ((cardElementRect.width - cardElementRect.width / scaleRev) / 2);
+        let offsetTop = (cardElementRect.top - drawCardElementRect.top) - ((cardElementRect.height * scale - cardElementRect.height) / 2.4);
+        let transform = 'translateX(' + offsetLeft + 'px) translateY(' + offsetTop + 'px) scale(' + scaleRev + ')';
         setTransformTimeout(animatedElement, transform, i * 100);
     }
     if (animatedElements.length > 0) {
@@ -115,8 +115,9 @@ export function animatePlayCards(playedCards, callback) {
         cardElement = cardsElement.children[playedCards[i]];
         let cardElementRect = cardElement.getBoundingClientRect();
         let scale = lastPlayedElementRect.width / cardElementRect.width
-        let offsetLeft = ((cardElementRect.left - lastPlayedElementRect.left) * -1) + (cardElementRect.width - cardElementRect.width / scale);
-        let offsetTop = ((cardElementRect.top - lastPlayedElementRect.top) * -1) + (cardElementRect.width - cardElementRect.width / scale);
+        console.log(scale)
+        let offsetLeft = ((cardElementRect.left - lastPlayedElementRect.left) * -1) + ((cardElementRect.width * scale - cardElementRect.width) / 2);
+        let offsetTop = ((cardElementRect.top - lastPlayedElementRect.top) * -1) + ((cardElementRect.height * scale - cardElementRect.height) / 2);
         let transform = 'translateX(' + offsetLeft + 'px) translateY(' + offsetTop + 'px) scale(' + scale + ')';
         setTransformTimeout(cardElement, transform, i * 100);
     }
